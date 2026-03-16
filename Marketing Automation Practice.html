@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design an Automated Email Campaign</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#17202a;
+      --muted:#52606d;
+      --line:#d8e1ea;
+      --accent:#1f5fbf;
+      --accent-dark:#174a94;
+      --accent-soft:#eaf2ff;
+      --success:#1f7a3d;
+      --success-soft:#eaf7ee;
+      --warning:#8a5a00;
+      --warning-soft:#fff6df;
+      --error:#a12622;
+      --error-soft:#fdeeed;
+      --shadow:0 10px 24px rgba(19, 38, 61, 0.08);
+      --radius:18px;
+      --focus:3px solid #111111;
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg, #f7faff 0%, #eef4fb 100%);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .wrapper{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 16px 48px;
+    }
+
+    .course-shell{
+      background:transparent;
+    }
+
+    .hero,
+    .panel,
+    .email-card,
+    .feedback-panel,
+    .example-panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      padding:24px;
+      margin-bottom:20px;
+    }
+
+    h1,h2,h3{
+      line-height:1.2;
+      margin-top:0;
+    }
+
+    h1{
+      font-size:clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom:10px;
+    }
+
+    h2{
+      font-size:clamp(1.35rem, 2.4vw, 1.75rem);
+      margin-bottom:12px;
+    }
+
+    h3{
+      font-size:1.15rem;
+      margin-bottom:10px;
+    }
+
+    p{
+      margin:0 0 12px;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .intro-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+
+    .mini-card{
+      background:#fbfdff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+    }
+
+    .step-indicator{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin:16px 0 0;
+      padding:0;
+      list-style:none;
+    }
+
+    .step-indicator li{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+      border:1px solid #cfe0ff;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:bold;
+      font-size:0.96rem;
+    }
+
+    .step-number{
+      width:30px;
+      height:30px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      background:var(--accent);
+      color:#fff;
+      font-size:0.95rem;
+      flex:0 0 auto;
+    }
+
+    .panel{
+      padding:22px;
+      margin-bottom:20px;
+    }
+
+    .section-header{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .progress-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#f8fbff;
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:bold;
+      color:var(--accent-dark);
+    }
+
+    .email-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:16px;
+    }
+
+    .email-card{
+      padding:18px;
+    }
+
+    .email-card h3{
+      margin-bottom:6px;
+    }
+
+    .email-role{
+      display:inline-block;
+      font-size:0.92rem;
+      color:var(--accent-dark);
+      background:var(--accent-soft);
+      border:1px solid #d5e4ff;
+      border-radius:999px;
+      padding:6px 10px;
+      margin-bottom:14px;
+      font-weight:bold;
+    }
+
+    fieldset{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      margin:0 0 14px;
+      min-width:0;
+    }
+
+    legend{
+      font-weight:bold;
+      padding:0 8px;
+    }
+
+    .field{
+      margin-bottom:14px;
+    }
+
+    .field:last-child{
+      margin-bottom:0;
+    }
+
+    label{
+      display:block;
+      font-weight:bold;
+      margin-bottom:6px;
+    }
+
+    input[type="text"],
+    select{
+      width:100%;
+      min-height:46px;
+      border:1px solid #aab7c4;
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:1rem;
+      background:#fff;
+      color:var(--text);
+    }
+
+    .hint{
+      font-size:0.92rem;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .check-list{
+      display:grid;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .check-option{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      background:#fbfdff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+    }
+
+    .check-option input{
+      margin-top:3px;
+      flex:0 0 auto;
+    }
+
+    .check-option label{
+      margin:0;
+      font-weight:normal;
+    }
+
+    .email-feedback,
+    .question-feedback{
+      margin-top:12px;
+      border-radius:12px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      background:#fafcff;
+    }
+
+    .email-feedback p:last-child,
+    .question-feedback p:last-child{
+      margin-bottom:0;
+    }
+
+    .status-good{
+      background:var(--success-soft);
+      border-color:#b9dfc3;
+    }
+
+    .status-warn{
+      background:var(--warning-soft);
+      border-color:#ead6a0;
+    }
+
+    .status-bad{
+      background:var(--error-soft);
+      border-color:#e7b7b4;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-top:8px;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      border-radius:999px;
+      padding:14px 20px;
+      font-size:1rem;
+      font-weight:bold;
+      cursor:pointer;
+      min-height:48px;
+    }
+
+    .primary-btn{
+      background:var(--accent);
+      color:#fff;
+    }
+
+    .primary-btn:hover,
+    .primary-btn:focus-visible{
+      background:var(--accent-dark);
+    }
+
+    .secondary-btn{
+      background:#eef3f8;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .secondary-btn:hover,
+    .secondary-btn:focus-visible{
+      background:#e5edf5;
+    }
+
+    .feedback-panel,
+    .example-panel{
+      padding:22px;
+      margin-top:20px;
+    }
+
+    .score-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:bold;
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+      border:1px solid #cfe0ff;
+      margin-bottom:12px;
+    }
+
+    .best-practice{
+      border-left:5px solid var(--accent);
+      background:#f8fbff;
+      padding:14px 16px;
+      border-radius:12px;
+      margin-top:12px;
+    }
+
+    .example-sequence{
+      display:grid;
+      gap:14px;
+      margin-top:12px;
+    }
+
+    .example-email{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+      background:#fbfdff;
+    }
+
+    .example-email strong{
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .sr-only{
+      position:absolute !important;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    [hidden]{
+      display:none !important;
+    }
+
+    :focus-visible{
+      outline:var(--focus);
+      outline-offset:2px;
+    }
+
+    @media (max-width: 860px){
+      .intro-grid,
+      .email-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 560px){
+      .hero,
+      .panel,
+      .feedback-panel,
+      .example-panel,
+      .email-card{
+        padding:16px;
+      }
+
+      .step-indicator li{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+    <div class="course-shell">
+      <section class="hero" aria-labelledby="activity-title">
+        <h1 id="activity-title">Design an Automated Email Campaign</h1>
+        <p class="muted"><strong>Learning Objective:</strong> Practice marketing automation concepts by designing a 4-email nurture campaign and identifying explicit and implicit marketing data.</p>
+
+        <div class="intro-grid">
+          <div class="mini-card" aria-labelledby="scenario-heading">
+            <h2 id="scenario-heading">Scenario</h2>
+            <p>A company offers a free downloadable guide about improving digital marketing performance.</p>
+            <p>When visitors submit a form to download the guide, the marketing team wants to nurture the lead automatically and encourage the visitor to schedule a product demo.</p>
+            <p>Your job is to design the automation campaign.</p>
+          </div>
+
+          <div class="mini-card" aria-labelledby="instructions-heading">
+            <h2 id="instructions-heading">Instructions</h2>
+            <p>Complete both steps below.</p>
+            <p>In Step 1, choose the timing, purpose, call to action, and write a headline for each email.</p>
+            <p>In Step 2, identify which data is explicit and which data is implicit.</p>
+            <p>Select <strong>Check My Work</strong> to see your score, feedback, and an example strong campaign.</p>
+          </div>
+        </div>
+
+        <ol class="step-indicator" aria-label="Activity steps">
+          <li><span class="step-number" aria-hidden="true">1</span>Build the email campaign</li>
+          <li><span class="step-number" aria-hidden="true">2</span>Identify the data collected</li>
+          <li><span class="step-number" aria-hidden="true">3</span>Review feedback and model answer</li>
+        </ol>
+      </section>
+
+      <form id="campaignForm" novalidate>
+        <section class="panel" aria-labelledby="step1-heading">
+          <div class="section-header">
+            <div>
+              <h2 id="step1-heading">Step 1 – Email Campaign Builder</h2>
+              <p class="muted">Design four emails in the nurture sequence.</p>
+            </div>
+            <div class="progress-chip" aria-label="Progress">
+              <span aria-hidden="true">✓</span> 4 emails to complete
+            </div>
+          </div>
+
+          <div class="email-grid">
+            <article class="email-card" aria-labelledby="email1-title">
+              <h3 id="email1-title">Email 1</h3>
+              <div class="email-role">Welcome / resource delivery</div>
+
+              <fieldset>
+                <legend>Email 1 choices</legend>
+
+                <div class="field">
+                  <label for="timing1">Timing</label>
+                  <select id="timing1" name="timing1">
+                    <option value="">Select timing</option>
+                    <option>Immediately after form submission</option>
+                    <option>2 days later</option>
+                    <option>4 days later</option>
+                    <option>7 days later</option>
+                    <option>After purchase</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="purpose1">Purpose</label>
+                  <select id="purpose1" name="purpose1">
+                    <option value="">Select purpose</option>
+                    <option>Deliver the guide and welcome the subscriber</option>
+                    <option>Provide additional educational content</option>
+                    <option>Share a case study or success story</option>
+                    <option>Encourage scheduling a demo</option>
+                    <option>Send a product discount</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="cta1">CTA</label>
+                  <select id="cta1" name="cta1">
+                    <option value="">Select CTA</option>
+                    <option>Download the guide</option>
+                    <option>Read a related article</option>
+                    <option>Watch a demo video</option>
+                    <option>Schedule a demo</option>
+                    <option>Contact sales</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="headline1">Headline</label>
+                  <input type="text" id="headline1" name="headline1" autocomplete="off" />
+                  <p class="hint">Tip: include words like <strong>guide</strong>, <strong>welcome</strong>, <strong>download</strong>, or <strong>here</strong>.</p>
+                </div>
+              </fieldset>
+              <div id="feedback-email1" class="email-feedback" hidden></div>
+            </article>
+
+            <article class="email-card" aria-labelledby="email2-title">
+              <h3 id="email2-title">Email 2</h3>
+              <div class="email-role">Educational nurture</div>
+
+              <fieldset>
+                <legend>Email 2 choices</legend>
+
+                <div class="field">
+                  <label for="timing2">Timing</label>
+                  <select id="timing2" name="timing2">
+                    <option value="">Select timing</option>
+                    <option>Immediately after form submission</option>
+                    <option>2 days later</option>
+                    <option>4 days later</option>
+                    <option>7 days later</option>
+                    <option>After purchase</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="purpose2">Purpose</label>
+                  <select id="purpose2" name="purpose2">
+                    <option value="">Select purpose</option>
+                    <option>Deliver the guide and welcome the subscriber</option>
+                    <option>Provide additional educational content</option>
+                    <option>Share a case study or success story</option>
+                    <option>Encourage scheduling a demo</option>
+                    <option>Send a product discount</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="cta2">CTA</label>
+                  <select id="cta2" name="cta2">
+                    <option value="">Select CTA</option>
+                    <option>Download the guide</option>
+                    <option>Read a related article</option>
+                    <option>Watch a demo video</option>
+                    <option>Schedule a demo</option>
+                    <option>Contact sales</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="headline2">Headline</label>
+                  <input type="text" id="headline2" name="headline2" autocomplete="off" />
+                  <p class="hint">Tip: include words like <strong>tips</strong>, <strong>learn</strong>, <strong>improve</strong>, or <strong>strategy</strong>.</p>
+                </div>
+              </fieldset>
+              <div id="feedback-email2" class="email-feedback" hidden></div>
+            </article>
+
+            <article class="email-card" aria-labelledby="email3-title">
+              <h3 id="email3-title">Email 3</h3>
+              <div class="email-role">Proof / value building</div>
+
+              <fieldset>
+                <legend>Email 3 choices</legend>
+
+                <div class="field">
+                  <label for="timing3">Timing</label>
+                  <select id="timing3" name="timing3">
+                    <option value="">Select timing</option>
+                    <option>Immediately after form submission</option>
+                    <option>2 days later</option>
+                    <option>4 days later</option>
+                    <option>7 days later</option>
+                    <option>After purchase</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="purpose3">Purpose</label>
+                  <select id="purpose3" name="purpose3">
+                    <option value="">Select purpose</option>
+                    <option>Deliver the guide and welcome the subscriber</option>
+                    <option>Provide additional educational content</option>
+                    <option>Share a case study or success story</option>
+                    <option>Encourage scheduling a demo</option>
+                    <option>Send a product discount</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="cta3">CTA</label>
+                  <select id="cta3" name="cta3">
+                    <option value="">Select CTA</option>
+                    <option>Download the guide</option>
+                    <option>Read a related article</option>
+                    <option>Watch a demo video</option>
+                    <option>Schedule a demo</option>
+                    <option>Contact sales</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="headline3">Headline</label>
+                  <input type="text" id="headline3" name="headline3" autocomplete="off" />
+                  <p class="hint">Tip: include words like <strong>results</strong>, <strong>success</strong>, <strong>case study</strong>, or <strong>proof</strong>.</p>
+                </div>
+              </fieldset>
+              <div id="feedback-email3" class="email-feedback" hidden></div>
+            </article>
+
+            <article class="email-card" aria-labelledby="email4-title">
+              <h3 id="email4-title">Email 4</h3>
+              <div class="email-role">Conversion / demo invitation</div>
+
+              <fieldset>
+                <legend>Email 4 choices</legend>
+
+                <div class="field">
+                  <label for="timing4">Timing</label>
+                  <select id="timing4" name="timing4">
+                    <option value="">Select timing</option>
+                    <option>Immediately after form submission</option>
+                    <option>2 days later</option>
+                    <option>4 days later</option>
+                    <option>7 days later</option>
+                    <option>After purchase</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="purpose4">Purpose</label>
+                  <select id="purpose4" name="purpose4">
+                    <option value="">Select purpose</option>
+                    <option>Deliver the guide and welcome the subscriber</option>
+                    <option>Provide additional educational content</option>
+                    <option>Share a case study or success story</option>
+                    <option>Encourage scheduling a demo</option>
+                    <option>Send a product discount</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="cta4">CTA</label>
+                  <select id="cta4" name="cta4">
+                    <option value="">Select CTA</option>
+                    <option>Download the guide</option>
+                    <option>Read a related article</option>
+                    <option>Watch a demo video</option>
+                    <option>Schedule a demo</option>
+                    <option>Contact sales</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="headline4">Headline</label>
+                  <input type="text" id="headline4" name="headline4" autocomplete="off" />
+                  <p class="hint">Tip: include words like <strong>demo</strong>, <strong>schedule</strong>, <strong>next step</strong>, or <strong>talk</strong>.</p>
+                </div>
+              </fieldset>
+              <div id="feedback-email4" class="email-feedback" hidden></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="step2-heading">
+          <div class="section-header">
+            <div>
+              <h2 id="step2-heading">Step 2 – Data Collection Questions</h2>
+              <p class="muted">Select the examples of explicit and implicit data collected in this campaign.</p>
+            </div>
+            <div class="progress-chip" aria-label="Progress">
+              <span aria-hidden="true">✓</span> 2 questions to complete
+            </div>
+          </div>
+
+          <div class="email-grid">
+            <article class="email-card" aria-labelledby="explicit-title">
+              <h3 id="explicit-title">Question 1 – Explicit Data</h3>
+              <p>Which of the following are examples of <strong>explicit data</strong> collected in this campaign?</p>
+
+              <fieldset>
+                <legend>Select all that apply</legend>
+                <div class="check-list">
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-email" name="explicit" value="email address" />
+                    <label for="explicit-email">email address</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-name" name="explicit" value="name entered on the form" />
+                    <label for="explicit-name">name entered on the form</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-company" name="explicit" value="company name" />
+                    <label for="explicit-company">company name</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-industry" name="explicit" value="industry selection" />
+                    <label for="explicit-industry">industry selection</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-opens" name="explicit" value="email opens" />
+                    <label for="explicit-opens">email opens</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-clicks" name="explicit" value="link clicks" />
+                    <label for="explicit-clicks">link clicks</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="explicit-pages" name="explicit" value="pages visited" />
+                    <label for="explicit-pages">pages visited</label>
+                  </div>
+                </div>
+              </fieldset>
+              <div id="feedback-explicit" class="question-feedback" hidden></div>
+            </article>
+
+            <article class="email-card" aria-labelledby="implicit-title">
+              <h3 id="implicit-title">Question 2 – Implicit Data</h3>
+              <p>Which of the following are examples of <strong>implicit data</strong> collected from the campaign?</p>
+
+              <fieldset>
+                <legend>Select all that apply</legend>
+                <div class="check-list">
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-opens" name="implicit" value="email opens" />
+                    <label for="implicit-opens">email opens</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-clicks" name="implicit" value="link clicks" />
+                    <label for="implicit-clicks">link clicks</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-pages" name="implicit" value="pages visited" />
+                    <label for="implicit-pages">pages visited</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-repeat" name="implicit" value="repeat visits" />
+                    <label for="implicit-repeat">repeat visits</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-name" name="implicit" value="name entered in form" />
+                    <label for="implicit-name">name entered in form</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-email" name="implicit" value="email address" />
+                    <label for="implicit-email">email address</label>
+                  </div>
+                  <div class="check-option">
+                    <input type="checkbox" id="implicit-company" name="implicit" value="company name" />
+                    <label for="implicit-company">company name</label>
+                  </div>
+                </div>
+              </fieldset>
+              <div id="feedback-implicit" class="question-feedback" hidden></div>
+            </article>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="primary-btn" id="checkBtn">Check My Work</button>
+            <button type="reset" class="secondary-btn" id="resetBtn">Reset Activity</button>
+          </div>
+        </section>
+
+        <div id="liveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+        <section id="overallFeedback" class="feedback-panel" hidden tabindex="-1" aria-labelledby="overall-heading">
+          <h2 id="overall-heading">Feedback</h2>
+          <div id="scoreBadge" class="score-badge"></div>
+          <div id="overallText"></div>
+          <div class="best-practice">
+            <strong>Best Practice Reminder</strong>
+            <p>A strong nurture sequence moves from delivery, to learning, to proof, to conversion. It also combines form data with behavior data so the team can personalize follow-up and measure engagement.</p>
+          </div>
+        </section>
+
+        <section id="exampleCampaign" class="example-panel" hidden aria-labelledby="example-heading">
+          <h2 id="example-heading">Example Strong Campaign</h2>
+          <p>This is one example of a strong 4-email automated nurture sequence.</p>
+
+          <div class="example-sequence">
+            <div class="example-email">
+              <strong>Email 1 – Welcome / Resource Delivery</strong>
+              <p><strong>Timing:</strong> Immediately after form submission</p>
+              <p><strong>Purpose:</strong> Deliver the guide and welcome the subscriber</p>
+              <p><strong>CTA:</strong> Download the guide</p>
+              <p><strong>Headline:</strong> Your Guide Is Here — Welcome!</p>
+            </div>
+
+            <div class="example-email">
+              <strong>Email 2 – Educational Nurture</strong>
+              <p><strong>Timing:</strong> 2 days later</p>
+              <p><strong>Purpose:</strong> Provide additional educational content</p>
+              <p><strong>CTA:</strong> Read a related article</p>
+              <p><strong>Headline:</strong> 3 Tips to Improve Your Digital Marketing Strategy</p>
+            </div>
+
+            <div class="example-email">
+              <strong>Email 3 – Proof / Value Building</strong>
+              <p><strong>Timing:</strong> 4 days later</p>
+              <p><strong>Purpose:</strong> Share a case study or success story</p>
+              <p><strong>CTA:</strong> Watch a demo video</p>
+              <p><strong>Headline:</strong> See the Results: A Customer Success Story</p>
+            </div>
+
+            <div class="example-email">
+              <strong>Email 4 – Conversion / Demo Invitation</strong>
+              <p><strong>Timing:</strong> 7 days later</p>
+              <p><strong>Purpose:</strong> Encourage scheduling a demo</p>
+              <p><strong>CTA:</strong> Schedule a demo</p>
+              <p><strong>Headline:</strong> Ready for the Next Step? Schedule Your Demo</p>
+            </div>
+          </div>
+        </section>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const emailConfigs = [
+        {
+          number: 1,
+          timingId: "timing1",
+          purposeId: "purpose1",
+          ctaId: "cta1",
+          headlineId: "headline1",
+          feedbackId: "feedback-email1",
+          correctTiming: "Immediately after form submission",
+          correctPurpose: "Deliver the guide and welcome the subscriber",
+          correctCta: "Download the guide",
+          keywords: ["guide", "welcome", "download", "here"],
+          goodTimingMessage: "Sending the guide immediately is best practice because it delivers the resource promised during sign-up.",
+          purposeMessage: "Email 1 should welcome the new lead and deliver the promised guide.",
+          ctaMessage: "The strongest CTA for the first email is usually the promised resource itself."
+        },
+        {
+          number: 2,
+          timingId: "timing2",
+          purposeId: "purpose2",
+          ctaId: "cta2",
+          headlineId: "headline2",
+          feedbackId: "feedback-email2",
+          correctTiming: "2 days later",
+          correctPurpose: "Provide additional educational content",
+          correctCta: "Read a related article",
+          keywords: ["tips", "learn", "improve", "strategy"],
+          goodTimingMessage: "A short delay keeps the lead engaged without overwhelming them right after sign-up.",
+          purposeMessage: "Email 2 should keep the lead learning with useful content.",
+          ctaMessage: "A low-pressure educational CTA works well in the nurture stage."
+        },
+        {
+          number: 3,
+          timingId: "timing3",
+          purposeId: "purpose3",
+          ctaId: "cta3",
+          feedbackId: "feedback-email3",
+          headlineId: "headline3",
+          correctTiming: "4 days later",
+          correctPurpose: "Share a case study or success story",
+          correctCta: "Watch a demo video",
+          keywords: ["results", "success", "case study", "proof"],
+          goodTimingMessage: "By the third email, it is helpful to build trust with proof and results.",
+          purposeMessage: "Email 3 should show evidence that the solution creates value.",
+          ctaMessage: "A demo video is a strong bridge from interest to deeper product understanding."
+        },
+        {
+          number: 4,
+          timingId: "timing4",
+          purposeId: "purpose4",
+          ctaId: "cta4",
+          headlineId: "headline4",
+          feedbackId: "feedback-email4",
+          correctTiming: "7 days later",
+          correctPurpose: "Encourage scheduling a demo",
+          correctCta: "Schedule a demo",
+          keywords: ["demo", "schedule", "next step", "talk"],
+          goodTimingMessage: "A later conversion email gives the lead time to learn before being asked for a meeting.",
+          purposeMessage: "Email 4 should move the lead toward a clear conversion action.",
+          ctaMessage: "The CTA should directly support the campaign goal of scheduling a demo."
+        }
+      ];
+
+      const explicitCorrect = [
+        "email address",
+        "name entered on the form",
+        "company name",
+        "industry selection"
+      ];
+
+      const implicitCorrect = [
+        "email opens",
+        "link clicks",
+        "pages visited",
+        "repeat visits"
+      ];
+
+      const checkBtn = document.getElementById("checkBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const form = document.getElementById("campaignForm");
+      const liveRegion = document.getElementById("liveRegion");
+      const overallFeedback = document.getElementById("overallFeedback");
+      const exampleCampaign = document.getElementById("exampleCampaign");
+      const overallText = document.getElementById("overallText");
+      const scoreBadge = document.getElementById("scoreBadge");
+
+      function normalizeText(text) {
+        return (text || "").toLowerCase().trim();
+      }
+
+      function containsKeyword(text, keywords) {
+        const normalized = normalizeText(text);
+        return keywords.some(function (keyword) {
+          return normalized.indexOf(keyword.toLowerCase()) !== -1;
+        });
+      }
+
+      function getCheckedValues(name) {
+        return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function (el) {
+          return el.value;
+        });
+      }
+
+      function compareSelections(selected, correct) {
+        const selectedSet = new Set(selected);
+        const correctSet = new Set(correct);
+        let correctCount = 0;
+
+        correct.forEach(function (item) {
+          if (selectedSet.has(item)) {
+            correctCount++;
+          }
+        });
+
+        let incorrectSelections = 0;
+        selected.forEach(function (item) {
+          if (!correctSet.has(item)) {
+            incorrectSelections++;
+          }
+        });
+
+        return {
+          correctCount: correctCount,
+          incorrectSelections: incorrectSelections,
+          fullyCorrect: correctCount === correct.length && incorrectSelections === 0
+        };
+      }
+
+      function setFeedbackBox(element, toneClass, html) {
+        element.hidden = false;
+        element.className = toneClass;
+        element.innerHTML = html;
+      }
+
+      function evaluateEmail(config) {
+        const timingValue = document.getElementById(config.timingId).value;
+        const purposeValue = document.getElementById(config.purposeId).value;
+        const ctaValue = document.getElementById(config.ctaId).value;
+        const headlineValue = document.getElementById(config.headlineId).value;
+        const feedbackEl = document.getElementById(config.feedbackId);
+
+        let points = 0;
+        const messages = [];
+
+        if (timingValue === config.correctTiming) {
+          points++;
+          messages.push("<p><strong>Timing:</strong> Good choice. " + config.goodTimingMessage + "</p>");
+        } else if (!timingValue) {
+          messages.push("<p><strong>Timing:</strong> Choose a timing for this email.</p>");
+        } else {
+          messages.push("<p><strong>Timing:</strong> Consider a different time. " + config.goodTimingMessage + "</p>");
+        }
+
+        if (purposeValue === config.correctPurpose) {
+          points++;
+          messages.push("<p><strong>Purpose:</strong> Good match for this stage of the campaign.</p>");
+        } else if (!purposeValue) {
+          messages.push("<p><strong>Purpose:</strong> Choose a purpose for this email.</p>");
+        } else {
+          messages.push("<p><strong>Purpose:</strong> Revisit the goal of this stage. " + config.purposeMessage + "</p>");
+        }
+
+        if (ctaValue === config.correctCta) {
+          points++;
+          messages.push("<p><strong>CTA:</strong> This call to action fits the email goal well.</p>");
+        } else if (!ctaValue) {
+          messages.push("<p><strong>CTA:</strong> Choose a call to action for this email.</p>");
+        } else {
+          messages.push("<p><strong>CTA:</strong> Try a CTA that better supports the purpose. " + config.ctaMessage + "</p>");
+        }
+
+        if (normalizeText(headlineValue).length > 0 && containsKeyword(headlineValue, config.keywords)) {
+          points++;
+          messages.push("<p><strong>Headline:</strong> Your headline uses relevant language for this email stage.</p>");
+        } else if (normalizeText(headlineValue).length > 0) {
+          messages.push("<p><strong>Headline:</strong> Your headline is on the right track, but it would be stronger if it included words tied to this email goal.</p>");
+        } else {
+          messages.push("<p><strong>Headline:</strong> Add a headline for this email.</p>");
+        }
+
+        let toneClass = "email-feedback status-warn";
+        if (points === 4) {
+          toneClass = "email-feedback status-good";
+        } else if (points <= 1) {
+          toneClass = "email-feedback status-bad";
+        }
+
+        setFeedbackBox(feedbackEl, toneClass, messages.join(""));
+        return points;
+      }
+
+      function evaluateQuestion(name, correctAnswers, feedbackId, explanation) {
+        const selected = getCheckedValues(name);
+        const result = compareSelections(selected, correctAnswers);
+        const feedbackEl = document.getElementById(feedbackId);
+        const missing = correctAnswers.filter(function (item) {
+          return selected.indexOf(item) === -1;
+        });
+        const incorrect = selected.filter(function (item) {
+          return correctAnswers.indexOf(item) === -1;
+        });
+
+        let html = "";
+        let toneClass = "question-feedback status-warn";
+
+        if (result.fullyCorrect) {
+          toneClass = "question-feedback status-good";
+          html += "<p><strong>Correct.</strong> You identified all of the best answers.</p>";
+        } else {
+          html += "<p><strong>Keep refining your answer.</strong></p>";
+          if (missing.length) {
+            html += "<p><strong>Missing correct choices:</strong> " + missing.join(", ") + ".</p>";
+          }
+          if (incorrect.length) {
+            html += "<p><strong>Choices to remove:</strong> " + incorrect.join(", ") + ".</p>";
+          }
+          if (result.correctCount === 0 && incorrect.length > 0) {
+            toneClass = "question-feedback status-bad";
+          }
+        }
+
+        html += "<p>" + explanation + "</p>";
+        setFeedbackBox(feedbackEl, toneClass, html);
+        return result.correctCount;
+      }
+
+      function showOverallFeedback(percent, pointsEarned, totalPoints) {
+        scoreBadge.textContent = "Score: " + pointsEarned + " / " + totalPoints + " (" + percent + "%)";
+
+        let summary = "";
+        if (percent >= 90) {
+          summary += "<p><strong>Excellent work.</strong> Your campaign structure closely matches common marketing automation best practices.</p>";
+        } else if (percent >= 70) {
+          summary += "<p><strong>Good progress.</strong> Your campaign shows a strong understanding of nurture flow, with a few areas to refine.</p>";
+        } else {
+          summary += "<p><strong>You are building the right foundation.</strong> Review the sequence logic and the difference between explicit and implicit data.</p>";
+        }
+
+        summary += "<p>A strong automated campaign usually follows this pattern: deliver the promised resource right away, continue with helpful education, build trust with proof, and then ask for the conversion action at the right time.</p>";
+        summary += "<p>When designing campaigns, marketers also separate <strong>explicit data</strong> from <strong>implicit data</strong>. Explicit data is submitted directly by the lead, while implicit data is learned from behavior during the campaign.</p>";
+
+        overallText.innerHTML = summary;
+      }
+
+      function evaluateActivity() {
+        let pointsEarned = 0;
+        const totalPoints = 24;
+
+        emailConfigs.forEach(function (config) {
+          pointsEarned += evaluateEmail(config);
+        });
+
+        pointsEarned += evaluateQuestion(
+          "explicit",
+          explicitCorrect,
+          "feedback-explicit",
+          "Explicit data is information the lead gives directly, such as their email address, name, company name, and industry selection."
+        );
+
+        pointsEarned += evaluateQuestion(
+          "implicit",
+          implicitCorrect,
+          "feedback-implicit",
+          "Implicit data comes from behavior. Email opens, link clicks, pages visited, and repeat visits are inferred from user actions."
+        );
+
+        const percent = Math.round((pointsEarned / totalPoints) * 100);
+        showOverallFeedback(percent, pointsEarned, totalPoints);
+
+        overallFeedback.hidden = false;
+        exampleCampaign.hidden = false;
+
+        const announcement = "Feedback ready. You scored " + pointsEarned + " out of " + totalPoints + ", which is " + percent + " percent.";
+        liveRegion.textContent = announcement;
+        overallFeedback.focus();
+      }
+
+      function resetFeedback() {
+        Array.from(document.querySelectorAll(".email-feedback, .question-feedback")).forEach(function (el) {
+          if (el.id.indexOf("feedback-email") === 0) {
+            el.className = "email-feedback";
+          } else {
+            el.className = "question-feedback";
+          }
+          el.hidden = true;
+          el.innerHTML = "";
+        });
+
+        overallFeedback.hidden = true;
+        exampleCampaign.hidden = true;
+        overallText.innerHTML = "";
+        scoreBadge.textContent = "";
+        liveRegion.textContent = "Activity reset.";
+      }
+
+      checkBtn.addEventListener("click", function () {
+        evaluateActivity();
+      });
+
+      resetBtn.addEventListener("click", function () {
+        window.setTimeout(function () {
+          resetFeedback();
+        }, 0);
+      });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+      });
+    })();
+  </script>
+</body>
+</html>
