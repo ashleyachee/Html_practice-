@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Strategy Studio</title>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --panel:#ffffff;
+      --panel-soft:#f8fbff;
+      --text:#17212b;
+      --muted:#526272;
+      --border:#c9d6e5;
+      --accent:#1d4ed8;
+      --accent-dark:#163ea9;
+      --accent-soft:#e8f0ff;
+      --success:#166534;
+      --success-bg:#ecfdf3;
+      --danger:#991b1b;
+      --danger-bg:#fef2f2;
+      --warning:#8a5a00;
+      --warning-bg:#fff8e8;
+      --shadow:0 14px 32px rgba(19, 37, 63, 0.08);
+      --radius:20px;
+      --focus:3px solid #111827;
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial, Helvetica, sans-serif;
+      line-height:1.5;
+    }
+
+    body{
+      padding:20px;
+    }
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .hero{
+      background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+      border:1px solid var(--border);
+      border-radius:26px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+      font-size:.85rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      padding:7px 11px;
+      border-radius:999px;
+      margin-bottom:12px;
+    }
+
+    h1,h2,h3{
+      margin-top:0;
+      line-height:1.2;
+    }
+
+    h1{
+      font-size:clamp(2rem, 3vw, 2.7rem);
+      margin-bottom:10px;
+    }
+
+    h2{
+      font-size:1.35rem;
+      margin-bottom:10px;
+    }
+
+    h3{
+      font-size:1.05rem;
+      margin-bottom:8px;
+    }
+
+    p{
+      margin:0 0 12px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .info-card{
+      background:var(--panel-soft);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .info-card ul{
+      margin:10px 0 0 20px;
+      padding:0;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(320px, 1.05fr) minmax(300px, .95fr);
+      gap:20px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .section-label{
+      display:inline-block;
+      color:var(--accent-dark);
+      font-weight:700;
+      font-size:.92rem;
+      margin-bottom:8px;
+    }
+
+    .progress-wrap{
+      margin:12px 0 18px;
+    }
+
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:8px;
+      flex-wrap:wrap;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:14px;
+      border-radius:999px;
+      background:#e7eef7;
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--accent), #4f7cff);
+      transition:width .35s ease;
+    }
+
+    .keyword-chip{
+      display:inline-block;
+      background:#eef4ff;
+      color:#10367c;
+      border:1px solid #c4d6fb;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .keyword-box{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      margin-bottom:16px;
+    }
+
+    .keyword-term{
+      font-size:1.35rem;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .keyword-hint{
+      color:var(--muted);
+      font-size:.98rem;
+    }
+
+    fieldset{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      margin:14px 0 0;
+      background:#fff;
+    }
+
+    legend{
+      font-weight:700;
+      padding:0 8px;
+    }
+
+    .field{
+      margin-bottom:14px;
+    }
+
+    .field:last-child{
+      margin-bottom:0;
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+
+    select, button{
+      font:inherit;
+    }
+
+    select{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #95a7ba;
+      background:#fff;
+      color:var(--text);
+    }
+
+    select:focus,
+    button:focus,
+    .keyword-nav button:focus{
+      outline:var(--focus);
+      outline-offset:2px;
+    }
+
+    .button-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    button{
+      min-height:48px;
+      border:none;
+      border-radius:14px;
+      padding:13px 18px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .primary-btn{
+      background:var(--accent);
+      color:#fff;
+    }
+
+    .primary-btn:hover{
+      background:var(--accent-dark);
+    }
+
+    .secondary-btn{
+      background:#e8eef6;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .feedback{
+      margin-top:16px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid transparent;
+      display:none;
+    }
+
+    .feedback.show{
+      display:block;
+    }
+
+    .feedback.correct{
+      background:var(--success-bg);
+      border-color:#b9e6ca;
+      color:var(--success);
+    }
+
+    .feedback.incorrect{
+      background:var(--danger-bg);
+      border-color:#efb3b3;
+      color:var(--danger);
+    }
+
+    .feedback.neutral{
+      background:var(--warning-bg);
+      border-color:#ead7a9;
+      color:var(--warning);
+    }
+
+    .board{
+      display:grid;
+      gap:14px;
+    }
+
+    .cluster{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+      overflow:hidden;
+    }
+
+    .cluster-head{
+      padding:14px 16px;
+      background:var(--panel-soft);
+      border-bottom:1px solid var(--border);
+    }
+
+    .cluster-head h3{
+      margin:0;
+      font-size:1rem;
+    }
+
+    .cluster-body{
+      padding:14px;
+      min-height:96px;
+    }
+
+    .empty-note{
+      color:var(--muted);
+      font-size:.95rem;
+      margin:0;
+    }
+
+    .content-card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:#fcfdff;
+      margin-bottom:10px;
+    }
+
+    .content-card:last-child{
+      margin-bottom:0;
+    }
+
+    .content-card .term{
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .content-card .meta{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .studio-summary{
+      margin-top:18px;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      display:none;
+    }
+
+    .studio-summary.show{
+      display:block;
+    }
+
+    .score{
+      font-size:2rem;
+      font-weight:800;
+      margin:4px 0 8px;
+    }
+
+    .keyword-nav{
+      display:grid;
+      grid-template-columns:repeat(8, minmax(36px, 1fr));
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .keyword-nav button{
+      min-height:42px;
+      padding:8px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      font-weight:700;
+    }
+
+    .keyword-nav button.active{
+      background:var(--accent-soft);
+      border-color:#a6c1ff;
+      color:var(--accent-dark);
+    }
+
+    .keyword-nav button.done{
+      background:#edfdf4;
+      border-color:#b7e4c7;
+    }
+
+    .visually-hidden{
+      position:absolute !important;
+      width:1px !important;
+      height:1px !important;
+      padding:0 !important;
+      margin:-1px !important;
+      overflow:hidden !important;
+      clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important;
+      border:0 !important;
+    }
+
+    .status-note{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:8px;
+    }
+
+    .completed-panel{
+      margin-top:16px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      background:var(--panel-soft);
+    }
+
+    .completed-panel ul{
+      margin:8px 0 0 20px;
+      padding:0;
+    }
+
+    @media (max-width: 940px){
+      .hero-grid,
+      .layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      body{
+        padding:14px;
+      }
+
+      .hero,
+      .card{
+        padding:18px;
+      }
+
+      .keyword-nav{
+        grid-template-columns:repeat(4, minmax(36px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <div class="eyebrow">Interactive Learning Activity</div>
+      <h1>Content Strategy Studio</h1>
+      <p>
+        Practice turning keyword research into a simple content plan. You will review one keyword at a time,
+        decide its search intent, choose the best content format, and watch your strategy board fill in as you work.
+      </p>
+
+      <div class="hero-grid">
+        <section class="info-card" aria-labelledby="scenario-heading">
+          <h2 id="scenario-heading">Scenario</h2>
+          <p>
+            You are helping a marketing team at an email marketing software company. The team already completed
+            keyword research and now needs help deciding what kind of content to create for each keyword opportunity.
+          </p>
+        </section>
+
+        <section class="info-card" aria-labelledby="instructions-heading">
+          <h2 id="instructions-heading">How It Works</h2>
+          <ul>
+            <li>Review one keyword card at a time.</li>
+            <li>Select the best search intent.</li>
+            <li>Select the best content format.</li>
+            <li>Submit your decision for each keyword.</li>
+            <li>Watch the content board fill automatically by topic cluster.</li>
+          </ul>
+        </section>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="studio-heading">
+        <div class="section-label">Decision Lab</div>
+        <h2 id="studio-heading">Keyword Review Panel</h2>
+        <p>
+          Make a content strategy decision for each keyword. The board on the right will update as you complete each card.
+        </p>
+
+        <div class="progress-wrap" aria-label="Activity progress">
+          <div class="progress-top">
+            <strong id="progressText">Keyword 1 of 8</strong>
+            <span id="completionText">0 of 8 completed</span>
+          </div>
+          <div class="progress-bar" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="keyword-box" aria-labelledby="current-keyword-heading">
+          <div class="keyword-chip" id="clusterPreview">Topic cluster: —</div>
+          <div class="keyword-term" id="current-keyword-heading">email marketing best practices</div>
+          <p class="keyword-hint" id="keywordHint">
+            Think about what the searcher most likely wants and what type of content would best meet that need.
+          </p>
+        </div>
+
+        <form id="studioForm" novalidate>
+          <fieldset>
+            <legend>Choose your strategy recommendation</legend>
+
+            <div class="field">
+              <label for="intentSelect">Search intent</label>
+              <select id="intentSelect" name="intentSelect">
+                <option value="">Select search intent</option>
+                <option value="Informational">Informational</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Navigational">Navigational</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="formatSelect">Best content format</label>
+              <select id="formatSelect" name="formatSelect">
+                <option value="">Select content format</option>
+                <option value="Blog article">Blog article</option>
+                <option value="Step-by-step guide">Step-by-step guide</option>
+                <option value="Tutorial">Tutorial</option>
+                <option value="Comparison page">Comparison page</option>
+                <option value="Case study">Case study</option>
+                <option value="Checklist">Checklist</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <div class="button-row">
+            <button type="button" class="primary-btn" id="saveBtn">Save This Decision</button>
+            <button type="button" class="secondary-btn" id="nextBtn">Next Keyword</button>
+            <button type="button" class="secondary-btn" id="resetBtn">Reset Activity</button>
+          </div>
+
+          <div id="cardFeedback" class="feedback" tabindex="-1"></div>
+          <div id="liveRegion" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+          <p class="status-note" id="statusNote">No keyword decisions saved yet.</p>
+        </form>
+
+        <div class="completed-panel" aria-labelledby="jump-heading">
+          <h3 id="jump-heading">Keyword Navigation</h3>
+          <p class="status-note">Use these buttons to move through the keyword cards in any order.</p>
+          <div class="keyword-nav" id="keywordNav"></div>
+        </div>
+
+        <section class="studio-summary" id="finalSummary" aria-labelledby="summary-heading">
+          <h2 id="summary-heading">Studio Results</h2>
+          <div class="score" id="finalScore">0%</div>
+          <p id="summaryText">Complete all keyword cards to view your final results.</p>
+          <div id="summaryDetails"></div>
+        </section>
+      </section>
+
+      <aside class="card" aria-labelledby="board-heading">
+        <div class="section-label">Strategy Board</div>
+        <h2 id="board-heading">Growing Content Board</h2>
+        <p>
+          Each time you save a keyword decision, the keyword is added to its topic cluster here.
+        </p>
+
+        <div class="board">
+          <section class="cluster" aria-labelledby="cluster-beginner">
+            <div class="cluster-head">
+              <h3 id="cluster-beginner">Beginner Education</h3>
+            </div>
+            <div class="cluster-body" id="board-Beginner Education">
+              <p class="empty-note">No keywords added yet.</p>
+            </div>
+          </section>
+
+          <section class="cluster" aria-labelledby="cluster-list">
+            <div class="cluster-head">
+              <h3 id="cluster-list">List Building</h3>
+            </div>
+            <div class="cluster-body" id="board-List Building">
+              <p class="empty-note">No keywords added yet.</p>
+            </div>
+          </section>
+
+          <section class="cluster" aria-labelledby="cluster-automation">
+            <div class="cluster-head">
+              <h3 id="cluster-automation">Automation</h3>
+            </div>
+            <div class="cluster-body" id="board-Automation">
+              <p class="empty-note">No keywords added yet.</p>
+            </div>
+          </section>
+
+          <section class="cluster" aria-labelledby="cluster-performance">
+            <div class="cluster-head">
+              <h3 id="cluster-performance">Performance / Measurement</h3>
+            </div>
+            <div class="cluster-body" id="board-Performance / Measurement">
+              <p class="empty-note">No keywords added yet.</p>
+            </div>
+          </section>
+
+          <section class="cluster" aria-labelledby="cluster-software">
+            <div class="cluster-head">
+              <h3 id="cluster-software">Software Comparison</h3>
+            </div>
+            <div class="cluster-body" id="board-Software Comparison">
+              <p class="empty-note">No keywords added yet.</p>
+            </div>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // ------------------------------------------------
+    // Data model
+    // ------------------------------------------------
+    const keywordCards = [
+      {
+        keyword: "email marketing best practices",
+        cluster: "Beginner Education",
+        intent: "Informational",
+        formats: ["Blog article", "Step-by-step guide"],
+        feedback: "This keyword belongs in Beginner Education because the searcher wants broad advice and practical starting guidance."
+      },
+      {
+        keyword: "how to grow an email list",
+        cluster: "List Building",
+        intent: "Informational",
+        formats: ["Step-by-step guide", "Checklist"],
+        feedback: "This keyword fits List Building because the searcher wants tactics for attracting more subscribers."
+      },
+      {
+        keyword: "email subject line examples",
+        cluster: "List Building",
+        intent: "Informational",
+        formats: ["Blog article", "Checklist"],
+        feedback: "Examples-based keywords work well as scannable content. This topic supports list growth and engagement goals."
+      },
+      {
+        keyword: "email automation workflow",
+        cluster: "Automation",
+        intent: "Informational",
+        formats: ["Tutorial", "Step-by-step guide"],
+        feedback: "Automation topics usually work best with instructional content because users want to learn a process step by step."
+      },
+      {
+        keyword: "welcome email sequence",
+        cluster: "Automation",
+        intent: "Informational",
+        formats: ["Tutorial", "Step-by-step guide"],
+        feedback: "A welcome sequence is a process-focused topic, so it fits the Automation cluster and benefits from guided instruction."
+      },
+      {
+        keyword: "email open rate benchmarks",
+        cluster: "Performance / Measurement",
+        intent: "Informational",
+        formats: ["Blog article"],
+        feedback: "Benchmark keywords usually belong in a measurement cluster because the user wants performance context and comparison data."
+      },
+      {
+        keyword: "best email marketing software",
+        cluster: "Software Comparison",
+        intent: "Commercial",
+        formats: ["Comparison page"],
+        feedback: "This keyword clearly signals commercial intent because the user is comparing tools before choosing one."
+      },
+      {
+        keyword: "email marketing for beginners",
+        cluster: "Beginner Education",
+        intent: "Informational",
+        formats: ["Blog article", "Step-by-step guide"],
+        feedback: "This keyword is introductory, so it fits Beginner Education and calls for simple educational content."
+      }
+    ];
+
+    let currentIndex = 0;
+    let savedAnswers = {};
+
+    // ------------------------------------------------
+    // DOM references
+    // ------------------------------------------------
+    const keywordHeading = document.getElementById("current-keyword-heading");
+    const clusterPreview = document.getElementById("clusterPreview");
+    const keywordHint = document.getElementById("keywordHint");
+    const intentSelect = document.getElementById("intentSelect");
+    const formatSelect = document.getElementById("formatSelect");
+    const feedbackBox = document.getElementById("cardFeedback");
+    const progressText = document.getElementById("progressText");
+    const completionText = document.getElementById("completionText");
+    const progressFill = document.getElementById("progressFill");
+    const liveRegion = document.getElementById("liveRegion");
+    const statusNote = document.getElementById("statusNote");
+    const keywordNav = document.getElementById("keywordNav");
+    const finalSummary = document.getElementById("finalSummary");
+    const finalScore = document.getElementById("finalScore");
+    const summaryText = document.getElementById("summaryText");
+    const summaryDetails = document.getElementById("summaryDetails");
+
+    const saveBtn = document.getElementById("saveBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    // ------------------------------------------------
+    // Initialization
+    // ------------------------------------------------
+    function initNav() {
+      keywordNav.innerHTML = "";
+      keywordCards.forEach((card, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = index + 1;
+        btn.setAttribute("aria-label", "Go to keyword " + (index + 1) + ": " + card.keyword);
+        btn.addEventListener("click", () => {
+          currentIndex = index;
+          renderCard();
+        });
+        keywordNav.appendChild(btn);
+      });
+    }
+
+    function renderCard() {
+      const card = keywordCards[currentIndex];
+      const existing = savedAnswers[currentIndex];
+
+      keywordHeading.textContent = card.keyword;
+      clusterPreview.textContent = "Topic cluster: " + card.cluster;
+      keywordHint.textContent = "Decide what the searcher wants and what content type would best serve that need.";
+      progressText.textContent = "Keyword " + (currentIndex + 1) + " of " + keywordCards.length;
+
+      intentSelect.value = existing ? existing.intent : "";
+      formatSelect.value = existing ? existing.format : "";
+
+      feedbackBox.className = "feedback";
+      feedbackBox.innerHTML = "";
+
+      updateProgress();
+      updateNavButtons();
+    }
+
+    function updateProgress() {
+      const completed = Object.keys(savedAnswers).length;
+      completionText.textContent = completed + " of " + keywordCards.length + " completed";
+      const percent = Math.round((completed / keywordCards.length) * 100);
+      progressFill.style.width = percent + "%";
+    }
+
+    function updateNavButtons() {
+      const buttons = keywordNav.querySelectorAll("button");
+      buttons.forEach((btn, index) => {
+        btn.className = "";
+        if (index === currentIndex) {
+          btn.classList.add("active");
+        }
+        if (savedAnswers[index]) {
+          btn.classList.add("done");
+        }
+      });
+    }
+
+    function showFeedback(type, html) {
+      feedbackBox.className = "feedback show " + type;
+      feedbackBox.innerHTML = html;
+      feedbackBox.focus();
+    }
+
+    function clearBoard() {
+      const clusters = [
+        "Beginner Education",
+        "List Building",
+        "Automation",
+        "Performance / Measurement",
+        "Software Comparison"
+      ];
+
+      clusters.forEach(cluster => {
+        const board = document.getElementById("board-" + cluster);
+        board.innerHTML = '<p class="empty-note">No keywords added yet.</p>';
+      });
+    }
+
+    function renderBoard() {
+      clearBoard();
+
+      Object.keys(savedAnswers).forEach(indexKey => {
+        const index = Number(indexKey);
+        const answer = savedAnswers[index];
+        const card = keywordCards[index];
+        const board = document.getElementById("board-" + card.cluster);
+
+        const empty = board.querySelector(".empty-note");
+        if (empty) {
+          empty.remove();
+        }
+
+        const item = document.createElement("div");
+        item.className = "content-card";
+
+        const term = document.createElement("div");
+        term.className = "term";
+        term.textContent = card.keyword;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = "<strong>Intent:</strong> " + answer.intent + "<br><strong>Format:</strong> " + answer.format;
+
+        item.appendChild(term);
+        item.appendChild(meta);
+        board.appendChild(item);
+      });
+    }
+
+    function evaluateAnswer(card, intent, format) {
+      let score = 0;
+      let total = 2;
+
+      const intentCorrect = intent === card.intent;
+      const formatCorrect = card.formats.includes(format);
+
+      if (intentCorrect) score += 1;
+      if (formatCorrect) score += 1;
+
+      return { score, total, intentCorrect, formatCorrect };
+    }
+
+    function saveCurrentDecision() {
+      const card = keywordCards[currentIndex];
+      const chosenIntent = intentSelect.value;
+      const chosenFormat = formatSelect.value;
+
+      if (!chosenIntent || !chosenFormat) {
+        showFeedback(
+          "neutral",
+          "<strong>Complete both choices before saving.</strong> Select a search intent and a content format for this keyword."
+        );
+        liveRegion.textContent = "Please complete both dropdowns before saving this keyword.";
+        return;
+      }
+
+      savedAnswers[currentIndex] = {
+        intent: chosenIntent,
+        format: chosenFormat
+      };
+
+      const result = evaluateAnswer(card, chosenIntent, chosenFormat);
+      let feedbackMessage = "<p>" + card.feedback + "</p>";
+
+      if (result.intentCorrect && result.formatCorrect) {
+        feedbackMessage =
+          "<strong>Strong recommendation.</strong> " +
+          "You correctly matched the search intent and chose an effective format for this keyword." +
+          feedbackMessage;
+        showFeedback("correct", feedbackMessage);
+      } else if (result.intentCorrect || result.formatCorrect) {
+        feedbackMessage =
+          "<strong>Partly correct.</strong> " +
+          "One of your choices works well, but one could be improved." +
+          feedbackMessage +
+          "<p><strong>Best intent:</strong> " + card.intent +
+          "<br><strong>Strong format choice:</strong> " + card.formats.join(" or ") + "</p>";
+        showFeedback("neutral", feedbackMessage);
+      } else {
+        feedbackMessage =
+          "<strong>Try revising this strategy choice.</strong> " +
+          "This keyword points to a different user need and content type." +
+          feedbackMessage +
+          "<p><strong>Best intent:</strong> " + card.intent +
+          "<br><strong>Strong format choice:</strong> " + card.formats.join(" or ") + "</p>";
+        showFeedback("incorrect", feedbackMessage);
+      }
+
+      renderBoard();
+      updateProgress();
+      updateNavButtons();
+
+      const completed = Object.keys(savedAnswers).length;
+      statusNote.textContent = "Saved keyword " + (currentIndex + 1) + ". You have completed " + completed + " of " + keywordCards.length + " keyword cards.";
+      liveRegion.textContent = "Decision saved for " + card.keyword + ".";
+
+      if (completed === keywordCards.length) {
+        showFinalResults();
+      }
+    }
+
+    function showFinalResults() {
+      let earned = 0;
+      const total = keywordCards.length * 2;
+
+      keywordCards.forEach((card, index) => {
+        const saved = savedAnswers[index];
+        if (!saved) return;
+
+        if (saved.intent === card.intent) earned += 1;
+        if (card.formats.includes(saved.format)) earned += 1;
+      });
+
+      const percent = Math.round((earned / total) * 100);
+      finalScore.textContent = percent + "%";
+
+      if (percent >= 90) {
+        summaryText.textContent = "Excellent work. You built a strong starter content board and matched keyword meaning to content decisions very effectively.";
+      } else if (percent >= 70) {
+        summaryText.textContent = "Nice progress. Your board shows a solid understanding of search intent and content planning, with a few areas to refine.";
+      } else {
+        summaryText.textContent = "You completed the board, but some keyword decisions need revision. Review the saved cards to strengthen your strategy choices.";
+      }
+
+      const clusterCounts = {
+        "Beginner Education": 0,
+        "List Building": 0,
+        "Automation": 0,
+        "Performance / Measurement": 0,
+        "Software Comparison": 0
+      };
+
+      keywordCards.forEach(card => {
+        clusterCounts[card.cluster] += 1;
+      });
+
+      summaryDetails.innerHTML =
+        "<ul>" +
+        "<li><strong>Pillar topic represented:</strong> Email Marketing Strategy</li>" +
+        "<li><strong>Topic clusters used:</strong> Beginner Education, List Building, Automation, Performance / Measurement, Software Comparison</li>" +
+        "<li><strong>Instructional takeaway:</strong> Good content strategy starts by matching keyword meaning to search intent and then choosing a format that fits the user’s goal.</li>" +
+        "</ul>";
+
+      finalSummary.classList.add("show");
+      liveRegion.textContent = "All keyword cards completed. Your final score is " + percent + " percent.";
+    }
+
+    function goToNextKeyword() {
+      if (currentIndex < keywordCards.length - 1) {
+        currentIndex += 1;
+      } else {
+        currentIndex = 0;
+      }
+      renderCard();
+    }
+
+    function resetActivity() {
+      savedAnswers = {};
+      currentIndex = 0;
+      intentSelect.value = "";
+      formatSelect.value = "";
+      feedbackBox.className = "feedback";
+      feedbackBox.innerHTML = "";
+      finalSummary.classList.remove("show");
+      finalScore.textContent = "0%";
+      summaryText.textContent = "Complete all keyword cards to view your final results.";
+      summaryDetails.innerHTML = "";
+      statusNote.textContent = "No keyword decisions saved yet.";
+      clearBoard();
+      renderCard();
+      liveRegion.textContent = "The activity has been reset.";
+    }
+
+    // ------------------------------------------------
+    // Event listeners
+    // ------------------------------------------------
+    saveBtn.addEventListener("click", saveCurrentDecision);
+    nextBtn.addEventListener("click", goToNextKeyword);
+    resetBtn.addEventListener("click", resetActivity);
+
+    // ------------------------------------------------
+    // Start app
+    // ------------------------------------------------
+    initNav();
+    clearBoard();
+    renderCard();
+  </script>
+</body>
+</html>
