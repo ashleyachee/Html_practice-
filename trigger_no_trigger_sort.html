@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trigger / No Trigger Inbox Review</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --text:#182235;
+      --muted:#526072;
+      --border:#d3dbe7;
+      --accent:#215ec9;
+      --accent-dark:#18499c;
+      --accent-soft:#eaf2ff;
+      --success:#146c43;
+      --success-soft:#eaf7ef;
+      --error:#8f2433;
+      --error-soft:#fdf0f2;
+      --shadow:0 14px 30px rgba(24,34,53,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#f7f9fc 0%, #eef3f9 100%);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:24px 16px 40px;
+    }
+
+    .card,
+    .query-card,
+    .summary-card,
+    .header-card,
+    .footer-bar{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .header-card,
+    .summary-card,
+    .footer-bar,
+    .query-card,
+    .card{
+      padding:20px;
+    }
+
+    .header-card{margin-bottom:18px}
+    h1,h2,h3{margin:0 0 10px}
+    h1{font-size:1.8rem; line-height:1.15}
+    h2{font-size:1.35rem}
+    h3{font-size:1.05rem}
+    p{margin:0 0 12px}
+
+    .lead{color:var(--muted); max-width:70ch; font-size:1.02rem}
+
+    .instruction-list{
+      margin:8px 0 0 0;
+      padding-left:18px;
+    }
+
+    .inbox-appbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding-bottom:14px;
+      margin-bottom:14px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .app-title-wrap{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .app-icon{
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+      font-size:1.4rem;
+      border:1px solid #cfe0ff;
+      flex-shrink:0;
+    }
+
+    .app-kicker{
+      color:var(--muted);
+      font-size:.88rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin-bottom:4px;
+    }
+
+    .mailbox-chip{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f8fafc;
+      font-weight:700;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .card{
+      margin-bottom:16px;
+      padding:0;
+      overflow:hidden;
+    }
+
+    .mail-toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 18px;
+      background:#f8fafc;
+      border-bottom:1px solid var(--border);
+    }
+
+    .toolbar-left,
+    .toolbar-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:700;
+      border:1px solid #cfe0ff;
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+    }
+
+    .toolbar-pill{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:.92rem;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .mailbox-body{
+      padding:18px 20px 20px;
+    }
+
+    .round-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(220px,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .info-box{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px 16px;
+      background:#fbfcff;
+    }
+
+    .label{
+      display:block;
+      font-size:.86rem;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:var(--muted);
+      margin-bottom:4px;
+      font-weight:700;
+    }
+
+    .value{font-size:1.12rem; font-weight:700}
+
+    .mail-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .mail-subject{
+      font-size:1.08rem;
+      font-weight:700;
+    }
+
+    .mail-meta{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .query-card{
+      margin-bottom:10px;
+      padding:0;
+      border-radius:14px;
+      border:1px solid var(--border);
+      box-shadow:none;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .query-card:last-child{margin-bottom:0}
+
+    .message-row{
+      display:grid;
+      grid-template-columns:110px 1fr auto;
+      gap:14px;
+      align-items:start;
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      background:#fcfdff;
+    }
+
+    .message-from{
+      font-size:.9rem;
+      font-weight:700;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .message-main{
+      min-width:0;
+    }
+
+    .query-tag{
+      display:inline-block;
+      margin-bottom:8px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:4px 10px;
+      font-size:.82rem;
+      font-weight:700;
+      background:#f7f9fc;
+    }
+
+    .query-text{
+      font-size:1.08rem;
+      font-weight:700;
+      margin-bottom:4px;
+      word-break:break-word;
+    }
+
+    .message-preview{
+      color:var(--muted);
+      font-size:.94rem;
+    }
+
+    .message-time{
+      color:var(--muted);
+      font-size:.9rem;
+      white-space:nowrap;
+      font-weight:700;
+    }
+
+    .message-actions{
+      padding:16px 18px 18px;
+    }
+
+    .decision-group{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .decision-btn,
+    .primary-btn,
+    .secondary-btn{
+      appearance:none;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:background-color .15s ease, border-color .15s ease, transform .05s ease;
+    }
+
+    .decision-btn:active,
+    .primary-btn:active,
+    .secondary-btn:active{transform:translateY(1px)}
+
+    .decision-btn{
+      border:2px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      text-align:left;
+      min-height:62px;
+    }
+
+    .decision-btn.selected-trigger{
+      border-color:var(--accent);
+      background:#eef5ff;
+    }
+
+    .decision-btn.selected-no-trigger{
+      border-color:#bb7a00;
+      background:#fff8ea;
+    }
+
+    .decision-btn[aria-pressed="true"]{
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+    }
+
+    .status-line{
+      font-size:.96rem;
+      color:var(--muted);
+      min-height:22px;
+    }
+
+    .feedback{
+      margin-top:12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      background:#f8fafc;
+    }
+
+    .feedback.correct{
+      background:var(--success-soft);
+      border-color:#b9dfc8;
+    }
+
+    .feedback.incorrect{
+      background:var(--error-soft);
+      border-color:#e8bcc5;
+    }
+
+    .feedback-title{
+      font-weight:700;
+      margin-bottom:5px;
+    }
+
+    .footer-bar{
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .primary-btn{
+      background:var(--accent);
+      color:#fff;
+    }
+
+    .primary-btn:hover:not(:disabled),
+    .primary-btn:focus-visible:not(:disabled){
+      background:var(--accent-dark);
+    }
+
+    .secondary-btn{
+      background:#eef2f7;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    .secondary-btn:hover:not(:disabled),
+    .secondary-btn:focus-visible:not(:disabled){
+      background:#e4ebf4;
+    }
+
+    button:disabled{
+      opacity:.58;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .summary-card{
+      margin-top:18px;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .summary-box{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfcff;
+    }
+
+    .live-region{
+      min-height:22px;
+      color:var(--accent-dark);
+      font-weight:700;
+      margin-top:10px;
+    }
+
+    .warning{
+      color:#7a5200;
+      font-weight:700;
+    }
+
+    .result-list{
+      margin:8px 0 0 18px;
+      padding:0;
+    }
+
+    *:focus-visible{
+      outline:3px solid #111;
+      outline-offset:3px;
+    }
+
+    @media (max-width: 760px){
+      .round-grid,
+      .decision-group,
+      .summary-grid{
+        grid-template-columns:1fr;
+      }
+      .message-row{
+        grid-template-columns:1fr;
+        gap:8px;
+      }
+      .mail-header,
+      .footer-bar,
+      .inbox-appbar,
+      .mail-toolbar{
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header-card">
+      <div class="inbox-appbar">
+        <div class="app-title-wrap">
+          <div class="app-icon" aria-hidden="true">✉</div>
+          <div>
+            <div class="app-kicker">Ad Review Mailbox</div>
+            <h1>Trigger / No Trigger Inbox Review</h1>
+          </div>
+        </div>
+        <div class="mailbox-chip">3 rounds</div>
+      </div>
+
+      <p class="lead">Read each search query and decide whether the ad would appear.</p>
+      <ul class="instruction-list">
+        <li>Pick <strong>Would Trigger</strong> or <strong>Would Not Trigger</strong>.</li>
+        <li>Answer every message.</li>
+        <li>Select <strong>Submit Round</strong> to see feedback.</li>
+      </ul>
+      <div id="liveRegion" class="live-region" aria-live="polite" aria-atomic="true"></div>
+    </header>
+
+    <main id="activity" aria-labelledby="roundHeading">
+      <section class="card">
+        <div class="mail-toolbar">
+          <div class="toolbar-left">
+            <div class="pill" id="progressText">Round 1 of 3</div>
+            <div class="toolbar-pill" id="queryCountText">5 messages</div>
+          </div>
+          <div class="toolbar-right">
+            <div class="pill" id="scoreText">Score: 0 / 15</div>
+          </div>
+        </div>
+
+        <div class="mailbox-body">
+          <h2 id="roundHeading">Inbox</h2>
+
+          <div class="round-grid">
+            <div class="info-box">
+              <span class="label">Keyword</span>
+              <div class="value" id="keywordValue"></div>
+            </div>
+            <div class="info-box">
+              <span class="label">Match Type</span>
+              <div class="value" id="matchValue"></div>
+            </div>
+          </div>
+
+          <div class="mail-header">
+            <div>
+              <div class="mail-subject">Incoming ad-match checks</div>
+              <div class="mail-meta">Review each message and decide whether the ad would show.</div>
+            </div>
+          </div>
+
+          <section id="queryList" aria-label="Search query review cards"></section>
+        </div>
+      </section>
+
+      <section class="footer-bar">
+        <div id="roundStatus" class="warning">Choose an answer on every message before submitting.</div>
+        <div class="actions">
+          <button type="button" class="secondary-btn" id="resetBtn">Reset Round</button>
+          <button type="button" class="primary-btn" id="submitBtn">Submit Round</button>
+          <button type="button" class="primary-btn" id="nextBtn" hidden>Next Round</button>
+        </div>
+      </section>
+    </main>
+
+    <section id="summary" class="summary-card" hidden aria-labelledby="summaryHeading">
+      <h2 id="summaryHeading">Activity Complete</h2>
+      <p id="finalMessage"></p>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <h3>Final Score</h3>
+          <p id="finalScore"></p>
+        </div>
+        <div class="summary-box">
+          <h3>Key Reminder</h3>
+          <p>Broad match allows related intent, phrase match keeps the keyword phrase in the same order, and exact match is the most restrictive in this activity.</p>
+        </div>
+        <div class="summary-box">
+          <h3>Round Results</h3>
+          <ul id="resultList" class="result-list"></ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const rounds = [
+      {
+        keyword: "running shoes",
+        matchType: "Phrase Match",
+        queries: [
+          {
+            text: "best running shoes for beginners",
+            correct: "trigger",
+            explanation: "This would trigger because the exact phrase “running shoes” appears in the query in the same order, with extra words before and after it."
+          },
+          {
+            text: "shoes for running",
+            correct: "no-trigger",
+            explanation: "This would not trigger because phrase match looks for the phrase “running shoes” in that order. “Shoes for running” changes the word order."
+          },
+          {
+            text: "trail running shoes",
+            correct: "trigger",
+            explanation: "This would trigger because the phrase “running shoes” is still present in the query exactly, even though another word appears before it."
+          },
+          {
+            text: "running gear",
+            correct: "no-trigger",
+            explanation: "This would not trigger because the full phrase “running shoes” does not appear in the query."
+          },
+          {
+            text: "cheap running shoes",
+            correct: "trigger",
+            explanation: "This would trigger because the full phrase “running shoes” appears in the same order, with one extra word added in front."
+          }
+        ]
+      },
+      {
+        keyword: "online mba",
+        matchType: "Exact Match",
+        queries: [
+          {
+            text: "online mba",
+            correct: "trigger",
+            explanation: "This would trigger because the query matches the exact keyword itself."
+          },
+          {
+            text: "best online mba",
+            correct: "no-trigger",
+            explanation: "This would not trigger here because exact match is treated as the most restrictive option in this activity. The extra word “best” makes it different from the exact keyword."
+          },
+          {
+            text: "mba online",
+            correct: "no-trigger",
+            explanation: "This would not trigger because the wording is rearranged and does not match the keyword exactly as written."
+          },
+          {
+            text: "online business degree",
+            correct: "no-trigger",
+            explanation: "This would not trigger because it is a different query and does not exactly match “online mba.”"
+          },
+          {
+            text: "affordable online mba",
+            correct: "no-trigger",
+            explanation: "This would not trigger because the extra word “affordable” makes it different from the exact keyword."
+          }
+        ]
+      },
+      {
+        keyword: "plumber near me",
+        matchType: "Broad Match",
+        queries: [
+          {
+            text: "emergency plumber nearby",
+            correct: "trigger",
+            explanation: "This would trigger because broad match can connect closely related wording and intent. “Nearby” is similar in meaning to “near me,” and the search is still clearly about finding a plumber."
+          },
+          {
+            text: "local plumbing repair",
+            correct: "trigger",
+            explanation: "This would trigger because broad match can include related searches with the same likely intent. A person looking for local plumbing repair is likely looking for nearby plumbing help."
+          },
+          {
+            text: "best bathroom tile ideas",
+            correct: "no-trigger",
+            explanation: "This would not trigger because the search is about design ideas, not about hiring a plumber or finding local plumbing services."
+          },
+          {
+            text: "plumber in my area",
+            correct: "trigger",
+            explanation: "This would trigger because broad match can match similar meaning. “In my area” is very close in intent to “near me.”"
+          },
+          {
+            text: "leak repair service",
+            correct: "trigger",
+            explanation: "This would trigger because broad match can include related service searches. Someone searching for leak repair service may be looking for a plumber, even though the exact words are different."
+          }
+        ]
+      }
+    ];
+
+    const app = {
+      roundIndex: 0,
+      totalScore: 0,
+      roundScores: [],
+      submitted: false,
+      state: []
+    };
+
+    const progressText = document.getElementById("progressText");
+    const scoreText = document.getElementById("scoreText");
+    const keywordValue = document.getElementById("keywordValue");
+    const matchValue = document.getElementById("matchValue");
+    const queryCountText = document.getElementById("queryCountText");
+    const queryList = document.getElementById("queryList");
+    const roundStatus = document.getElementById("roundStatus");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const liveRegion = document.getElementById("liveRegion");
+    const activity = document.getElementById("activity");
+    const summary = document.getElementById("summary");
+    const finalMessage = document.getElementById("finalMessage");
+    const finalScore = document.getElementById("finalScore");
+    const resultList = document.getElementById("resultList");
+
+    function totalPossible() {
+      return rounds.reduce((sum, round) => sum + round.queries.length, 0);
+    }
+
+    function announce(message) {
+      liveRegion.textContent = "";
+      setTimeout(() => {
+        liveRegion.textContent = message;
+      }, 20);
+    }
+
+    function loadRound() {
+      const round = rounds[app.roundIndex];
+      app.submitted = false;
+      app.state = round.queries.map((item, index) => ({
+        id: index + 1,
+        text: item.text,
+        correct: item.correct,
+        explanation: item.explanation,
+        selected: "",
+        isCorrect: null
+      }));
+
+      progressText.textContent = `Round ${app.roundIndex + 1} of ${rounds.length}`;
+      scoreText.textContent = `Score: ${app.totalScore} / ${totalPossible()}`;
+      keywordValue.textContent = round.keyword;
+      matchValue.textContent = round.matchType;
+      queryCountText.textContent = `${round.queries.length} messages`;
+      roundStatus.textContent = "Choose an answer on every message before submitting.";
+      submitBtn.hidden = false;
+      submitBtn.disabled = false;
+      nextBtn.hidden = true;
+      nextBtn.textContent = app.roundIndex === rounds.length - 1 ? "See Final Results" : "Next Round";
+
+      renderQueries();
+      announce(`Round ${app.roundIndex + 1} loaded. Review each message and choose whether it would trigger the ad.`);
+    }
+
+    function renderQueries() {
+      queryList.innerHTML = "";
+
+      app.state.forEach((item, idx) => {
+        const article = document.createElement("article");
+        article.className = "query-card";
+
+        const row = document.createElement("div");
+        row.className = "message-row";
+
+        const from = document.createElement("div");
+        from.className = "message-from";
+        from.textContent = `Message ${idx + 1}`;
+        row.appendChild(from);
+
+        const main = document.createElement("div");
+        main.className = "message-main";
+
+        const tag = document.createElement("div");
+        tag.className = "query-tag";
+        tag.textContent = `Search Query`;
+        main.appendChild(tag);
+
+        const queryText = document.createElement("div");
+        queryText.className = "query-text";
+        queryText.textContent = item.text;
+        main.appendChild(queryText);
+
+        const preview = document.createElement("div");
+        preview.className = "message-preview";
+        preview.textContent = "Would this search make the ad appear?";
+        main.appendChild(preview);
+
+        row.appendChild(main);
+
+        const time = document.createElement("div");
+        time.className = "message-time";
+        time.textContent = `Now`;
+        row.appendChild(time);
+
+        article.appendChild(row);
+
+        const actions = document.createElement("div");
+        actions.className = "message-actions";
+
+        const group = document.createElement("div");
+        group.className = "decision-group";
+        group.setAttribute("role", "group");
+        group.setAttribute("aria-label", `Answer choices for message ${idx + 1}: ${item.text}`);
+
+        const triggerBtn = document.createElement("button");
+        triggerBtn.type = "button";
+        triggerBtn.className = `decision-btn ${item.selected === "trigger" ? "selected-trigger" : ""}`;
+        triggerBtn.setAttribute("aria-pressed", item.selected === "trigger" ? "true" : "false");
+        triggerBtn.textContent = "Would Trigger";
+        triggerBtn.disabled = app.submitted;
+        triggerBtn.addEventListener("click", () => setChoice(item.id, "trigger"));
+
+        const noTriggerBtn = document.createElement("button");
+        noTriggerBtn.type = "button";
+        noTriggerBtn.className = `decision-btn ${item.selected === "no-trigger" ? "selected-no-trigger" : ""}`;
+        noTriggerBtn.setAttribute("aria-pressed", item.selected === "no-trigger" ? "true" : "false");
+        noTriggerBtn.textContent = "Would Not Trigger";
+        noTriggerBtn.disabled = app.submitted;
+        noTriggerBtn.addEventListener("click", () => setChoice(item.id, "no-trigger"));
+
+        group.appendChild(triggerBtn);
+        group.appendChild(noTriggerBtn);
+        actions.appendChild(group);
+
+        const status = document.createElement("div");
+        status.className = "status-line";
+        if (!item.selected) {
+          status.textContent = "No answer selected yet.";
+        } else if (!app.submitted) {
+          status.textContent = item.selected === "trigger" ? "Selected: Would Trigger" : "Selected: Would Not Trigger";
+        } else {
+          status.textContent = item.isCorrect ? "Correct" : "Incorrect";
+        }
+        actions.appendChild(status);
+
+        if (app.submitted) {
+          const feedback = document.createElement("div");
+          feedback.className = `feedback ${item.isCorrect ? "correct" : "incorrect"}`;
+
+          const title = document.createElement("div");
+          title.className = "feedback-title";
+          const correctLabel = item.correct === "trigger" ? "Would Trigger" : "Would Not Trigger";
+          title.textContent = `${item.isCorrect ? "Correct." : "Not quite."} Correct answer: ${correctLabel}`;
+          feedback.appendChild(title);
+
+          const explanation = document.createElement("div");
+          explanation.textContent = item.explanation;
+          feedback.appendChild(explanation);
+
+          actions.appendChild(feedback);
+        }
+
+        article.appendChild(actions);
+        queryList.appendChild(article);
+      });
+    }
+
+    function setChoice(id, choice) {
+      if (app.submitted) return;
+      const item = app.state.find(entry => entry.id === id);
+      if (!item) return;
+      item.selected = choice;
+      renderQueries();
+      const label = choice === "trigger" ? "Would Trigger" : "Would Not Trigger";
+      announce(`Selected ${label} for query: ${item.text}`);
+    }
+
+    function resetRound() {
+      loadRound();
+      announce(`Round ${app.roundIndex + 1} has been reset.`);
+    }
+
+    function submitRound() {
+      if (app.submitted) return;
+      const unanswered = app.state.filter(item => !item.selected);
+      if (unanswered.length > 0) {
+        roundStatus.textContent = "Please answer every message before submitting.";
+        announce("Please answer every message before submitting the round.");
+        return;
+      }
+
+      let roundScore = 0;
+      app.state.forEach(item => {
+        item.isCorrect = item.selected === item.correct;
+        if (item.isCorrect) roundScore += 1;
+      });
+
+      app.totalScore += roundScore;
+      app.roundScores[app.roundIndex] = {
+        earned: roundScore,
+        possible: app.state.length
+      };
+      app.submitted = true;
+
+      submitBtn.hidden = true;
+      nextBtn.hidden = false;
+      nextBtn.textContent = app.roundIndex === rounds.length - 1 ? "See Final Results" : "Next Round";
+      scoreText.textContent = `Score: ${app.totalScore} / ${totalPossible()}`;
+      roundStatus.textContent = `Round submitted. You earned ${roundScore} out of ${app.state.length}.`;
+      renderQueries();
+      announce(`Round ${app.roundIndex + 1} submitted. You earned ${roundScore} out of ${app.state.length}.`);
+    }
+
+    function nextRound() {
+      if (!app.submitted) return;
+      if (app.roundIndex < rounds.length - 1) {
+        app.roundIndex += 1;
+        loadRound();
+      } else {
+        showSummary();
+      }
+    }
+
+    function showSummary() {
+      activity.hidden = true;
+      summary.hidden = false;
+
+      const total = totalPossible();
+      const percent = Math.round((app.totalScore / total) * 100);
+      finalScore.textContent = `${app.totalScore} out of ${total} correct (${percent}%).`;
+
+      let message = "Nice work finishing the inbox review. ";
+      if (percent === 100) {
+        message += "You showed strong understanding of how the three match types work in these examples.";
+      } else if (percent >= 80) {
+        message += "You have a strong grasp of the match logic. A few edge cases may still need review.";
+      } else if (percent >= 60) {
+        message += "You are building the skill. Revisit the explanations to compare broad, phrase, and exact match more carefully.";
+      } else {
+        message += "You have a starting point. The feedback can help you notice how each match type changes what would trigger the ad.";
+      }
+      finalMessage.textContent = message;
+
+      resultList.innerHTML = "";
+      app.roundScores.forEach((result, index) => {
+        const li = document.createElement("li");
+        li.textContent = `Round ${index + 1}: ${result.earned} out of ${result.possible}`;
+        resultList.appendChild(li);
+      });
+
+      announce(`Activity complete. Your final score is ${app.totalScore} out of ${total}.`);
+      summary.scrollIntoView({ behavior: "auto", block: "start" });
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", resetRound);
+    document.getElementById("submitBtn").addEventListener("click", submitRound);
+    document.getElementById("nextBtn").addEventListener("click", nextRound);
+
+    loadRound();
+  </script>
+</body>
+</html>
