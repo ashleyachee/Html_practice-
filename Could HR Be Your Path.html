@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Could HR Be Your Path?</title>
+  <style>
+    :root{
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --text: #1a1f2b;
+      --muted: #5b6475;
+      --border: #d7dfeb;
+      --accent: #2358d8;
+      --accent-dark: #163ea3;
+      --accent-soft: #eaf1ff;
+      --success: #1f7a4d;
+      --success-soft: #e9f8f0;
+      --warning: #8a5a00;
+      --warning-soft: #fff4de;
+      --neutral-soft: #f3f5f8;
+      --shadow: 0 10px 30px rgba(25, 42, 70, 0.10);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --focus: 0 0 0 4px rgba(35, 88, 216, 0.18);
+      --maxw: 900px;
+      --transition: 180ms ease;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    body {
+      padding: 16px;
+    }
+
+    #could-hr-be-your-path {
+      width: 100%;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      background: linear-gradient(180deg, #f8fbff 0%, #f3f7fc 100%);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hr-path-shell {
+      padding: 20px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      border: 1px solid #cfe0ff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    .layout-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 8px 18px rgba(23, 40, 70, 0.06);
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .progress-wrap {
+      flex: 1 1 280px;
+      min-width: 220px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .progress-count {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e8edf5;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #dbe3ee;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent) 0%, #5e8fff 100%);
+      border-radius: 999px;
+      transition: width var(--transition);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: #f8fbff;
+      border-color: #bed0f7;
+    }
+
+    .btn:focus-visible,
+    .option-btn:focus-visible,
+    .continue-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+
+    .scenario-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .scenario-pill {
+      background: var(--neutral-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .scenario-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .scenario-title {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .scenario-prompt {
+      color: var(--text);
+      font-size: 1rem;
+      margin: 0 0 18px 0;
+      max-width: 62ch;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px 16px 16px 18px;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
+      color: var(--text);
+      position: relative;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-1px);
+      background: #fbfdff;
+      border-color: #b8caf0;
+      box-shadow: 0 8px 16px rgba(32, 67, 140, 0.08);
+    }
+
+    .option-btn .option-top {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .option-icon {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      border: 1px solid #d3e2ff;
+      font-size: 1.1rem;
+      margin-top: 1px;
+    }
+
+    .option-text {
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .option-btn.selected {
+      background: #f5f9ff;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(35, 88, 216, 0.10);
+    }
+
+    .feedback-box {
+      display: none;
+      margin-top: 8px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid #cfe0ff;
+      background: #f4f8ff;
+    }
+
+    .feedback-box.show {
+      display: block;
+    }
+
+    .feedback-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .feedback-text {
+      margin: 0;
+      color: var(--text);
+    }
+
+    .feedback-actions {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .continue-btn {
+      appearance: none;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .continue-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .results-card {
+      display: none;
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .results-card.show {
+      display: block;
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border: 1px solid transparent;
+    }
+
+    .result-strong .result-badge {
+      background: var(--success-soft);
+      color: var(--success);
+      border-color: #ccefdc;
+    }
+
+    .result-middle .result-badge {
+      background: var(--warning-soft);
+      color: var(--warning);
+      border-color: #f0deb0;
+    }
+
+    .result-alt .result-badge {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      border-color: #cfe0ff;
+    }
+
+    .result-title {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .result-copy {
+      color: var(--text);
+      margin: 0 0 12px 0;
+      max-width: 65ch;
+    }
+
+    .mini-note {
+      color: var(--muted);
+      font-size: 0.97rem;
+      margin-bottom: 18px;
+    }
+
+    .next-steps {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .next-steps h3 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    .next-steps ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .next-steps li {
+      margin-bottom: 8px;
+    }
+
+    .score-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .score-chip {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .score-chip strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.96rem;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+
+      .hr-path-shell,
+      .layout-card,
+      .hero,
+      .scenario-card,
+      .results-card {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 1.55rem;
+      }
+
+      .score-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar,
+      .footer-actions,
+      .feedback-actions {
+        justify-content: stretch;
+      }
+
+      .btn,
+      .continue-btn {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="could-hr-be-your-path">
+    <div class="hr-path-shell">
+      <section class="hero" aria-labelledby="activity-title">
+        <div class="eyebrow">🧭 Career Exploration</div>
+        <h1 id="activity-title">Could HR Be Your Path?</h1>
+        <p class="subtext">
+          Explore a few workplace situations and see whether HR-style work may be a good fit for you.
+        </p>
+      </section>
+
+      <main class="layout-card" aria-describedby="activity-instructions">
+        <div class="topbar">
+          <div class="progress-wrap" aria-label="Scenario progress">
+            <div class="progress-row">
+              <div class="progress-label">Your progress</div>
+              <div class="progress-count" id="progressText">Scenario 1 of 6</div>
+            </div>
+            <div class="progress-bar" aria-hidden="true">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button type="button" class="btn" id="restartTopBtn">Start Over</button>
+          </div>
+        </div>
+
+        <p id="activity-instructions" class="subtext" style="margin-bottom:16px;">
+          Read each short situation and choose the response that feels most natural to you.
+        </p>
+
+        <div id="liveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+        <section id="scenarioArea" aria-labelledby="scenarioHeading">
+          <!-- Scenario content renders here -->
+        </section>
+
+        <section id="resultsArea" class="results-card" tabindex="-1" aria-labelledby="resultHeading">
+          <!-- Results render here -->
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /*
+      Could HR Be Your Path?
+      OEX-safe, single-file, offline activity.
+      All editable scenario content is stored in the array below.
+    */
+
+    const scenarios = [
+      {
+        id: "conflict",
+        icon: "🤝",
+        title: "Team Conflict",
+        prompt: "Two employees keep arguing during meetings. Other team members are starting to feel uncomfortable, and the work is slowing down.",
+        options: [
+          {
+            text: "Talk with both people, listen carefully, and help build a fair plan to move forward.",
+            icon: "🫶",
+            tags: ["peopleSupport", "fairness"],
+            feedback: "This choice suggests you may enjoy helping people work through challenges in a fair way."
+          },
+          {
+            text: "Set a clear expectation for behavior so everyone knows what is acceptable.",
+            icon: "📋",
+            tags: ["fairness", "organizationPlanning"],
+            feedback: "This response connects to the kind of consistency and structure that HR often supports."
+          },
+          {
+            text: "Focus on the deadline first and let the team solve the conflict on its own.",
+            icon: "📈",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This choice leans more toward results-focused leadership than direct people support."
+          },
+          {
+            text: "Suggest coaching so both employees can improve how they work together.",
+            icon: "🌱",
+            tags: ["developmentGrowth", "peopleSupport"],
+            feedback: "This suggests you may be interested in helping people grow, which connects strongly to HR work."
+          }
+        ]
+      },
+      {
+        id: "hiring",
+        icon: "🧩",
+        title: "Hiring Fast",
+        prompt: "A team is growing quickly and needs new employees soon. The manager wants to hire fast, but there is worry about choosing the right people.",
+        options: [
+          {
+            text: "Create a clear hiring process so every candidate is reviewed in a fair and organized way.",
+            icon: "🗂️",
+            tags: ["fairness", "organizationPlanning"],
+            feedback: "This choice shows interest in creating clear processes and fair decisions, which is a big part of HR."
+          },
+          {
+            text: "Help define what the team really needs so new hires are more likely to succeed.",
+            icon: "🎯",
+            tags: ["organizationPlanning", "developmentGrowth"],
+            feedback: "This suggests you may enjoy connecting people decisions to team success."
+          },
+          {
+            text: "Leave all hiring decisions to the manager and focus on keeping the work moving.",
+            icon: "⚡",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This choice fits many business roles, but it shows less interest in the people systems side of the work."
+          },
+          {
+            text: "Think about how to welcome and support new hires after they join.",
+            icon: "🙌",
+            tags: ["peopleSupport", "developmentGrowth"],
+            feedback: "This response suggests interest in helping employees feel supported and prepared to succeed."
+          }
+        ]
+      },
+      {
+        id: "new-system",
+        icon: "💻",
+        title: "New Process Confusion",
+        prompt: "A company introduces a new system for scheduling and time tracking. Many employees are confused and frustrated, and some are already making mistakes.",
+        options: [
+          {
+            text: "Create simple training and support so people can learn the new system with confidence.",
+            icon: "🧠",
+            tags: ["developmentGrowth", "peopleSupport"],
+            feedback: "This suggests you may enjoy helping people adapt and learn during change."
+          },
+          {
+            text: "Write clear step-by-step instructions so the process is easier to follow.",
+            icon: "📝",
+            tags: ["organizationPlanning", "fairness"],
+            feedback: "This choice connects to building structure and clarity, which is often part of HR work."
+          },
+          {
+            text: "Tell employees they need to figure it out quickly because the change is already happening.",
+            icon: "⏱️",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This response shows a direct approach, but less interest in support and change guidance."
+          },
+          {
+            text: "Gather common questions and share them with leaders so the rollout can improve.",
+            icon: "🔄",
+            tags: ["organizationPlanning", "peopleSupport"],
+            feedback: "This suggests interest in improving systems by listening to employee experience."
+          }
+        ]
+      },
+      {
+        id: "feedback",
+        icon: "🗣️",
+        title: "Unclear Feedback",
+        prompt: "Several employees say their manager only points out mistakes and rarely explains how to improve. Team members are starting to feel discouraged.",
+        options: [
+          {
+            text: "Help the manager learn how to give clearer, more useful feedback.",
+            icon: "📘",
+            tags: ["developmentGrowth", "leadershipOutsideHR"],
+            feedback: "This suggests you may enjoy helping leaders grow, which often overlaps with HR and team development."
+          },
+          {
+            text: "Check in with employees and look for a fair way to support both the team and the manager.",
+            icon: "⚖️",
+            tags: ["peopleSupport", "fairness"],
+            feedback: "This choice points to interest in balancing employee support with workplace fairness."
+          },
+          {
+            text: "Focus mainly on whether the team is still meeting goals, even if morale is lower.",
+            icon: "📊",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This choice leans toward general operations leadership more than HR-style support."
+          },
+          {
+            text: "Build a clearer feedback process so expectations are more consistent across the team.",
+            icon: "🧭",
+            tags: ["organizationPlanning", "fairness"],
+            feedback: "This response connects strongly to the HR side of creating clear and consistent people practices."
+          }
+        ]
+      },
+      {
+        id: "fair-rules",
+        icon: "⚖️",
+        title: "Fairness Questions",
+        prompt: "Employees begin to notice that some people can leave early or miss deadlines without consequences, while others are corrected right away. Team trust is dropping.",
+        options: [
+          {
+            text: "Review how rules are being applied and help create a more consistent approach.",
+            icon: "📏",
+            tags: ["fairness", "organizationPlanning"],
+            feedback: "This choice strongly connects to fairness and consistency, which are central parts of HR."
+          },
+          {
+            text: "Talk with employees about their concerns so they feel heard and respected.",
+            icon: "👂",
+            tags: ["peopleSupport"],
+            feedback: "This suggests interest in listening to employees and supporting a healthier workplace."
+          },
+          {
+            text: "Leave it to the manager because every leader should handle their team however they want.",
+            icon: "🏢",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This response fits a hands-off leadership style more than an HR-style interest in fair people practices."
+          },
+          {
+            text: "Help leaders set clearer expectations so everyone knows the same standards apply.",
+            icon: "✅",
+            tags: ["fairness", "developmentGrowth", "organizationPlanning"],
+            feedback: "This suggests you may enjoy creating fairness through clearer expectations and team improvement."
+          }
+        ]
+      },
+      {
+        id: "morale",
+        icon: "🌤️",
+        title: "Low Morale",
+        prompt: "A team has had a busy few months, and people are feeling tired and less motivated. Work quality is slipping, and the manager is worried.",
+        options: [
+          {
+            text: "Find out what employees need and look for ways to support workload, communication, or morale.",
+            icon: "💬",
+            tags: ["peopleSupport", "developmentGrowth"],
+            feedback: "This choice suggests you may care about employee experience and helping teams stay healthy and productive."
+          },
+          {
+            text: "Look for patterns in the workload and create a plan to improve how work is organized.",
+            icon: "🛠️",
+            tags: ["organizationPlanning", "developmentGrowth"],
+            feedback: "This response connects to improving team systems so people can do better work."
+          },
+          {
+            text: "Push the team to work harder until results improve.",
+            icon: "🚀",
+            tags: ["leadershipOutsideHR"],
+            feedback: "This choice may fit a more direct leadership style, but it shows less interest in the support side of HR."
+          },
+          {
+            text: "Help the manager think about recognition, communication, and team support.",
+            icon: "🌟",
+            tags: ["peopleSupport", "developmentGrowth", "leadershipOutsideHR"],
+            feedback: "This suggests interest in helping both employees and leaders succeed together."
+          }
+        ]
+      }
+    ];
+
+    function initCouldHRBeYourPath() {
+      const state = {
+        currentIndex: 0,
+        answers: [],
+        scores: {
+          peopleSupport: 0,
+          fairness: 0,
+          developmentGrowth: 0,
+          organizationPlanning: 0,
+          leadershipOutsideHR: 0
+        }
+      };
+
+      const scenarioArea = document.getElementById("scenarioArea");
+      const resultsArea = document.getElementById("resultsArea");
+      const progressFill = document.getElementById("progressFill");
+      const progressText = document.getElementById("progressText");
+      const liveRegion = document.getElementById("liveRegion");
+      const restartTopBtn = document.getElementById("restartTopBtn");
+
+      restartTopBtn.addEventListener("click", resetActivity);
+
+      function announce(message) {
+        liveRegion.textContent = "";
+        window.setTimeout(function () {
+          liveRegion.textContent = message;
+        }, 20);
+      }
+
+      function resetStateValues() {
+        state.currentIndex = 0;
+        state.answers = [];
+        state.scores = {
+          peopleSupport: 0,
+          fairness: 0,
+          developmentGrowth: 0,
+          organizationPlanning: 0,
+          leadershipOutsideHR: 0
+        };
+      }
+
+      function resetActivity() {
+        resetStateValues();
+        resultsArea.className = "results-card";
+        resultsArea.innerHTML = "";
+        resultsArea.style.display = "none";
+        scenarioArea.style.display = "block";
+        renderScenario();
+        announce("Activity restarted. Scenario 1 is ready.");
+      }
+
+      function updateProgress() {
+        const total = scenarios.length;
+        const currentHuman = Math.min(state.currentIndex + 1, total);
+        const percent = (state.currentIndex / total) * 100;
+        progressFill.style.width = percent + "%";
+        progressText.textContent = state.currentIndex >= total
+          ? "Complete"
+          : "Scenario " + currentHuman + " of " + total;
+      }
+
+      function renderScenario() {
+        updateProgress();
+
+        if (state.currentIndex >= scenarios.length) {
+          showResults();
+          return;
+        }
+
+        const scenario = scenarios[state.currentIndex];
+
+        scenarioArea.innerHTML = "";
+        const wrapper = document.createElement("div");
+        wrapper.className = "scenario-card";
+
+        const meta = document.createElement("div");
+        meta.className = "scenario-meta";
+        meta.innerHTML = `
+          <span class="scenario-pill">${scenario.icon} Workplace Situation</span>
+          <span class="scenario-pill">Choose the response that feels most natural</span>
+        `;
+
+        const title = document.createElement("h2");
+        title.className = "scenario-title";
+        title.id = "scenarioHeading";
+        title.textContent = scenario.title;
+
+        const prompt = document.createElement("p");
+        prompt.className = "scenario-prompt";
+        prompt.textContent = scenario.prompt;
+
+        const optionsWrap = document.createElement("div");
+        optionsWrap.className = "options";
+        optionsWrap.setAttribute("role", "group");
+        optionsWrap.setAttribute("aria-label", "Answer choices");
+
+        const feedbackBox = document.createElement("div");
+        feedbackBox.className = "feedback-box";
+        feedbackBox.setAttribute("aria-live", "polite");
+
+        let selectedOptionIndex = null;
+
+        scenario.options.forEach(function(option, optionIndex) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option-btn";
+          btn.setAttribute("aria-describedby", "scenarioHeading");
+          btn.innerHTML = `
+            <span class="option-top">
+              <span class="option-icon" aria-hidden="true">${option.icon}</span>
+              <span class="option-text">${option.text}</span>
+            </span>
+          `;
+
+          btn.addEventListener("click", function() {
+            selectedOptionIndex = optionIndex;
+
+            const allButtons = optionsWrap.querySelectorAll(".option-btn");
+            allButtons.forEach(function(buttonEl) {
+              buttonEl.classList.remove("selected");
+              buttonEl.setAttribute("aria-pressed", "false");
+            });
+
+            btn.classList.add("selected");
+            btn.setAttribute("aria-pressed", "true");
+
+            feedbackBox.className = "feedback-box show";
+            feedbackBox.innerHTML = `
+              <div class="feedback-title">Quick reflection</div>
+              <p class="feedback-text">${option.feedback}</p>
+              <div class="feedback-actions">
+                <button type="button" class="continue-btn" id="continueBtn">
+                  Continue
+                </button>
+              </div>
+            `;
+
+            announce(option.feedback);
+
+            const continueBtn = document.getElementById("continueBtn");
+            continueBtn.addEventListener("click", function() {
+              saveAnswer(scenario, option, selectedOptionIndex);
+              state.currentIndex += 1;
+              renderScenario();
+            });
+            continueBtn.focus();
+          });
+
+          optionsWrap.appendChild(btn);
+        });
+
+        wrapper.appendChild(meta);
+        wrapper.appendChild(title);
+        wrapper.appendChild(prompt);
+        wrapper.appendChild(optionsWrap);
+        wrapper.appendChild(feedbackBox);
+
+        scenarioArea.appendChild(wrapper);
+
+        const firstButton = scenarioArea.querySelector(".option-btn");
+        if (firstButton) {
+          firstButton.focus();
+        }
+      }
+
+      function saveAnswer(scenario, option, optionIndex) {
+        state.answers.push({
+          scenarioId: scenario.id,
+          optionIndex: optionIndex,
+          text: option.text,
+          tags: option.tags.slice()
+        });
+
+        option.tags.forEach(function(tag) {
+          if (Object.prototype.hasOwnProperty.call(state.scores, tag)) {
+            state.scores[tag] += 1;
+          }
+        });
+      }
+
+      function getTopCategories() {
+        const pairs = Object.keys(state.scores).map(function(key) {
+          return { key: key, score: state.scores[key] };
+        });
+
+        pairs.sort(function(a, b) {
+          return b.score - a.score;
+        });
+
+        return pairs;
+      }
+
+      function determineResult() {
+        const s = state.scores;
+        const hrCore = s.peopleSupport + s.fairness + s.developmentGrowth + s.organizationPlanning;
+        const leadership = s.leadershipOutsideHR;
+        const top = getTopCategories();
+
+        if (hrCore >= 8 && leadership <= 2) {
+          return {
+            theme: "result-strong",
+            badge: "Likely HR interest",
+            title: "HR could be a strong fit for you",
+            paragraphs: [
+              "You seem interested in solving people and workplace challenges in ways that connect strongly with HR work.",
+              "Your choices suggest interest in fairness, employee support, team growth, and clear people processes.",
+              "That does not mean HR is your only option, but it may be a field worth exploring more closely."
+            ]
+          };
+        }
+
+        if (hrCore >= 5) {
+          return {
+            theme: "result-middle",
+            badge: "Possible HR match",
+            title: "Some parts of HR may be a good fit for you",
+            paragraphs: [
+              "You seem drawn to some parts of HR, especially areas like employee support, fairness, growth, or team improvement.",
+              "You may enjoy parts of HR work even if you also have interests in leadership, business, or another major.",
+              "HR knowledge could still be useful to you in many careers."
+            ]
+          };
+        }
+
+        return {
+          theme: "result-alt",
+          badge: "Leadership path",
+          title: "You may prefer leading from another role while partnering with HR",
+          paragraphs: [
+            "You may be more interested in leading teams from another business role, while still using HR knowledge to make better people decisions.",
+            "That is still a valuable path. Strong leaders often work closely with HR to support employees and improve team success.",
+            "Learning about HR can help you wherever you lead."
+          ]
+        };
+      }
+
+      function getCategoryLabel(key) {
+        const labels = {
+          peopleSupport: "Supporting people",
+          fairness: "Fairness and consistency",
+          developmentGrowth: "Growth and improvement",
+          organizationPlanning: "Planning and structure",
+          leadershipOutsideHR: "Leadership outside HR"
+        };
+        return labels[key] || key;
+      }
+
+      function showResults() {
+        scenarioArea.style.display = "none";
+        resultsArea.style.display = "block";
+        resultsArea.className = "results-card show " + determineResult().theme;
+
+        const result = determineResult();
+        const topCategories = getTopCategories().slice(0, 4);
+
+        let scoreChips = "";
+        topCategories.forEach(function(item) {
+          scoreChips += `
+            <div class="score-chip">
+              <strong>${getCategoryLabel(item.key)}</strong>
+              <span>${item.score} strong choice${item.score === 1 ? "" : "s"}</span>
+            </div>
+          `;
+        });
+
+        resultsArea.innerHTML = `
+          <div class="result-badge">${result.badge}</div>
+          <h2 class="result-title" id="resultHeading">${result.title}</h2>
+          <p class="result-copy">${result.paragraphs[0]}</p>
+          <p class="result-copy">${result.paragraphs[1]}</p>
+          <p class="result-copy">${result.paragraphs[2]}</p>
+          <p class="mini-note">
+            This is a starting point, not a final answer. Career interests grow as you learn more and gain experience.
+          </p>
+
+          <div class="score-summary" aria-label="Interest summary">
+            ${scoreChips}
+          </div>
+
+          <div class="next-steps">
+            <h3>Possible next steps</h3>
+            <ul>
+              <li>Explore HR courses and see which topics interest you most.</li>
+              <li>Attend a campus event, student organization meeting, or a SHRM Student Chapter event if one is available.</li>
+              <li>Read about HR career paths or talk with someone who works in HR.</li>
+            </ul>
+          </div>
+
+          <div class="footer-actions">
+            <button type="button" class="btn btn-primary" id="restartBtn">Try Again</button>
+            <button type="button" class="btn" id="reviewBtn">Review Scenarios</button>
+          </div>
+        `;
+
+        progressFill.style.width = "100%";
+        progressText.textContent = "Complete";
+
+        const restartBtn = document.getElementById("restartBtn");
+        const reviewBtn = document.getElementById("reviewBtn");
+
+        restartBtn.addEventListener("click", function() {
+          resetActivity();
+        });
+
+        reviewBtn.addEventListener("click", function() {
+          state.currentIndex = 0;
+          state.answers = [];
+          state.scores = {
+            peopleSupport: 0,
+            fairness: 0,
+            developmentGrowth: 0,
+            organizationPlanning: 0,
+            leadershipOutsideHR: 0
+          };
+          resultsArea.className = "results-card";
+          resultsArea.style.display = "none";
+          scenarioArea.style.display = "block";
+          renderScenario();
+          announce("Review restarted from the first scenario.");
+        });
+
+        resultsArea.focus();
+        announce("Results ready. " + result.title);
+      }
+
+      renderScenario();
+    }
+
+    initCouldHRBeYourPath();
+  </script>
+</body>
+</html>
