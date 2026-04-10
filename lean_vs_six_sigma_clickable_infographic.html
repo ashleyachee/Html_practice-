@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lean vs. Six Sigma Interactive Infographic</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #eef4ff;
+      --text: #1f2937;
+      --muted: #5b6472;
+      --border: #d5deea;
+      --lean: #0f766e;
+      --lean-soft: #d1fae5;
+      --sigma: #1d4ed8;
+      --sigma-soft: #dbeafe;
+      --both: #7c3aed;
+      --both-soft: #ede9fe;
+      --shadow: 0 12px 28px rgba(24, 39, 75, 0.08);
+      --radius: 20px;
+      --focus: 3px solid #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #ecf4ff 0%, #f8fbff 42%, #ffffff 100%);
+      line-height: 1.55;
+    }
+
+    .wrapper {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #12356f 0%, #2857c7 55%, #4a7bf0 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 820px;
+      font-size: 1.05rem;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2, .card h3 {
+      margin-top: 0;
+    }
+
+    .quick-compare {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .pill-card {
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .pill-card p {
+      margin: 8px 0 0;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .lean-bg { background: var(--lean-soft); }
+    .sigma-bg { background: var(--sigma-soft); }
+    .both-bg { background: var(--both-soft); }
+
+    .section-title {
+      margin: 10px 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    details[open] {
+      border-color: #9cb5ef;
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .summary-inner {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 22px;
+    }
+
+    .badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .lean .badge, .lean .detail-head { background: var(--lean-soft); }
+    .sigma .badge, .sigma .detail-head { background: var(--sigma-soft); }
+    .both .badge, .both .detail-head { background: var(--both-soft); }
+
+    .summary-text h3 {
+      margin: 0 0 6px;
+      font-size: 1.22rem;
+    }
+
+    .summary-text p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .toggle-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 2px solid #3559a8;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3559a8;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    details[open] .toggle-icon::before { content: "−"; }
+    details:not([open]) .toggle-icon::before { content: "+"; }
+
+    .detail-body {
+      padding: 0 22px 22px;
+    }
+
+    .detail-head {
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .detail-head p { margin: 8px 0 0; }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .content-grid section {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .content-grid h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .content-grid ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .content-grid li + li { margin-top: 6px; }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .mini-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .mini-list li + li { margin-top: 10px; }
+
+    .banner {
+      margin-top: 24px;
+      background: #162c57;
+      color: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .banner strong { color: #d7e6ff; }
+
+    summary:focus,
+    summary:focus-visible {
+      outline: var(--focus);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 980px) {
+      .intro,
+      .grid,
+      .bottom,
+      .content-grid,
+      .quick-compare {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-inner {
+        grid-template-columns: 56px 1fr;
+      }
+
+      .toggle-icon {
+        grid-column: 2 / 3;
+        justify-self: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+    <section class="hero" aria-labelledby="page-title">
+      <h1 id="page-title">Lean vs. Six Sigma</h1>
+      <p>
+        This interactive infographic introduces two common improvement methodologies at a high level. Click each section to see what each approach focuses on, how it helps organizations, and where the two overlap.
+      </p>
+    </section>
+
+    <section class="intro" aria-label="Overview">
+      <div class="card">
+        <h2>Big picture</h2>
+        <p>
+          Lean and Six Sigma are both used to improve organizational performance, but they emphasize different problems. Lean focuses on eliminating waste and improving flow. Six Sigma focuses on reducing errors, variation, and defects.
+        </p>
+        <div class="quick-compare">
+          <div class="pill-card lean-bg">
+            Lean
+            <p>Move work faster and remove activities that do not add value.</p>
+          </div>
+          <div class="pill-card sigma-bg">
+            Six Sigma
+            <p>Make processes more consistent and reduce mistakes.</p>
+          </div>
+          <div class="pill-card both-bg">
+            Both
+            <p>Improve quality, efficiency, and decision-making.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Simple way to remember it</h2>
+        <p><strong>Lean asks:</strong> “How can we remove waste?”</p>
+        <p><strong>Six Sigma asks:</strong> “How can we reduce defects and variation?”</p>
+        <p><strong>Together they support:</strong> better processes, better customer outcomes, and more effective operations.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="compare-heading">
+      <div class="card section-title">
+        <h2 id="compare-heading">Click to compare</h2>
+        <p>These sections are intentionally high level so students can understand the fundamentals before diving into tools or advanced terminology.</p>
+      </div>
+
+      <div class="grid">
+        <details class="lean">
+          <summary aria-describedby="lean-summary">
+            <div class="summary-inner">
+              <div class="badge" aria-hidden="true">L</div>
+              <div class="summary-text">
+                <h3>Lean</h3>
+                <p id="lean-summary">Focuses on reducing waste and improving the flow of work.</p>
+              </div>
+              <div class="toggle-icon" aria-hidden="true"></div>
+            </div>
+          </summary>
+          <div class="detail-body">
+            <div class="detail-head">
+              <strong>Core idea:</strong>
+              <p>Lean is about identifying steps, time, or resources that do not add value for the customer and finding ways to streamline the process.</p>
+            </div>
+            <div class="content-grid">
+              <section>
+                <h4>Main focus</h4>
+                <ul>
+                  <li>Removing waste</li>
+                  <li>Improving speed and flow</li>
+                  <li>Making work more efficient</li>
+                </ul>
+              </section>
+              <section>
+                <h4>High-level example</h4>
+                <p>If a process includes extra handoffs, waiting time, or unnecessary steps, Lean looks for ways to simplify it.</p>
+              </section>
+              <section>
+                <h4>Helpful question</h4>
+                <p>Which parts of this process are slowing us down without helping the customer?</p>
+              </section>
+            </div>
+          </div>
+        </details>
+
+        <details class="sigma">
+          <summary aria-describedby="sigma-summary">
+            <div class="summary-inner">
+              <div class="badge" aria-hidden="true">6σ</div>
+              <div class="summary-text">
+                <h3>Six Sigma</h3>
+                <p id="sigma-summary">Focuses on reducing variation, defects, and inconsistency in a process.</p>
+              </div>
+              <div class="toggle-icon" aria-hidden="true"></div>
+            </div>
+          </summary>
+          <div class="detail-body">
+            <div class="detail-head">
+              <strong>Core idea:</strong>
+              <p>Six Sigma is about making processes more stable, predictable, and accurate so organizations can reduce errors and improve quality.</p>
+            </div>
+            <div class="content-grid">
+              <section>
+                <h4>Main focus</h4>
+                <ul>
+                  <li>Reducing errors</li>
+                  <li>Reducing variation</li>
+                  <li>Improving consistency and quality</li>
+                </ul>
+              </section>
+              <section>
+                <h4>High-level example</h4>
+                <p>If the same process produces different outcomes each time, Six Sigma works to find the cause and make results more reliable.</p>
+              </section>
+              <section>
+                <h4>Helpful question</h4>
+                <p>Why are results inconsistent, and how can we make the process more dependable?</p>
+              </section>
+            </div>
+          </div>
+        </details>
+
+        <details class="both">
+          <summary aria-describedby="both-summary">
+            <div class="summary-inner">
+              <div class="badge" aria-hidden="true">+</div>
+              <div class="summary-text">
+                <h3>What they share</h3>
+                <p id="both-summary">Both aim to improve processes and create better outcomes for customers and organizations.</p>
+              </div>
+              <div class="toggle-icon" aria-hidden="true"></div>
+            </div>
+          </summary>
+          <div class="detail-body">
+            <div class="detail-head">
+              <strong>Shared purpose:</strong>
+              <p>Both methodologies support continuous improvement. They help organizations become more intentional about how work gets done.</p>
+            </div>
+            <div class="content-grid">
+              <section>
+                <h4>Shared goals</h4>
+                <ul>
+                  <li>Better quality</li>
+                  <li>Better efficiency</li>
+                  <li>Better customer experience</li>
+                </ul>
+              </section>
+              <section>
+                <h4>Shared mindset</h4>
+                <p>Both encourage teams to study processes, identify problems, and make informed improvements rather than guessing.</p>
+              </section>
+              <section>
+                <h4>Helpful question</h4>
+                <p>How can we improve the way this work is done so results are stronger and more consistent?</p>
+              </section>
+            </div>
+          </div>
+        </details>
+
+        <details class="both">
+          <summary aria-describedby="when-summary">
+            <div class="summary-inner">
+              <div class="badge" aria-hidden="true">?</div>
+              <div class="summary-text">
+                <h3>When to use each approach</h3>
+                <p id="when-summary">Choose the focus based on the type of problem the organization is trying to solve.</p>
+              </div>
+              <div class="toggle-icon" aria-hidden="true"></div>
+            </div>
+          </summary>
+          <div class="detail-body">
+            <div class="detail-head">
+              <strong>Simple rule:</strong>
+              <p>Use Lean when the problem is waste or slow flow. Use Six Sigma when the problem is inconsistency or defects. Many organizations blend both.</p>
+            </div>
+            <div class="content-grid">
+              <section>
+                <h4>Lean fits when...</h4>
+                <ul>
+                  <li>Work takes too long</li>
+                  <li>There are too many extra steps</li>
+                  <li>Customers are waiting unnecessarily</li>
+                </ul>
+              </section>
+              <section>
+                <h4>Six Sigma fits when...</h4>
+                <ul>
+                  <li>Errors happen too often</li>
+                  <li>Results vary from case to case</li>
+                  <li>Quality is not consistent</li>
+                </ul>
+              </section>
+              <section>
+                <h4>Using both</h4>
+                <p>An organization may streamline a process with Lean and then improve consistency with Six Sigma.</p>
+              </section>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="bottom" aria-label="Takeaways">
+      <div class="card">
+        <h2>At a glance</h2>
+        <ul class="mini-list">
+          <li><strong>Lean:</strong> remove waste and improve flow.</li>
+          <li><strong>Six Sigma:</strong> reduce defects and variation.</li>
+          <li><strong>Both:</strong> improve processes and support better results.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Student takeaway</h2>
+        <p>
+          You do not need to memorize advanced tools to understand the difference. At a high level, Lean is about efficiency, while Six Sigma is about consistency and quality.
+        </p>
+      </div>
+    </section>
+
+    <section class="banner" aria-labelledby="final-takeaway">
+      <h2 id="final-takeaway">Main takeaway</h2>
+      <p>
+        <strong>Lean helps organizations do work with less waste.</strong> <strong>Six Sigma helps organizations do work with fewer errors.</strong> Together, they provide a strong foundation for process improvement.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
