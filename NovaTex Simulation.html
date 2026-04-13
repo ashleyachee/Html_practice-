@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaTech Crisis Investigation Simulator</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-2:#eef3f9;
+      --text:#17212b;
+      --muted:#52606d;
+      --border:#cdd6e1;
+      --accent:#155eef;
+      --accent-dark:#0b4cc2;
+      --accent-soft:#e7f0ff;
+      --danger:#b42318;
+      --danger-soft:#fef3f2;
+      --warning:#b54708;
+      --warning-soft:#fff7ed;
+      --success:#027a48;
+      --success-soft:#ecfdf3;
+      --shadow:0 8px 24px rgba(16, 24, 40, 0.08);
+      --radius:18px;
+      --focus:3px solid #111111;
+      --max:1200px;
+    }
+
+    * { box-sizing:border-box; }
+
+    html, body {
+      margin:0;
+      padding:0;
+      background:linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+      color:var(--text);
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      line-height:1.5;
+    }
+
+    body {
+      padding:24px;
+    }
+
+    .app {
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .skip-link {
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+
+    .skip-link:focus {
+      position:static;
+      width:auto;
+      height:auto;
+      padding:10px 14px;
+      background:#fff;
+      border:2px solid #111;
+      border-radius:8px;
+      display:inline-block;
+      margin-bottom:12px;
+    }
+
+    header.hero {
+      background:linear-gradient(135deg, #102a43 0%, #1e3a5f 55%, #155eef 100%);
+      color:#fff;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .eyebrow {
+      display:inline-block;
+      font-size:0.82rem;
+      font-weight:700;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,0.14);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:12px;
+    }
+
+    h1, h2, h3 {
+      line-height:1.2;
+      margin-top:0;
+    }
+
+    h1 {
+      font-size:clamp(1.8rem, 2.5vw, 2.6rem);
+      margin-bottom:10px;
+    }
+
+    .hero p {
+      max-width:900px;
+      margin:0 0 14px 0;
+      color:#eaf2ff;
+    }
+
+    .hero-meta {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .pill {
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.2);
+      color:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:0.95rem;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    @media (max-width: 940px) {
+      .grid {
+        grid-template-columns:1fr;
+      }
+    }
+
+    .stack {
+      display:grid;
+      gap:20px;
+    }
+
+    .card {
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .card h2 {
+      font-size:1.25rem;
+      margin-bottom:8px;
+    }
+
+    .card h3 {
+      font-size:1.02rem;
+      margin-bottom:8px;
+    }
+
+    .muted {
+      color:var(--muted);
+    }
+
+    .intro-box {
+      background:var(--panel-2);
+      border-left:5px solid var(--accent);
+      border-radius:14px;
+      padding:14px 16px;
+      margin-top:12px;
+    }
+
+    .toolbar {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    button,
+    .button-link {
+      appearance:none;
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover,
+    .button-link:hover {
+      transform:translateY(-1px);
+    }
+
+    button.primary {
+      background:var(--accent);
+      color:#fff;
+    }
+
+    button.primary:hover {
+      background:var(--accent-dark);
+    }
+
+    button.secondary {
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    button.secondary:hover {
+      background:#f8fafc;
+    }
+
+    button.ghost {
+      background:var(--accent-soft);
+      color:var(--accent-dark);
+      border:1px solid #bfd3ff;
+    }
+
+    button.danger {
+      background:var(--danger-soft);
+      color:var(--danger);
+      border:1px solid #f3b6b2;
+    }
+
+    button:focus,
+    .choice-btn:focus,
+    details summary:focus,
+    .tab-btn:focus {
+      outline:var(--focus);
+      outline-offset:2px;
+    }
+
+    .status-panel {
+      position:sticky;
+      top:20px;
+    }
+
+    .meter {
+      background:#e8eef5;
+      border-radius:999px;
+      height:12px;
+      overflow:hidden;
+      margin:8px 0 14px;
+    }
+
+    .meter > span {
+      display:block;
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, #155eef 0%, #7aa2ff 100%);
+      transition:width 0.25s ease;
+    }
+
+    .kpi-grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .kpi {
+      background:#f8fbff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .kpi .label {
+      font-size:0.84rem;
+      color:var(--muted);
+    }
+
+    .kpi .value {
+      font-size:1.3rem;
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:0.83rem;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .badge.good {
+      background:var(--success-soft);
+      color:var(--success);
+    }
+
+    .badge.warn {
+      background:var(--warning-soft);
+      color:var(--warning);
+    }
+
+    .badge.bad {
+      background:var(--danger-soft);
+      color:var(--danger);
+    }
+
+    .tabs {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:16px 0;
+    }
+
+    .tab-btn {
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:10px;
+      padding:10px 12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background:var(--accent-soft);
+      border-color:#bfd3ff;
+      color:var(--accent-dark);
+    }
+
+    .panel {
+      display:none;
+      border-top:1px solid #e6ecf3;
+      padding-top:16px;
+    }
+
+    .panel.active {
+      display:block;
+    }
+
+    .timeline {
+      display:grid;
+      gap:12px;
+    }
+
+    .timeline-item {
+      border-left:4px solid var(--border);
+      padding:6px 0 6px 14px;
+      position:relative;
+    }
+
+    .timeline-item::before {
+      content:"";
+      position:absolute;
+      left:-8px;
+      top:12px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#fff;
+      border:3px solid var(--accent);
+    }
+
+    .data-list {
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .data-item {
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fcfdff;
+    }
+
+    .data-item strong {
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .chart-box {
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
+      overflow-x:auto;
+    }
+
+    .chart-wrap {
+      min-width:640px;
+    }
+
+    svg text {
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      fill:#314154;
+      font-size:12px;
+    }
+
+    .legend {
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      font-size:0.92rem;
+      color:var(--muted);
+    }
+
+    .legend span::before {
+      content:"";
+      display:inline-block;
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      margin-right:8px;
+      vertical-align:middle;
+    }
+
+    .legend .line1::before { background:#155eef; }
+    .legend .line2::before { background:#b42318; }
+    .legend .line3::before { background:#027a48; }
+    .legend .line4::before { background:#7a5af8; }
+
+    details {
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      background:#fff;
+      margin-bottom:10px;
+    }
+
+    details[open] {
+      background:#fbfdff;
+    }
+
+    summary {
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .decision-group {
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .choice-btn {
+      text-align:left;
+      width:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:14px 15px;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .choice-btn:hover {
+      background:#f8fbff;
+      border-color:#adc6ff;
+    }
+
+    .choice-btn strong {
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .feedback {
+      margin-top:16px;
+      border-radius:16px;
+      padding:16px;
+      border:1px solid var(--border);
+      background:#fbfdff;
+    }
+
+    .feedback.good {
+      background:var(--success-soft);
+      border-color:#9fe0ba;
+    }
+
+    .feedback.warn {
+      background:var(--warning-soft);
+      border-color:#f2c48a;
+    }
+
+    .feedback.bad {
+      background:var(--danger-soft);
+      border-color:#efb0aa;
+    }
+
+    .hidden {
+      display:none !important;
+    }
+
+    .sr-only {
+      position:absolute !important;
+      width:1px !important;
+      height:1px !important;
+      padding:0 !important;
+      margin:-1px !important;
+      overflow:hidden !important;
+      clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important;
+      border:0 !important;
+    }
+
+    .footer-note {
+      margin-top:16px;
+      font-size:0.94rem;
+      color:var(--muted);
+    }
+
+    .recommendations {
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .rec {
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px 14px;
+      background:#fff;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app">
+    <header class="hero" aria-labelledby="pageTitle">
+      <div class="eyebrow">Branching Marketing Simulation</div>
+      <h1 id="pageTitle">NovaTech Crisis Investigation Dashboard</h1>
+      <p>
+        You are a marketing analyst at NovaTech. Customer sentiment has dropped sharply, social media complaints are spiking,
+        and news outlets are questioning the company’s credibility. Your job is to investigate the evidence, avoid jumping to
+        conclusions, and guide the company toward the right crisis response.
+      </p>
+      <div class="hero-meta" aria-label="Key learning areas">
+        <span class="pill">Reputation management</span>
+        <span class="pill">Crisis communication timing</span>
+        <span class="pill">Transparency vs silence</span>
+        <span class="pill">Social listening</span>
+        <span class="pill">Trust signals</span>
+      </div>
+    </header>
+
+    <main id="main-content" class="grid">
+      <section class="stack">
+        <article class="card" aria-labelledby="scenarioHeading">
+          <h2 id="scenarioHeading">1. Scenario Introduction</h2>
+          <p class="muted">
+            A sudden wave of online complaints is affecting NovaTech’s new cloud-connected home productivity device,
+            NovaHub. Has the brand suffered a real security incident, or is something else driving the reputation drop?
+          </p>
+          <div class="intro-box">
+            <strong>Your role:</strong>
+            Review evidence from multiple channels, make investigation choices, interpret incomplete and sometimes misleading data,
+            and recommend the next marketing action.
+          </div>
+          <div class="toolbar">
+            <button class="primary" id="startBtn">Start Investigation</button>
+            <button class="secondary" id="resetBtn">Replay / Reset</button>
+          </div>
+        </article>
+
+        <article class="card hidden" id="dashboardCard" aria-labelledby="dashboardHeading">
+          <h2 id="dashboardHeading">2. Investigation Dashboard</h2>
+          <p class="muted">
+            Explore the evidence. Some panels contain partial clues. Your earlier choices will unlock additional details later.
+          </p>
+
+          <div class="tabs" role="tablist" aria-label="Evidence panels">
+            <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-sentiment" id="tab-sentiment">Sentiment Timeline</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-complaints" id="tab-complaints">Complaint Log</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-news" id="tab-news">News Headlines</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-response" id="tab-response">Response Timeline</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-traffic" id="tab-traffic">Website Traffic</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-email" id="tab-email">Internal Emails</button>
+            <button class="tab-btn hidden" role="tab" aria-selected="false" aria-controls="panel-forensics" id="tab-forensics">Unlocked Evidence</button>
+          </div>
+
+          <section class="panel active" id="panel-sentiment" role="tabpanel" aria-labelledby="tab-sentiment">
+            <h3>Social Media Sentiment Timeline</h3>
+            <p class="muted">
+              Sentiment fell quickly after an influential post accused NovaTech of exposing customer account data.
+            </p>
+            <div class="chart-box" aria-describedby="sentimentDesc">
+              <div class="chart-wrap">
+                <svg viewBox="0 0 760 280" width="100%" height="280" role="img" aria-labelledby="sentimentTitle sentimentDesc">
+                  <title id="sentimentTitle">Sentiment and mention volume timeline</title>
+                  <desc id="sentimentDesc">
+                    A line chart showing sentiment score falling from plus 22 to minus 58 between 9 AM and 6 PM,
+                    while mention volume rises sharply.
+                  </desc>
+
+                  <!-- axes -->
+                  <line x1="60" y1="20" x2="60" y2="220" stroke="#7b8794" stroke-width="1.5"/>
+                  <line x1="60" y1="220" x2="710" y2="220" stroke="#7b8794" stroke-width="1.5"/>
+
+                  <!-- y labels -->
+                  <text x="24" y="28">+30</text>
+                  <text x="30" y="82">0</text>
+                  <text x="24" y="142">-30</text>
+                  <text x="24" y="202">-60</text>
+
+                  <!-- x labels -->
+                  <text x="72" y="245">9 AM</text>
+                  <text x="172" y="245">11 AM</text>
+                  <text x="282" y="245">1 PM</text>
+                  <text x="392" y="245">3 PM</text>
+                  <text x="502" y="245">5 PM</text>
+                  <text x="622" y="245">6 PM</text>
+
+                  <!-- grid -->
+                  <line x1="60" y1="80" x2="710" y2="80" stroke="#e6edf5" stroke-width="1"/>
+                  <line x1="60" y1="140" x2="710" y2="140" stroke="#e6edf5" stroke-width="1"/>
+                  <line x1="60" y1="200" x2="710" y2="200" stroke="#e6edf5" stroke-width="1"/>
+
+                  <!-- sentiment line -->
+                  <polyline
+                    fill="none"
+                    stroke="#155eef"
+                    stroke-width="4"
+                    points="80,90 190,102 300,135 410,165 520,195 650,208"/>
+                  <!-- mention volume -->
+                  <polyline
+                    fill="none"
+                    stroke="#b42318"
+                    stroke-width="4"
+                    points="80,188 190,178 300,145 410,110 520,70 650,50"/>
+
+                  <!-- markers -->
+                  <circle cx="80" cy="90" r="4" fill="#155eef"/>
+                  <circle cx="190" cy="102" r="4" fill="#155eef"/>
+                  <circle cx="300" cy="135" r="4" fill="#155eef"/>
+                  <circle cx="410" cy="165" r="4" fill="#155eef"/>
+                  <circle cx="520" cy="195" r="4" fill="#155eef"/>
+                  <circle cx="650" cy="208" r="4" fill="#155eef"/>
+
+                  <circle cx="80" cy="188" r="4" fill="#b42318"/>
+                  <circle cx="190" cy="178" r="4" fill="#b42318"/>
+                  <circle cx="300" cy="145" r="4" fill="#b42318"/>
+                  <circle cx="410" cy="110" r="4" fill="#b42318"/>
+                  <circle cx="520" cy="70" r="4" fill="#b42318"/>
+                  <circle cx="650" cy="50" r="4" fill="#b42318"/>
+
+                  <!-- event callout -->
+                  <line x1="300" y1="25" x2="300" y2="220" stroke="#7a5af8" stroke-dasharray="6 6" stroke-width="2"/>
+                  <text x="310" y="35">Influencer post alleging “breach”</text>
+                </svg>
+              </div>
+              <div class="legend" aria-hidden="true">
+                <span class="line1">Sentiment Score</span>
+                <span class="line2">Mention Volume</span>
+                <span class="line4">Trigger Event</span>
+              </div>
+            </div>
+
+            <div class="data-list" aria-label="Example social posts">
+              <div class="data-item">
+                <strong>Sample Post 1 — 12:58 PM</strong>
+                “My NovaHub app logged me out. Did they get hacked?”
+              </div>
+              <div class="data-item">
+                <strong>Sample Post 2 — 1:11 PM</strong>
+                “Seeing screenshots everywhere. NovaTech better explain what happened.”
+              </div>
+              <div class="data-item">
+                <strong>Sample Post 3 — 2:04 PM</strong>
+                “This rumor is moving faster than the company’s response.”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-complaints" role="tabpanel" aria-labelledby="tab-complaints">
+            <h3>Customer Service Complaint Log</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>10:42 AM — Account Login Issue</strong>
+                “I reset my password because I saw rumors online. I cannot tell whether my account is affected.”
+              </div>
+              <div class="data-item">
+                <strong>12:35 PM — Support Ticket Spike</strong>
+                “Customers are asking whether leaked screenshots are real. Most do not report unauthorized charges.”
+              </div>
+              <div class="data-item">
+                <strong>1:47 PM — Phone Escalation</strong>
+                “Caller says a tech blog reported exposed user records, but cannot confirm if their own account was accessed.”
+              </div>
+              <div class="data-item">
+                <strong>3:22 PM — Security Concern</strong>
+                “Several customers say they changed passwords out of caution after a creator shared a thread with cropped screenshots.”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-news" role="tabpanel" aria-labelledby="tab-news">
+            <h3>News Headlines and Snippets</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>TechWatch Daily — 1:15 PM</strong>
+                “NovaTech faces questions after viral thread hints at customer data exposure.”
+              </div>
+              <div class="data-item">
+                <strong>Startup Signal — 2:40 PM</strong>
+                “Silence from NovaTech fuels speculation as screenshots continue spreading.”
+              </div>
+              <div class="data-item">
+                <strong>MarketMinute — 4:10 PM</strong>
+                “Brand trust may be at greater risk from communication delay than from verified technical evidence.”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-response" role="tabpanel" aria-labelledby="tab-response">
+            <h3>Company Response Timeline</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <strong>11:40 AM</strong><br>
+                Internal teams notice unusual social chatter, but no public statement is made.
+              </div>
+              <div class="timeline-item">
+                <strong>1:20 PM</strong><br>
+                Draft response circulated internally: “We are reviewing the situation.”
+              </div>
+              <div class="timeline-item">
+                <strong>3:05 PM</strong><br>
+                Customer support receives talking points, but social channels remain silent.
+              </div>
+              <div class="timeline-item">
+                <strong>5:10 PM</strong><br>
+                Public statement posted: “We have no evidence of widespread unauthorized access at this time.”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-traffic" role="tabpanel" aria-labelledby="tab-traffic">
+            <h3>Website Traffic Changes</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>Help Center Visits</strong>
+                +240% between 12 PM and 5 PM
+              </div>
+              <div class="data-item">
+                <strong>Security FAQ Page</strong>
+                +410% pageviews, unusually high bounce rate
+              </div>
+              <div class="data-item">
+                <strong>Status Page</strong>
+                Low traffic until after the official statement, suggesting many customers could not find a trusted source quickly
+              </div>
+              <div class="data-item">
+                <strong>Brand Search Queries</strong>
+                Spike in searches containing “hack,” “breach,” and “safe?”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-email" role="tabpanel" aria-labelledby="tab-email">
+            <h3>Internal Marketing Email Excerpts</h3>
+            <details>
+              <summary>11:55 AM — Marketing Director to Comms Lead</summary>
+              <p>
+                “We need to confirm facts before posting, but waiting too long could let speculation define the narrative.”
+              </p>
+            </details>
+            <details>
+              <summary>12:28 PM — Brand Manager to Leadership Team</summary>
+              <p>
+                “Creators are repeating each other’s screenshots. Some may be recycled from older account error messages.”
+              </p>
+            </details>
+            <details>
+              <summary>2:12 PM — VP of Growth to Marketing Team</summary>
+              <p>
+                “Traffic is pouring into support pages. Even if the technical issue is minor or unrelated, trust damage is increasing.”
+              </p>
+            </details>
+          </section>
+
+          <section class="panel hidden" id="panel-forensics" role="tabpanel" aria-labelledby="tab-forensics">
+            <h3>Unlocked Evidence</h3>
+            <div id="forensicsContent" class="data-list"></div>
+          </section>
+        </article>
+
+        <article class="card hidden" id="decision1Card" aria-labelledby="decision1Heading">
+          <h2 id="decision1Heading">3. Branching Decision Point 1</h2>
+          <p>
+            Based on the evidence so far, what should you investigate first?
+          </p>
+          <div class="decision-group" role="group" aria-label="First investigation choice">
+            <button class="choice-btn" data-decision="first" data-value="security">
+              <strong>Focus on security logs and breach verification</strong>
+              Prioritize confirming whether a real technical incident occurred.
+            </button>
+            <button class="choice-btn" data-decision="first" data-value="comms">
+              <strong>Audit crisis communication timing and message clarity</strong>
+              Focus on how the brand responded and whether silence worsened public trust.
+            </button>
+            <button class="choice-btn" data-decision="first" data-value="social">
+              <strong>Trace the rumor’s origin across social and media channels</strong>
+              Investigate how the claim spread and whether bad actors amplified it.
+            </button>
+          </div>
+          <div id="decision1Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="decision2Card" aria-labelledby="decision2Heading">
+          <h2 id="decision2Heading">4. Branching Decision Point 2</h2>
+          <p>
+            A major tech outlet requests comment before publishing an update. What should NovaTech do next?
+          </p>
+          <div class="decision-group" role="group" aria-label="Second decision choice">
+            <button class="choice-btn" data-decision="second" data-value="silent">
+              <strong>Stay silent until every fact is confirmed</strong>
+              Avoid saying anything until the investigation is complete.
+            </button>
+            <button class="choice-btn" data-decision="second" data-value="holding">
+              <strong>Issue a transparent holding statement</strong>
+              Acknowledge concern, state what is known, and promise a timed update.
+            </button>
+            <button class="choice-btn" data-decision="second" data-value="defensive">
+              <strong>Push back aggressively and dismiss the story</strong>
+              Emphasize that the reports are exaggerated and unfair.
+            </button>
+          </div>
+          <div id="decision2Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="decision3Card" aria-labelledby="decision3Heading">
+          <h2 id="decision3Heading">5. Branching Decision Point 3</h2>
+          <p>
+            New evidence appears. Internal security review finds no sign of large-scale unauthorized access. At the same time,
+            analysts notice coordinated reposting from accounts linked to a rival agency network. What is your working conclusion now?
+          </p>
+          <div class="decision-group" role="group" aria-label="Third decision choice">
+            <button class="choice-btn" data-decision="third" data-value="breach">
+              <strong>A real data breach caused the reputation drop</strong>
+              The security explanation still best fits the public response.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="poorcomms">
+              <strong>Poor crisis communication amplified a misunderstood incident</strong>
+              The company’s slow response damaged trust, regardless of the technical reality.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="rumor">
+              <strong>A viral rumor with no major verified incident drove the crisis</strong>
+              Social amplification outpaced facts.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="smear">
+              <strong>A competitor smear campaign played a meaningful role</strong>
+              Coordinated amplification likely worsened the narrative, even if communication failures also mattered.
+            </button>
+          </div>
+          <div id="decision3Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="finalCard" aria-labelledby="finalHeading">
+          <h2 id="finalHeading">6. Final Analysis and Recommendation</h2>
+          <div id="finalOutcome"></div>
+          <div class="footer-note">
+            Replay to explore different paths and compare how evidence interpretation and communication choices shape outcomes.
+          </div>
+          <div class="toolbar">
+            <button class="primary" id="replayBtn">Replay Scenario</button>
+          </div>
+        </article>
+      </section>
+
+      <aside class="stack status-panel">
+        <article class="card" aria-labelledby="progressHeading">
+          <h2 id="progressHeading">Investigation Status</h2>
+          <p class="muted">Track your progress and see how your choices affect public trust.</p>
+
+          <div>
+            <strong>Progress</strong>
+            <div class="meter" aria-hidden="true">
+              <span id="progressBar"></span>
+            </div>
+            <div id="progressText" aria-live="polite">0% complete</div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="label">Evidence Reviewed</div>
+              <div class="value" id="evidenceCount">0/6</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Decision Points</div>
+              <div class="value" id="decisionCount">0/3</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Public Trust</div>
+              <div class="value" id="trustValue">50</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Confidence Score</div>
+              <div class="value" id="confidenceValue">0</div>
+            </div>
+          </div>
+
+          <div id="trustBadge" class="badge warn" aria-live="polite">Trust is fragile</div>
+        </article>
+
+        <article class="card" aria-labelledby="taskHeading">
+          <h2 id="taskHeading">Your Questions</h2>
+          <div class="recommendations">
+            <div class="rec">What caused the reputation drop?</div>
+            <div class="rec">Did a real data breach occur?</div>
+            <div class="rec">Did NovaTech respond appropriately?</div>
+            <div class="rec">What should the marketing team do next?</div>
+          </div>
+        </article>
+
+        <article class="card" aria-labelledby="conceptHeading">
+          <h2 id="conceptHeading">Marketing Concepts</h2>
+          <div class="recommendations">
+            <div class="rec"><strong>Social listening:</strong> Monitor how narratives spread before they harden into “truth.”</div>
+            <div class="rec"><strong>Crisis timing:</strong> Slow responses often increase uncertainty and speculation.</div>
+            <div class="rec"><strong>Transparency:</strong> Acknowledge concern without overclaiming certainty.</div>
+            <div class="rec"><strong>Trust signals:</strong> Clear updates, FAQs, and visible leadership messaging reduce confusion.</div>
+          </div>
+        </article>
+
+        <div class="sr-only" aria-live="polite" id="liveRegion"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const state = {
+        started: false,
+        reviewed: new Set(),
+        decisions: {
+          first: null,
+          second: null,
+          third: null
+        },
+        trust: 50,
+        confidence: 0,
+        unlockedEvidence: [],
+        misleadingPath: false
+      };
+
+      const evidenceKeys = [
+        "panel-sentiment",
+        "panel-complaints",
+        "panel-news",
+        "panel-response",
+        "panel-traffic",
+        "panel-email"
+      ];
+
+      const startBtn = document.getElementById("startBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const replayBtn = document.getElementById("replayBtn");
+
+      const dashboardCard = document.getElementById("dashboardCard");
+      const decision1Card = document.getElementById("decision1Card");
+      const decision2Card = document.getElementById("decision2Card");
+      const decision3Card = document.getElementById("decision3Card");
+      const finalCard = document.getElementById("finalCard");
+
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+      const evidenceCount = document.getElementById("evidenceCount");
+      const decisionCount = document.getElementById("decisionCount");
+      const trustValue = document.getElementById("trustValue");
+      const confidenceValue = document.getElementById("confidenceValue");
+      const trustBadge = document.getElementById("trustBadge");
+      const liveRegion = document.getElementById("liveRegion");
+      const finalOutcome = document.getElementById("finalOutcome");
+
+      const forensicsTab = document.getElementById("tab-forensics");
+      const forensicsPanel = document.getElementById("panel-forensics");
+      const forensicsContent = document.getElementById("forensicsContent");
+
+      const tabButtons = Array.from(document.querySelectorAll(".tab-btn"));
+      const panels = Array.from(document.querySelectorAll(".panel"));
+
+      function announce(message) {
+        liveRegion.textContent = message;
+      }
+
+      function updateStatus() {
+        const reviewedCount = state.reviewed.size;
+        const decidedCount = Object.values(state.decisions).filter(Boolean).length;
+        const progress = Math.round(((reviewedCount + decidedCount) / 9) * 100);
+
+        progressBar.style.width = progress + "%";
+        progressText.textContent = progress + "% complete";
+        evidenceCount.textContent = reviewedCount + "/6";
+        decisionCount.textContent = decidedCount + "/3";
+        trustValue.textContent = state.trust;
+        confidenceValue.textContent = state.confidence;
+
+        trustBadge.className = "badge";
+        if (state.trust >= 65) {
+          trustBadge.classList.add("good");
+          trustBadge.textContent = "Trust is stabilizing";
+        } else if (state.trust >= 40) {
+          trustBadge.classList.add("warn");
+          trustBadge.textContent = "Trust is fragile";
+        } else {
+          trustBadge.classList.add("bad");
+          trustBadge.textContent = "Trust is deteriorating";
+        }
+
+        if (reviewedCount >= 3 && decision1Card.classList.contains("hidden")) {
+          decision1Card.classList.remove("hidden");
+          announce("First decision point unlocked.");
+        }
+
+        if (state.decisions.first && decision2Card.classList.contains("hidden")) {
+          decision2Card.classList.remove("hidden");
+          unlockEvidenceFromFirstDecision();
+          announce("Second decision point unlocked.");
+        }
+
+        if (state.decisions.second && decision3Card.classList.contains("hidden")) {
+          decision3Card.classList.remove("hidden");
+          unlockEvidenceFromSecondDecision();
+          announce("Third decision point unlocked.");
+        }
+
+        if (state.decisions.third && finalCard.classList.contains("hidden")) {
+          finalCard.classList.remove("hidden");
+          renderFinalOutcome();
+          announce("Final outcome ready.");
+        }
+      }
+
+      function startScenario() {
+        state.started = true;
+        dashboardCard.classList.remove("hidden");
+        state.reviewed.add("panel-sentiment");
+        updateStatus();
+        announce("Investigation started. Dashboard opened.");
+        document.getElementById("dashboardHeading").focus?.();
+      }
+
+      function resetScenario() {
+        state.started = false;
+        state.reviewed = new Set();
+        state.decisions = { first:null, second:null, third:null };
+        state.trust = 50;
+        state.confidence = 0;
+        state.unlockedEvidence = [];
+        state.misleadingPath = false;
+
+        dashboardCard.classList.add("hidden");
+        decision1Card.classList.add("hidden");
+        decision2Card.classList.add("hidden");
+        decision3Card.classList.add("hidden");
+        finalCard.classList.add("hidden");
+
+        document.getElementById("decision1Feedback").className = "feedback hidden";
+        document.getElementById("decision2Feedback").className = "feedback hidden";
+        document.getElementById("decision3Feedback").className = "feedback hidden";
+        document.getElementById("decision1Feedback").innerHTML = "";
+        document.getElementById("decision2Feedback").innerHTML = "";
+        document.getElementById("decision3Feedback").innerHTML = "";
+        finalOutcome.innerHTML = "";
+
+        forensicsTab.classList.add("hidden");
+        forensicsPanel.classList.add("hidden");
+        forensicsContent.innerHTML = "";
+
+        activateTab("tab-sentiment", "panel-sentiment");
+        updateStatus();
+        announce("Scenario reset. You can replay the investigation.");
+      }
+
+      function activateTab(tabId, panelId) {
+        tabButtons.forEach(btn => {
+          const selected = btn.id === tabId;
+          btn.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach(panel => {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+
+        if (evidenceKeys.includes(panelId)) {
+          state.reviewed.add(panelId);
+          if (panelId === "panel-response" || panelId === "panel-email") {
+            state.confidence += 5;
+          } else {
+            state.confidence += 3;
+          }
+        }
+
+        updateStatus();
+      }
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const panelId = btn.getAttribute("aria-controls");
+          activateTab(btn.id, panelId);
+        });
+      });
+
+      function showFeedback(id, html, tone) {
+        const el = document.getElementById(id);
+        el.innerHTML = html;
+        el.className = "feedback " + tone;
+        el.classList.remove("hidden");
+        el.focus();
+      }
+
+      function unlockForensics(items) {
+        forensicsTab.classList.remove("hidden");
+        forensicsPanel.classList.remove("hidden");
+
+        items.forEach(item => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "data-item";
+          wrapper.innerHTML = `<strong>${item.title}</strong>${item.text}`;
+          forensicsContent.appendChild(wrapper);
+        });
+      }
+
+      function unlockEvidenceFromFirstDecision() {
+        if (state.unlockedEvidence.includes("first")) return;
+        state.unlockedEvidence.push("first");
+
+        if (state.decisions.first === "security") {
+          unlockForensics([
+            {
+              title: "Security Log Review — 2:55 PM",
+              text: "Internal security team reports no evidence of mass account extraction, no unusual database exfiltration pattern, and no spike in confirmed unauthorized account access."
+            },
+            {
+              title: "Technical Note",
+              text: "The screenshots circulating online match an older password reset error state, not a breach dashboard."
+            }
+          ]);
+          state.confidence += 12;
+        } else if (state.decisions.first === "comms") {
+          unlockForensics([
+            {
+              title: "Channel Response Audit",
+              text: "NovaTech took nearly four hours to issue a public-facing statement after social concern escalated. Support agents were briefed before customers saw any official social update."
+            },
+            {
+              title: "Brand Trust Memo",
+              text: "Internal analysts warn that uncertainty, not only technical risk, is driving negative sentiment."
+            }
+          ]);
+          state.confidence += 10;
+        } else if (state.decisions.first === "social") {
+          unlockForensics([
+            {
+              title: "Amplification Trace",
+              text: "A cluster of recently created accounts reposted the original allegation within minutes. Several pushed identical wording."
+            },
+            {
+              title: "Risk Note",
+              text: "The original thread cites screenshots but provides no independently verified proof of data exposure."
+            }
+          ]);
+          state.confidence += 8;
+          state.misleadingPath = true;
+        }
+      }
+
+      function unlockEvidenceFromSecondDecision() {
+        if (state.unlockedEvidence.includes("second")) return;
+        state.unlockedEvidence.push("second");
+
+        unlockForensics([
+          {
+            title: "Independent Security Summary — 5:40 PM",
+            text: "Third-party review finds no signs of a widespread breach. Small login friction appears tied to customers voluntarily resetting credentials after rumor exposure."
+          },
+          {
+            title: "Competitive Intelligence Brief — 6:05 PM",
+            text: "Monitoring suggests a rival-linked PR vendor account interacted early with the viral rumor network, increasing visibility among industry reporters."
+          }
+        ]);
+
+        state.confidence += 15;
+      }
+
+      document.querySelectorAll(".choice-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const type = btn.dataset.decision;
+          const value = btn.dataset.value;
+
+          if (type === "first") {
+            state.decisions.first = value;
+
+            if (value === "security") {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Good investigative instinct.</strong> Verifying technical facts first helps prevent a false breach conclusion. However, technical accuracy alone will not solve the trust problem if communication remains slow.",
+                "good"
+              );
+              state.confidence += 10;
+            } else if (value === "comms") {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Strong marketing lens.</strong> This focuses on reputation dynamics and trust signals. Still, you will need later evidence to separate communication failure from actual security failure.",
+                "good"
+              );
+              state.confidence += 8;
+            } else {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Useful, but risky if used alone.</strong> Rumor tracing matters, but focusing too heavily on social amplification can tempt you toward a premature smear-campaign conclusion.",
+                "warn"
+              );
+              state.confidence += 5;
+            }
+          }
+
+          if (type === "second") {
+            state.decisions.second = value;
+
+            if (value === "silent") {
+              state.trust -= 18;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>This worsens the crisis.</strong> Waiting for perfect certainty leaves customers in an information vacuum. In reputation management, silence often gets interpreted as avoidance or lack of control.",
+                "bad"
+              );
+            } else if (value === "holding") {
+              state.trust += 16;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>Best practice.</strong> A transparent holding statement acknowledges concern, reduces speculation, and signals accountability without making unsupported claims.",
+                "good"
+              );
+            } else {
+              state.trust -= 12;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>Defensive messaging harms trust.</strong> Dismissing concern too quickly can make the brand seem evasive, especially when the public is looking for reassurance and clarity.",
+                "bad"
+              );
+            }
+          }
+
+          if (type === "third") {
+            state.decisions.third = value;
+
+            if (value === "breach") {
+              state.confidence -= 8;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Weak conclusion.</strong> Later evidence does not support a large-scale verified breach. This interpretation leans too heavily on early rumor signals and public fear.",
+                "bad"
+              );
+            } else if (value === "poorcomms") {
+              state.confidence += 16;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Excellent interpretation.</strong> The strongest reading is that poor crisis communication amplified a misunderstood event. Technical evidence did not confirm a major breach, but slow messaging damaged trust.",
+                "good"
+              );
+            } else if (value === "rumor") {
+              state.confidence += 12;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Mostly correct.</strong> A viral rumor appears central to the crisis, but the company’s slow communication also played a major role in making the rumor credible.",
+                "good"
+              );
+            } else {
+              state.confidence += 10;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Plausible but incomplete.</strong> Coordinated amplification likely mattered, but competitor activity alone does not explain the trust collapse. Communication failures still shaped the outcome.",
+                "warn"
+              );
+            }
+          }
+
+          updateStatus();
+        });
+      });
+
+      function renderFinalOutcome() {
+        const first = state.decisions.first;
+        const second = state.decisions.second;
+        const third = state.decisions.third;
+
+        let title = "";
+        let tone = "warn";
+        let summary = "";
+        let answers = "";
+        let recommendations = "";
+
+        if (third === "poorcomms") {
+          title = "Most Effective Outcome: Misunderstood incident + poor crisis communication";
+          tone = "good";
+          summary = `
+            <div class="feedback good">
+              <strong>${title}</strong><br><br>
+              NovaTech’s reputation drop was driven primarily by a viral rumor that gained credibility because the company responded too slowly and too vaguely.
+              Available evidence does <strong>not</strong> support a major verified data breach. The more accurate marketing interpretation is that
+              crisis communication timing and trust signals shaped public perception more than technical harm did.
+            </div>
+          `;
+        } else if (third === "rumor") {
+          title = "Good Outcome: Viral rumor identified, but communication lesson only partly applied";
+          tone = "good";
+          summary = `
+            <div class="feedback good">
+              <strong>${title}</strong><br><br>
+              You correctly recognized that the crisis was fueled by an unverified rumor rather than a confirmed large-scale breach.
+              However, the strongest conclusion would also emphasize that NovaTech’s delayed communication amplified the trust damage.
+            </div>
+          `;
+        } else if (third === "smear") {
+          title = "Mixed Outcome: Coordinated amplification detected, but root cause overstated";
+          tone = "warn";
+          summary = `
+            <div class="feedback warn">
+              <strong>${title}</strong><br><br>
+              You identified an important clue: coordinated amplification likely worsened the narrative. Still, a competitor-linked campaign was
+              only part of the picture. The brand’s own slow communication made customers more likely to believe the claims.
+            </div>
+          `;
+        } else {
+          title = "False Conclusion Outcome: Early fear overshadowed later evidence";
+          tone = "bad";
+          summary = `
+            <div class="feedback bad">
+              <strong>${title}</strong><br><br>
+              You concluded that a real breach caused the crisis, but the later evidence does not support that interpretation.
+              This path demonstrates how incomplete data and emotionally charged signals can distort marketing decisions.
+            </div>
+          `;
+        }
+
+        let breachAnswer = (third === "breach")
+          ? "You concluded that a data breach occurred, but later evidence suggests that conclusion is not well supported."
+          : "No major verified breach was established by the later evidence.";
+
+        let responseAnswer = (second === "holding")
+          ? "NovaTech responded in the most trust-preserving way once you chose a transparent holding statement."
+          : "NovaTech’s communication approach worsened trust because silence or defensive messaging increased uncertainty.";
+
+        let causeAnswer = "";
+        if (third === "poorcomms") {
+          causeAnswer = "The reputation drop was caused by a viral rumor that was intensified by poor crisis communication.";
+        } else if (third === "rumor") {
+          causeAnswer = "The reputation drop was driven largely by a viral rumor, though communication weakness also mattered.";
+        } else if (third === "smear") {
+          causeAnswer = "The reputation drop involved coordinated amplification, but communication failures still played a major role.";
+        } else {
+          causeAnswer = "You attributed the reputation drop to a real breach, showing how incomplete evidence can drive a false conclusion.";
+        }
+
+        answers = `
+          <div class="recommendations" aria-label="Puzzle question answers">
+            <div class="rec"><strong>What caused the reputation drop?</strong><br>${causeAnswer}</div>
+            <div class="rec"><strong>Did a data breach occur?</strong><br>${breachAnswer}</div>
+            <div class="rec"><strong>Did the company respond appropriately?</strong><br>${responseAnswer}</div>
+            <div class="rec"><strong>What should the marketing team do next?</strong><br>
+              Publish a clear update hub, acknowledge uncertainty honestly, reinforce trust signals, coordinate social and support messaging,
+              and monitor sentiment continuously.
+            </div>
+          </div>
+        `;
+
+        recommendations = `
+          <h3 style="margin-top:18px;">Marketing Takeaways</h3>
+          <div class="recommendations">
+            <div class="rec"><strong>Do not jump to conclusions:</strong> Early signals are often incomplete, emotional, or manipulated.</div>
+            <div class="rec"><strong>Use transparent timing:</strong> A fast holding statement is often better than long silence.</div>
+            <div class="rec"><strong>Coordinate trust signals:</strong> Social channels, support, status pages, and leadership messaging should align.</div>
+            <div class="rec"><strong>Practice social listening:</strong> Track rumor origin, amplification patterns, and customer confusion in real time.</div>
+            <div class="rec"><strong>Protect credibility:</strong> Even when the original claim is weak, slow communication can make it believable.</div>
+          </div>
+        `;
+
+        let pathNote = "";
+        if (first === "social" && third === "smear") {
+          pathNote = `
+            <div class="feedback warn" style="margin-top:16px;">
+              <strong>Replay insight:</strong> This branch shows how focusing heavily on social amplification can pull investigators toward a competitor-smear conclusion
+              before they fully integrate communication and technical evidence.
+            </div>
+          `;
+        } else if (second === "silent" || second === "defensive") {
+          pathNote = `
+            <div class="feedback bad" style="margin-top:16px;">
+              <strong>Replay insight:</strong> Your communication choice reduced public trust. This illustrates how poor crisis communication can worsen outcomes
+              even when the original incident is misunderstood or unverified.
+            </div>
+          `;
+        }
+
+        finalOutcome.innerHTML = summary + answers + recommendations + pathNote;
+      }
+
+      startBtn.addEventListener("click", startScenario);
+      resetBtn.addEventListener("click", resetScenario);
+      replayBtn.addEventListener("click", resetScenario);
+
+      updateStatus();
+    })();
+  </script>
+</body>
+</html>
