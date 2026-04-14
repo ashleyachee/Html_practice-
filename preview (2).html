@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Growth vs. Fixed Mindset Drag Flashcards</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #4677ad;
+      color: #111;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      text-align: center;
+    }
+
+    .definition-card {
+      width: min(1100px, 92%);
+      min-height: 210px;
+      margin: 20px auto 48px;
+      background: #efefef;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 40px;
+      font-size: clamp(1.6rem, 2.8vw, 2.7rem);
+      line-height: 1.25;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      border: 4px solid transparent;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .definition-card.drag-over {
+      border-color: #1d4f8c;
+      transform: scale(1.01);
+    }
+
+    .choices {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .term-card {
+      width: 560px;
+      max-width: 100%;
+      min-height: 190px;
+      background: #234f84;
+      color: #fff;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+      font-weight: 700;
+      cursor: grab;
+      user-select: none;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+      border: 3px solid transparent;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    }
+
+    .term-card:hover,
+    .term-card:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.18);
+      outline: none;
+      border-color: #dfefff;
+    }
+
+    .term-card.dragging {
+      opacity: 0.6;
+    }
+
+    .term-card.used {
+      opacity: 0.35;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .status {
+      margin-top: 28px;
+      min-height: 32px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .controls {
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      background: #163a61;
+      color: #fff;
+      padding: 12px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus {
+      background: #102d4d;
+      outline: 3px solid #d9ebff;
+      outline-offset: 2px;
+    }
+
+    .progress {
+      margin-top: 14px;
+      color: #eaf3ff;
+      font-size: 1rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 800px) {
+      .definition-card {
+        min-height: 180px;
+        padding: 24px;
+      }
+
+      .term-card {
+        min-height: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="sr-only">Growth and Fixed Mindset Drag Flashcards</h1>
+
+    <div
+      id="definitionCard"
+      class="definition-card"
+      aria-live="polite"
+      aria-label="Definition drop zone"
+    >
+      Loading...
+    </div>
+
+    <section class="choices" aria-label="Term choices">
+      <div
+        id="growthCard"
+        class="term-card"
+        draggable="true"
+        tabindex="0"
+        role="button"
+        aria-label="Growth Mindset"
+        data-term="growth"
+      >
+        Growth Mindset
+      </div>
+
+      <div
+        id="fixedCard"
+        class="term-card"
+        draggable="true"
+        tabindex="0"
+        role="button"
+        aria-label="Fixed Mindset"
+        data-term="fixed"
+      >
+        Fixed Mindset
+      </div>
+    </section>
+
+    <div id="status" class="status" aria-live="polite"></div>
+
+    <div class="controls">
+      <button id="nextBtn" type="button" hidden>Next Card</button>
+    </div>
+
+    <div id="progress" class="progress"></div>
+  </main>
+
+  <script>
+    const cards = [
+      {
+        definition: "Believing abilities can be developed through effort and learning.",
+        answer: "growth"
+      },
+      {
+        definition: "Believing intelligence and talent are mostly fixed traits.",
+        answer: "fixed"
+      },
+      {
+        definition: "Viewing mistakes as opportunities to improve.",
+        answer: "growth"
+      },
+      {
+        definition: "Avoiding challenges to prevent looking unsuccessful.",
+        answer: "fixed"
+      },
+      {
+        definition: "Persisting through setbacks because improvement is possible.",
+        answer: "growth"
+      }
+    ];
+
+    let currentIndex = 0;
+    let selectedByKeyboard = null;
+
+    const definitionCard = document.getElementById("definitionCard");
+    const growthCard = document.getElementById("growthCard");
+    const fixedCard = document.getElementById("fixedCard");
+    const statusEl = document.getElementById("status");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressEl = document.getElementById("progress");
+    const termCards = [growthCard, fixedCard];
+
+    function loadCard() {
+      const current = cards[currentIndex];
+      definitionCard.textContent = current.definition;
+      statusEl.textContent = "";
+      nextBtn.hidden = true;
+      selectedByKeyboard = null;
+      progressEl.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+
+      termCards.forEach(card => {
+        card.classList.remove("used", "dragging");
+        card.setAttribute("draggable", "true");
+        card.setAttribute("aria-disabled", "false");
+      });
+    }
+
+    function checkAnswer(term) {
+      const correct = cards[currentIndex].answer;
+
+      if (term === correct) {
+        statusEl.textContent = "Correct!";
+        nextBtn.hidden = false;
+        termCards.forEach(card => {
+          card.classList.add("used");
+          card.setAttribute("draggable", "false");
+          card.setAttribute("aria-disabled", "true");
+        });
+      } else {
+        statusEl.textContent = "Not quite. Try the other term.";
+      }
+    }
+
+    termCards.forEach(card => {
+      card.addEventListener("dragstart", (e) => {
+        if (card.classList.contains("used")) {
+          e.preventDefault();
+          return;
+        }
+        e.dataTransfer.setData("text/plain", card.dataset.term);
+        card.classList.add("dragging");
+      });
+
+      card.addEventListener("dragend", () => {
+        card.classList.remove("dragging");
+      });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectedByKeyboard = card.dataset.term;
+          checkAnswer(selectedByKeyboard);
+        }
+      });
+
+      card.addEventListener("click", () => {
+        checkAnswer(card.dataset.term);
+      });
+    });
+
+    definitionCard.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      definitionCard.classList.add("drag-over");
+    });
+
+    definitionCard.addEventListener("dragleave", () => {
+      definitionCard.classList.remove("drag-over");
+    });
+
+    definitionCard.addEventListener("drop", (e) => {
+      e.preventDefault();
+      definitionCard.classList.remove("drag-over");
+      const droppedTerm = e.dataTransfer.getData("text/plain");
+      if (droppedTerm) {
+        checkAnswer(droppedTerm);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentIndex += 1;
+
+      if (currentIndex >= cards.length) {
+        definitionCard.textContent = "You completed all 5 cards.";
+        statusEl.textContent = "Nice work!";
+        progressEl.textContent = "Finished";
+        nextBtn.hidden = true;
+        termCards.forEach(card => card.remove());
+        return;
+      }
+
+      loadCard();
+    });
+
+    loadCard();
+  </script>
+</body>
+</html>
