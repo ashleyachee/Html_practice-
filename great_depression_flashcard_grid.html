@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Regulation Acts Flashcards</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-alt: #eef3f9;
+      --text: #17202a;
+      --muted: #4a5a6a;
+      --border: #c9d4e0;
+      --accent: #174a8b;
+      --accent-strong: #103763;
+      --focus: #ffb703;
+      --shadow: 0 10px 24px rgba(16, 55, 99, 0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent-strong);
+    }
+
+    .intro {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1rem;
+      font-weight: bold;
+    }
+
+    summary:focus-visible {
+      outline: 3px solid var(--focus);
+    }
+
+    .back {
+      border-top: 1px solid var(--border);
+      background: var(--surface-alt);
+      padding: 1rem;
+    }
+
+    details:not([open]) .back {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Key Financial Regulation Acts</h1>
+    <p class="intro">Select each card to review the purpose and impact of major financial regulations.</p>
+
+    <section class="grid">
+
+      <div class="card">
+        <details>
+          <summary>Securities Act of 1933</summary>
+          <div class="back">
+            Requires companies issuing securities to the public for the first time to disclose important financial information and prohibits fraud in the issuance of securities.
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary>Securities Act of 1934</summary>
+          <div class="back">
+            Created the SEC and established rules for ongoing financial disclosure and regulation of securities markets.
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary>Sarbanes-Oxley Act (2002)</summary>
+          <div class="back">
+            Strengthened financial reporting requirements, required internal controls, and increased accountability for corporate executives and auditors.
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary>Public Company Accounting Oversight Board (PCAOB)</summary>
+          <div class="back">
+            Oversees audits of public companies to ensure accurate and independent financial reporting—often called the “auditor of the auditors.”
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary>Dodd-Frank Act (2008)</summary>
+          <div class="back">
+            Aimed to improve financial stability by reducing risky financial practices following the 2007–2008 financial crisis.
+          </div>
+        </details>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>
