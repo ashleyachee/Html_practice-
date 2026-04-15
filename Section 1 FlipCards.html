@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<!--
+Instructor note:
+- Edit the flashcards in the "flashcards" array near the bottom of the file.
+- Each card has a "term" and a "definition."
+- This is a single-file, accessible flip-card study grid for OEX/LMS embedding.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Management Key Terms Flashcards</title>
+  <style>
+    :root{
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #5f6b7a;
+      --line: #d7dfeb;
+      --primary: #1f4b99;
+      --primary-2: #2f67c8;
+      --accent: #0f766e;
+      --shadow: 0 14px 34px rgba(20, 41, 77, 0.10);
+      --radius: 18px;
+      --focus: 0 0 0 4px rgba(47, 103, 200, 0.18);
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(47,103,200,0.08), transparent 22%),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      line-height: 1.5;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #17366f, #274f9a 60%, #2f67c8);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0 0 10px;
+      max-width: 850px;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .controls {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      min-height: 46px;
+      padding: 12px 16px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    button:focus,
+    .flip-card:focus {
+      outline: none;
+      box-shadow: var(--focus);
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #17366f;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      border-color: rgba(255,255,255,0.28);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .panel-top h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .panel-top p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .status {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #eef4ff;
+      border: 1px solid #d8e4ff;
+      color: #23467d;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card-wrap {
+      min-width: 0;
+    }
+
+    .flip-card {
+      width: 100%;
+      min-height: 220px;
+      border: 0;
+      border-radius: 18px;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      display: block;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+      border-radius: 18px;
+      transition: transform 0.5s ease;
+      transform-style: preserve-3d;
+      box-shadow: var(--shadow);
+    }
+
+    .flip-card.is-flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      backface-visibility: hidden;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flip-front {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .flip-back {
+      background: linear-gradient(180deg, #eef6ff 0%, #e4f1ff 100%);
+      transform: rotateY(180deg);
+    }
+
+    .face-top {
+      padding: 16px 16px 0;
+    }
+
+    .face-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .term {
+      font-size: 1.22rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #17366f;
+    }
+
+    .definition {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .face-bottom {
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(215,223,235,0.9);
+      background: rgba(255,255,255,0.55);
+    }
+
+    .hint {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flip-card-inner {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="pageTitle">
+      <div class="eyebrow">Self-Study Flashcards</div>
+      <h1 id="pageTitle">Change Management Key Terms</h1>
+      <p>
+        Use these flashcards to quiz yourself on core concepts. Select any card to flip it and reveal the definition.
+      </p>
+      <p>
+        Keyboard users: tab to a card and press Enter or Space to flip it.
+      </p>
+      <div class="controls">
+        <button type="button" class="btn-primary" id="flipAllBtn">Flip All Cards</button>
+        <button type="button" class="btn-secondary" id="resetBtn">Reset Cards</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="gridHeading">
+      <div class="panel-top">
+        <div>
+          <h2 id="gridHeading">Flashcard Grid</h2>
+          <p>Review the front, predict the definition, then flip to check yourself.</p>
+        </div>
+        <div class="status" aria-live="polite">
+          <span id="statusText">0 cards flipped</span>
+        </div>
+      </div>
+
+      <div class="grid" id="cardGrid" aria-label="Flashcard grid"></div>
+    </section>
+
+    <p class="footer-note">Single-file HTML. No external libraries or assets required.</p>
+  </main>
+
+  <script>
+    const flashcards = [
+      {
+        term: "Stakeholders",
+        definition: "Individuals or groups who are affected by, can influence, or have an interest in a change effort."
+      },
+      {
+        term: "Internal vs. External Stakeholders",
+        definition: "Internal stakeholders are inside the organization, such as employees and managers. External stakeholders are outside the organization, such as customers, suppliers, or regulators."
+      },
+      {
+        term: "Change Leadership",
+        definition: "Guiding people through change by setting direction, communicating clearly, building partnerships, and supporting adoption."
+      },
+      {
+        term: "Drivers of Change",
+        definition: "The forces that create the need for an organization to adapt, improve, or transform."
+      },
+      {
+        term: "Internal vs. External Drivers",
+        definition: "Internal drivers originate inside the organization, such as outdated systems or skill gaps. External drivers come from outside, such as competitors, regulation, or changing customer expectations."
+      },
+      {
+        term: "Disruptive Change",
+        definition: "Change that significantly alters the assumptions, business model, or basis of competition in an industry or organization."
+      },
+      {
+        term: "Change Readiness",
+        definition: "The extent to which people, systems, structures, and culture are prepared to support and sustain change."
+      },
+      {
+        term: "McKinsey 7-S Model",
+        definition: "A framework for assessing organizational alignment across strategy, structure, systems, shared values, style, staff, and skills."
+      },
+      {
+        term: "Organizational Environment",
+        definition: "The internal and external conditions that shape how an organization operates and responds to change."
+      },
+      {
+        term: "Culture",
+        definition: "The shared assumptions, norms, and patterns of behavior that influence how people think, act, and make decisions in an organization."
+      },
+      {
+        term: "Leadership",
+        definition: "The process of influencing direction, priorities, behavior, and decisions within a group or organization."
+      },
+      {
+        term: "Culture Alignment",
+        definition: "The degree to which values, behaviors, rewards, and systems support the type of change the organization is trying to achieve."
+      },
+      {
+        term: "Competing Values Framework (CVF)",
+        definition: "A framework for understanding organizational culture through four types: clan, adhocracy, market, and hierarchy."
+      },
+      {
+        term: "CVF Culture Types",
+        definition: "Clan emphasizes collaboration, adhocracy emphasizes innovation, market emphasizes results and competition, and hierarchy emphasizes control and structure."
+      },
+      {
+        term: "OCAI",
+        definition: "The Organizational Culture Assessment Instrument, a tool based on the Competing Values Framework used to identify current and preferred culture patterns."
+      }
+    ];
+
+    const cardGrid = document.getElementById("cardGrid");
+    const statusText = document.getElementById("statusText");
+    const flipAllBtn = document.getElementById("flipAllBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function renderCards() {
+      cardGrid.innerHTML = flashcards.map((card, index) => `
+        <div class="card-wrap">
+          <button
+            type="button"
+            class="flip-card"
+            aria-pressed="false"
+            aria-label="Flashcard ${index + 1}: ${escapeHtml(card.term)}. Select to flip."
+            data-index="${index}"
+          >
+            <div class="flip-card-inner">
+              <div class="flip-face flip-front">
+                <div class="face-top">
+                  <div class="face-label">Term</div>
+                  <div class="term">${escapeHtml(card.term)}</div>
+                </div>
+                <div class="face-bottom">
+                  <p class="hint">Select to reveal the definition.</p>
+                </div>
+              </div>
+              <div class="flip-face flip-back">
+                <div class="face-top">
+                  <div class="face-label">Definition</div>
+                  <div class="definition">${escapeHtml(card.definition)}</div>
+                </div>
+                <div class="face-bottom">
+                  <p class="hint">Select again to return to the term.</p>
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      `).join("");
+
+      attachCardEvents();
+      updateStatus();
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function attachCardEvents() {
+      const cards = document.querySelectorAll(".flip-card");
+      cards.forEach(card => {
+        card.addEventListener("click", () => toggleCard(card));
+        card.addEventListener("keydown", (event) => {
+          if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            toggleCard(card);
+          }
+        });
+      });
+    }
+
+    function toggleCard(card) {
+      const flipped = card.classList.toggle("is-flipped");
+      card.setAttribute("aria-pressed", flipped ? "true" : "false");
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const total = document.querySelectorAll(".flip-card").length;
+      const flipped = document.querySelectorAll(".flip-card.is-flipped").length;
+      statusText.textContent = `${flipped} card${flipped === 1 ? "" : "s"} flipped`;
+      flipAllBtn.textContent = flipped === total ? "All Cards Flipped" : "Flip All Cards";
+    }
+
+    flipAllBtn.addEventListener("click", () => {
+      const cards = document.querySelectorAll(".flip-card");
+      cards.forEach(card => {
+        card.classList.add("is-flipped");
+        card.setAttribute("aria-pressed", "true");
+      });
+      updateStatus();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      const cards = document.querySelectorAll(".flip-card");
+      cards.forEach(card => {
+        card.classList.remove("is-flipped");
+        card.setAttribute("aria-pressed", "false");
+      });
+      updateStatus();
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
