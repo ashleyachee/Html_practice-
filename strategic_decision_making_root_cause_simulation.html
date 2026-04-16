@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northstar Health Strategic Decision-Making Simulator</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-2:#eef3f9;
+      --text:#17212b;
+      --muted:#52606d;
+      --border:#cdd6e1;
+      --accent:#155eef;
+      --accent-dark:#0b4cc2;
+      --accent-soft:#e7f0ff;
+      --danger:#b42318;
+      --danger-soft:#fef3f2;
+      --warning:#b54708;
+      --warning-soft:#fff7ed;
+      --success:#027a48;
+      --success-soft:#ecfdf3;
+      --shadow:0 8px 24px rgba(16, 24, 40, 0.08);
+      --radius:18px;
+      --focus:3px solid #111111;
+      --max:1200px;
+    }
+
+    * { box-sizing:border-box; }
+
+    html, body {
+      margin:0;
+      padding:0;
+      background:linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+      color:var(--text);
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      line-height:1.5;
+    }
+
+    body {
+      padding:24px;
+    }
+
+    .app {
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .skip-link {
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+
+    .skip-link:focus {
+      position:static;
+      width:auto;
+      height:auto;
+      padding:10px 14px;
+      background:#fff;
+      border:2px solid #111;
+      border-radius:8px;
+      display:inline-block;
+      margin-bottom:12px;
+    }
+
+    header.hero {
+      background:linear-gradient(135deg, #102a43 0%, #1e3a5f 55%, #155eef 100%);
+      color:#fff;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .eyebrow {
+      display:inline-block;
+      font-size:0.82rem;
+      font-weight:700;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,0.14);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:12px;
+    }
+
+    h1, h2, h3 {
+      line-height:1.2;
+      margin-top:0;
+    }
+
+    h1 {
+      font-size:clamp(1.8rem, 2.5vw, 2.6rem);
+      margin-bottom:10px;
+    }
+
+    .hero p {
+      max-width:900px;
+      margin:0 0 14px 0;
+      color:#eaf2ff;
+    }
+
+    .hero-meta {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .pill {
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.2);
+      color:#fff;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:0.95rem;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    @media (max-width: 940px) {
+      .grid {
+        grid-template-columns:1fr;
+      }
+    }
+
+    .stack {
+      display:grid;
+      gap:20px;
+    }
+
+    .card {
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .card h2 {
+      font-size:1.25rem;
+      margin-bottom:8px;
+    }
+
+    .card h3 {
+      font-size:1.02rem;
+      margin-bottom:8px;
+    }
+
+    .muted {
+      color:var(--muted);
+    }
+
+    .intro-box {
+      background:var(--panel-2);
+      border-left:5px solid var(--accent);
+      border-radius:14px;
+      padding:14px 16px;
+      margin-top:12px;
+    }
+
+    .toolbar {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    button,
+    .button-link {
+      appearance:none;
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform 0.12s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover,
+    .button-link:hover {
+      transform:translateY(-1px);
+    }
+
+    button.primary {
+      background:var(--accent);
+      color:#fff;
+    }
+
+    button.primary:hover {
+      background:var(--accent-dark);
+    }
+
+    button.secondary {
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
+    button.secondary:hover {
+      background:#f8fafc;
+    }
+
+    button:focus,
+    .choice-btn:focus,
+    details summary:focus,
+    .tab-btn:focus {
+      outline:var(--focus);
+      outline-offset:2px;
+    }
+
+    .status-panel {
+      position:sticky;
+      top:20px;
+    }
+
+    .meter {
+      background:#e8eef5;
+      border-radius:999px;
+      height:12px;
+      overflow:hidden;
+      margin:8px 0 14px;
+    }
+
+    .meter > span {
+      display:block;
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, #155eef 0%, #7aa2ff 100%);
+      transition:width 0.25s ease;
+    }
+
+    .kpi-grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .kpi {
+      background:#f8fbff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .kpi .label {
+      font-size:0.84rem;
+      color:var(--muted);
+    }
+
+    .kpi .value {
+      font-size:1.3rem;
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:0.83rem;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .badge.good {
+      background:var(--success-soft);
+      color:var(--success);
+    }
+
+    .badge.warn {
+      background:var(--warning-soft);
+      color:var(--warning);
+    }
+
+    .badge.bad {
+      background:var(--danger-soft);
+      color:var(--danger);
+    }
+
+    .tabs {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:16px 0;
+    }
+
+    .tab-btn {
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:10px;
+      padding:10px 12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background:var(--accent-soft);
+      border-color:#bfd3ff;
+      color:var(--accent-dark);
+    }
+
+    .panel {
+      display:none;
+      border-top:1px solid #e6ecf3;
+      padding-top:16px;
+    }
+
+    .panel.active {
+      display:block;
+    }
+
+    .timeline {
+      display:grid;
+      gap:12px;
+    }
+
+    .timeline-item {
+      border-left:4px solid var(--border);
+      padding:6px 0 6px 14px;
+      position:relative;
+    }
+
+    .timeline-item::before {
+      content:"";
+      position:absolute;
+      left:-8px;
+      top:12px;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#fff;
+      border:3px solid var(--accent);
+    }
+
+    .data-list {
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .data-item {
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      background:#fcfdff;
+    }
+
+    .data-item strong {
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .chart-box {
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
+      overflow-x:auto;
+    }
+
+    .chart-wrap {
+      min-width:640px;
+    }
+
+    svg text {
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      fill:#314154;
+      font-size:12px;
+    }
+
+    .legend {
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      font-size:0.92rem;
+      color:var(--muted);
+    }
+
+    .legend span::before {
+      content:"";
+      display:inline-block;
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      margin-right:8px;
+      vertical-align:middle;
+    }
+
+    .legend .line1::before { background:#155eef; }
+    .legend .line2::before { background:#b42318; }
+    .legend .line4::before { background:#7a5af8; }
+
+    details {
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      background:#fff;
+      margin-bottom:10px;
+    }
+
+    details[open] {
+      background:#fbfdff;
+    }
+
+    summary {
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .decision-group {
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .choice-btn {
+      text-align:left;
+      width:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:14px;
+      padding:14px 15px;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .choice-btn:hover {
+      background:#f8fbff;
+      border-color:#adc6ff;
+    }
+
+    .choice-btn strong {
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .feedback {
+      margin-top:16px;
+      border-radius:16px;
+      padding:16px;
+      border:1px solid var(--border);
+      background:#fbfdff;
+    }
+
+    .feedback.good {
+      background:var(--success-soft);
+      border-color:#9fe0ba;
+    }
+
+    .feedback.warn {
+      background:var(--warning-soft);
+      border-color:#f2c48a;
+    }
+
+    .feedback.bad {
+      background:var(--danger-soft);
+      border-color:#efb0aa;
+    }
+
+    .hidden {
+      display:none !important;
+    }
+
+    .sr-only {
+      position:absolute !important;
+      width:1px !important;
+      height:1px !important;
+      padding:0 !important;
+      margin:-1px !important;
+      overflow:hidden !important;
+      clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important;
+      border:0 !important;
+    }
+
+    .footer-note {
+      margin-top:16px;
+      font-size:0.94rem;
+      color:var(--muted);
+    }
+
+    .recommendations {
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .rec {
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px 14px;
+      background:#fff;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app">
+    <header class="hero" aria-labelledby="pageTitle">
+      <div class="eyebrow">Branching Strategy Simulation</div>
+      <h1 id="pageTitle">Northstar Health Strategic Decision-Making Dashboard</h1>
+      <p>
+        You are part of the strategy team at Northstar Health, a regional hospital system. Patient satisfaction has been declining,
+        appointment wait times are rising, and patients are reporting breakdowns in care coordination across departments.
+        Leadership initially believes staffing shortages are the main issue. Your job is to review the evidence, identify the most likely root cause,
+        and help the organization choose a response that is both strategic and cost-effective.
+      </p>
+      <div class="hero-meta" aria-label="Key learning areas">
+        <span class="pill">Root cause analysis</span>
+        <span class="pill">Cost-benefit thinking</span>
+        <span class="pill">Decision-making frameworks</span>
+        <span class="pill">Operational evidence</span>
+        <span class="pill">Strategic choice</span>
+      </div>
+    </header>
+
+    <main id="main-content" class="grid">
+      <section class="stack">
+        <article class="card" aria-labelledby="scenarioHeading">
+          <h2 id="scenarioHeading">1. Scenario Introduction</h2>
+          <p class="muted">
+            Teams across Northstar Health are hearing the same complaints: long delays, confusing handoffs between departments,
+            and missed expectations about appointment timing. A new scheduling platform was introduced recently, and now leadership wants to know what the real problem is.
+          </p>
+          <div class="intro-box">
+            <strong>Your role:</strong>
+            Review the evidence, identify the strongest root cause, compare the likely value of response options, and determine which decision-making approach leadership should use.
+          </div>
+          <div class="toolbar">
+            <button class="primary" id="startBtn">Start Review</button>
+            <button class="secondary" id="resetBtn">Replay / Reset</button>
+          </div>
+        </article>
+
+        <article class="card hidden" id="dashboardCard" aria-labelledby="dashboardHeading">
+          <h2 id="dashboardHeading">2. Strategic Evidence Dashboard</h2>
+          <p class="muted">
+            Explore the evidence. Some panels contain early clues, and later decisions will unlock more details.
+          </p>
+
+          <div class="tabs" role="tablist" aria-label="Evidence panels">
+            <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-experience" id="tab-experience">Patient Experience</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-feedback" id="tab-feedback">Patient Feedback</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-operations" id="tab-operations">Operations Data</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-timeline" id="tab-timeline">Leadership Timeline</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-options" id="tab-options">Response Options</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-notes" id="tab-notes">Leadership Notes</button>
+            <button class="tab-btn hidden" role="tab" aria-selected="false" aria-controls="panel-forensics" id="tab-forensics">Unlocked Evidence</button>
+          </div>
+
+          <section class="panel active" id="panel-experience" role="tabpanel" aria-labelledby="tab-experience">
+            <h3>Patient Experience Trend</h3>
+            <p class="muted">
+              Over several months, patient satisfaction has declined while wait-time complaints have increased.
+            </p>
+            <div class="chart-box" aria-describedby="pulseDesc">
+              <div class="chart-wrap">
+                <svg viewBox="0 0 760 280" width="100%" height="280" role="img" aria-labelledby="pulseTitle pulseDesc">
+                  <title id="pulseTitle">Patient satisfaction and wait-time complaint timeline</title>
+                  <desc id="pulseDesc">
+                    A line chart showing patient satisfaction declining over six months while wait-time complaints rise after a scheduling system rollout.
+                  </desc>
+
+                  <line x1="60" y1="20" x2="60" y2="220" stroke="#7b8794" stroke-width="1.5"/>
+                  <line x1="60" y1="220" x2="710" y2="220" stroke="#7b8794" stroke-width="1.5"/>
+
+                  <text x="24" y="28">High</text>
+                  <text x="31" y="82">Med</text>
+                  <text x="32" y="142">Low</text>
+                  <text x="26" y="202">Very Low</text>
+
+                  <text x="82" y="245">Month 1</text>
+                  <text x="192" y="245">Month 2</text>
+                  <text x="302" y="245">Month 3</text>
+                  <text x="412" y="245">Month 4</text>
+                  <text x="522" y="245">Month 5</text>
+                  <text x="632" y="245">Month 6</text>
+
+                  <line x1="60" y1="80" x2="710" y2="80" stroke="#e6edf5" stroke-width="1"/>
+                  <line x1="60" y1="140" x2="710" y2="140" stroke="#e6edf5" stroke-width="1"/>
+                  <line x1="60" y1="200" x2="710" y2="200" stroke="#e6edf5" stroke-width="1"/>
+
+                  <polyline fill="none" stroke="#155eef" stroke-width="4"
+                    points="90,92 200,100 310,118 420,138 530,164 640,186"/>
+                  <polyline fill="none" stroke="#b42318" stroke-width="4"
+                    points="90,186 200,178 310,154 420,126 530,94 640,74"/>
+
+                  <circle cx="90" cy="92" r="4" fill="#155eef"/>
+                  <circle cx="200" cy="100" r="4" fill="#155eef"/>
+                  <circle cx="310" cy="118" r="4" fill="#155eef"/>
+                  <circle cx="420" cy="138" r="4" fill="#155eef"/>
+                  <circle cx="530" cy="164" r="4" fill="#155eef"/>
+                  <circle cx="640" cy="186" r="4" fill="#155eef"/>
+
+                  <circle cx="90" cy="186" r="4" fill="#b42318"/>
+                  <circle cx="200" cy="178" r="4" fill="#b42318"/>
+                  <circle cx="310" cy="154" r="4" fill="#b42318"/>
+                  <circle cx="420" cy="126" r="4" fill="#b42318"/>
+                  <circle cx="530" cy="94" r="4" fill="#b42318"/>
+                  <circle cx="640" cy="74" r="4" fill="#b42318"/>
+
+                  <line x1="420" y1="25" x2="420" y2="220" stroke="#7a5af8" stroke-dasharray="6 6" stroke-width="2"/>
+                  <text x="430" y="35">New scheduling platform launches</text>
+                </svg>
+              </div>
+              <div class="legend" aria-hidden="true">
+                <span class="line1">Patient Satisfaction</span>
+                <span class="line2">Wait-Time Complaints</span>
+                <span class="line4">Trigger Event</span>
+              </div>
+            </div>
+
+            <div class="data-list" aria-label="Example patient comments">
+              <div class="data-item">
+                <strong>Patient Comment 1 — Month 4</strong>
+                “I arrived on time, but no one seemed sure which department was supposed to see me first.”
+              </div>
+              <div class="data-item">
+                <strong>Patient Comment 2 — Month 5</strong>
+                “My follow-up test was delayed because the schedule did not match what the clinic told me.”
+              </div>
+              <div class="data-item">
+                <strong>Patient Comment 3 — Month 6</strong>
+                “The staff were kind, but the process felt disorganized and I waited far too long.”
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-feedback" role="tabpanel" aria-labelledby="tab-feedback">
+            <h3>Patient Feedback</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>Appointment Delays</strong>
+                Patients say visits are starting later than expected, especially when multiple departments are involved.
+              </div>
+              <div class="data-item">
+                <strong>Care Coordination</strong>
+                Patients describe confusion about handoffs between registration, imaging, outpatient clinics, and follow-up care.
+              </div>
+              <div class="data-item">
+                <strong>Communication</strong>
+                Some patients say the instructions they received from one department did not match what happened in another.
+              </div>
+              <div class="data-item">
+                <strong>Staffing Perception</strong>
+                Patients sometimes assume understaffing is the issue, but the complaints focus more on process breakdowns than on staff behavior.
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-operations" role="tabpanel" aria-labelledby="tab-operations">
+            <h3>Operations Data</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>Scheduling Accuracy</strong>
+                Appointment mismatches increased after the new scheduling platform was introduced.
+              </div>
+              <div class="data-item">
+                <strong>Department Variation</strong>
+                Satisfaction declines are steepest in service lines that rely on multiple department handoffs.
+              </div>
+              <div class="data-item">
+                <strong>Staffing Levels</strong>
+                Staffing has remained relatively stable across the same period, with no sudden drop matching the complaint spike.
+              </div>
+              <div class="data-item">
+                <strong>Throughput Pattern</strong>
+                Delays are concentrated where scheduling handoffs and coordination steps are most complex.
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+            <h3>Leadership Timeline</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <strong>Month 2</strong><br>
+                Leaders begin hearing about growing frustration with appointment delays and patient confusion.
+              </div>
+              <div class="timeline-item">
+                <strong>Month 3</strong><br>
+                Northstar Health launches a new scheduling platform across multiple departments.
+              </div>
+              <div class="timeline-item">
+                <strong>Month 4</strong><br>
+                Patient complaints increase sharply, especially in departments with more care handoffs.
+              </div>
+              <div class="timeline-item">
+                <strong>Month 5</strong><br>
+                Executives debate whether the main issue is staffing or a flaw in scheduling and coordination.
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-options" role="tabpanel" aria-labelledby="tab-options">
+            <h3>Response Options</h3>
+            <div class="data-list">
+              <div class="data-item">
+                <strong>Hire More Staff</strong>
+                This is a visible response, but it is expensive and may not solve the process problem if coordination is the real issue.
+              </div>
+              <div class="data-item">
+                <strong>Fix the Scheduling and Coordination Process</strong>
+                This requires operational review, training, and system adjustments, but it addresses the pattern most strongly linked to declining satisfaction.
+              </div>
+              <div class="data-item">
+                <strong>Launch a Patient Communication Campaign</strong>
+                This may improve messaging, but it does not correct breakdowns in handoffs, timing, or scheduling accuracy.
+              </div>
+              <div class="data-item">
+                <strong>Redesign Waiting Areas</strong>
+                This may improve comfort, but the evidence suggests the main issue is process reliability rather than physical space.
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="panel-notes" role="tabpanel" aria-labelledby="tab-notes">
+            <h3>Leadership Notes</h3>
+            <details>
+              <summary>Chief Nursing Officer to Executive Team</summary>
+              <p>
+                “Frontline teams are working hard, but patients are still experiencing delays when departments are not aligned.”
+              </p>
+            </details>
+            <details>
+              <summary>Operations Director to Strategy Team</summary>
+              <p>
+                “The timeline makes the new scheduling rollout hard to ignore. We need to know whether the process itself is causing the variation.”
+              </p>
+            </details>
+            <details>
+              <summary>Chief Experience Officer to Leadership Team</summary>
+              <p>
+                “If we invest without diagnosing the issue first, we may spend heavily and still leave the patient experience unchanged.”
+              </p>
+            </details>
+          </section>
+
+          <section class="panel hidden" id="panel-forensics" role="tabpanel" aria-labelledby="tab-forensics">
+            <h3>Unlocked Evidence</h3>
+            <div id="forensicsContent" class="data-list"></div>
+          </section>
+        </article>
+
+        <article class="card hidden" id="decision1Card" aria-labelledby="decision1Heading">
+          <h2 id="decision1Heading">3. Branching Decision Point 1</h2>
+          <p>
+            Based on the evidence so far, what should leadership focus on first?
+          </p>
+          <div class="decision-group" role="group" aria-label="First investigation choice">
+            <button class="choice-btn" data-decision="first" data-value="rootcause">
+              <strong>Investigate whether the scheduling and coordination process is the true root cause</strong>
+              Start by testing the strongest pattern in the data before choosing a costly response.
+            </button>
+            <button class="choice-btn" data-decision="first" data-value="staffing">
+              <strong>Assume staffing shortages are the main issue and begin expansion planning</strong>
+              Start with the most visible explanation and prepare to add personnel.
+            </button>
+            <button class="choice-btn" data-decision="first" data-value="messaging">
+              <strong>Focus mainly on improving patient messaging and expectation-setting</strong>
+              Start by improving communication before reviewing the operational problem more closely.
+            </button>
+          </div>
+          <div id="decision1Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="decision2Card" aria-labelledby="decision2Heading">
+          <h2 id="decision2Heading">4. Branching Decision Point 2</h2>
+          <p>
+            Leadership wants a response that is strategic and cost-conscious. What should the organization do next?
+          </p>
+          <div class="decision-group" role="group" aria-label="Second decision choice">
+            <button class="choice-btn" data-decision="second" data-value="fixprocess">
+              <strong>Fix the scheduling and coordination process, then train teams on the updated workflow</strong>
+              Target the cause most strongly linked to delays and declining satisfaction.
+            </button>
+            <button class="choice-btn" data-decision="second" data-value="hire">
+              <strong>Hire more staff right away across affected departments</strong>
+              Invest heavily in capacity before confirming that staffing is the main problem.
+            </button>
+            <button class="choice-btn" data-decision="second" data-value="campaign">
+              <strong>Launch a patient communication campaign first</strong>
+              Focus on reassurance and messaging before correcting the underlying process.
+            </button>
+          </div>
+          <div id="decision2Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="decision3Card" aria-labelledby="decision3Heading">
+          <h2 id="decision3Heading">5. Branching Decision Point 3</h2>
+          <p>
+            Executives ask which decision-making approach should guide the final recommendation. What is the strongest overall strategy now?
+          </p>
+          <div class="decision-group" role="group" aria-label="Third decision choice">
+            <button class="choice-btn" data-decision="third" data-value="rootonly">
+              <strong>Use root cause analysis only</strong>
+              Focus on diagnosing the issue, but do not fully compare the tradeoffs among response options.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="hybrid">
+              <strong>Use root cause analysis first, then cost-benefit thinking to compare solutions</strong>
+              Diagnose the cause clearly, then choose the strongest response using tradeoff analysis.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="intuition">
+              <strong>Move quickly based on executive intuition</strong>
+              Choose the most visible action first and adjust later if needed.
+            </button>
+            <button class="choice-btn" data-decision="third" data-value="costonly">
+              <strong>Use cost-benefit analysis only</strong>
+              Compare options without first clarifying the strongest root cause.
+            </button>
+          </div>
+          <div id="decision3Feedback" class="feedback hidden" tabindex="-1"></div>
+        </article>
+
+        <article class="card hidden" id="finalCard" aria-labelledby="finalHeading">
+          <h2 id="finalHeading">6. Final Analysis and Recommendation</h2>
+          <div id="finalOutcome"></div>
+          <div class="footer-note">
+            Replay to explore different paths and compare how stronger diagnosis changes the quality of the final decision.
+          </div>
+          <div class="toolbar">
+            <button class="primary" id="replayBtn">Replay Scenario</button>
+          </div>
+        </article>
+      </section>
+
+      <aside class="stack status-panel">
+        <article class="card" aria-labelledby="progressHeading">
+          <h2 id="progressHeading">Review Status</h2>
+          <p class="muted">Track your progress and see how your choices affect strategic confidence.</p>
+
+          <div>
+            <strong>Progress</strong>
+            <div class="meter" aria-hidden="true">
+              <span id="progressBar"></span>
+            </div>
+            <div id="progressText" aria-live="polite">0% complete</div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="label">Evidence Reviewed</div>
+              <div class="value" id="evidenceCount">0/6</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Decision Points</div>
+              <div class="value" id="decisionCount">0/3</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Strategic Fit</div>
+              <div class="value" id="trustValue">50</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Decision Confidence</div>
+              <div class="value" id="confidenceValue">0</div>
+            </div>
+          </div>
+
+          <div id="trustBadge" class="badge warn" aria-live="polite">Strategic clarity is still developing</div>
+        </article>
+
+        <article class="card" aria-labelledby="taskHeading">
+          <h2 id="taskHeading">Your Questions</h2>
+          <div class="recommendations">
+            <div class="rec">What is the most likely root cause of the patient experience decline?</div>
+            <div class="rec">Which option creates the strongest benefit relative to cost?</div>
+            <div class="rec">Which decision-making framework best fits this problem?</div>
+            <div class="rec">What should leadership do next?</div>
+          </div>
+        </article>
+
+        <article class="card" aria-labelledby="conceptHeading">
+          <h2 id="conceptHeading">Key Strategy Concepts</h2>
+          <div class="recommendations">
+            <div class="rec"><strong>Root cause analysis:</strong> Identify the underlying source of the problem before choosing a solution.</div>
+            <div class="rec"><strong>Cost-benefit thinking:</strong> Compare likely value, tradeoffs, and resource use before acting.</div>
+            <div class="rec"><strong>Decision-making frameworks:</strong> Use structured logic instead of jumping to the most visible response.</div>
+            <div class="rec"><strong>Evidence patterns:</strong> Time trends and linked variables can reveal stronger explanations than assumptions.</div>
+            <div class="rec"><strong>Strategic fit:</strong> The best option aligns the cause, the response, and the expected outcome.</div>
+          </div>
+        </article>
+
+        <div class="sr-only" aria-live="polite" id="liveRegion"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const state = {
+        started: false,
+        reviewed: new Set(),
+        decisions: {
+          first: null,
+          second: null,
+          third: null
+        },
+        trust: 50,
+        confidence: 0,
+        unlockedEvidence: []
+      };
+
+      const evidenceKeys = [
+        "panel-experience",
+        "panel-feedback",
+        "panel-operations",
+        "panel-timeline",
+        "panel-options",
+        "panel-notes"
+      ];
+
+      const startBtn = document.getElementById("startBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const replayBtn = document.getElementById("replayBtn");
+
+      const dashboardCard = document.getElementById("dashboardCard");
+      const decision1Card = document.getElementById("decision1Card");
+      const decision2Card = document.getElementById("decision2Card");
+      const decision3Card = document.getElementById("decision3Card");
+      const finalCard = document.getElementById("finalCard");
+
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+      const evidenceCount = document.getElementById("evidenceCount");
+      const decisionCount = document.getElementById("decisionCount");
+      const trustValue = document.getElementById("trustValue");
+      const confidenceValue = document.getElementById("confidenceValue");
+      const trustBadge = document.getElementById("trustBadge");
+      const liveRegion = document.getElementById("liveRegion");
+      const finalOutcome = document.getElementById("finalOutcome");
+
+      const forensicsTab = document.getElementById("tab-forensics");
+      const forensicsPanel = document.getElementById("panel-forensics");
+      const forensicsContent = document.getElementById("forensicsContent");
+
+      const tabButtons = Array.from(document.querySelectorAll(".tab-btn"));
+      const panels = Array.from(document.querySelectorAll(".panel"));
+
+      function announce(message) {
+        liveRegion.textContent = message;
+      }
+
+      function updateStatus() {
+        const reviewedCount = state.reviewed.size;
+        const decidedCount = Object.values(state.decisions).filter(Boolean).length;
+        const progress = Math.round(((reviewedCount + decidedCount) / 9) * 100);
+
+        progressBar.style.width = progress + "%";
+        progressText.textContent = progress + "% complete";
+        evidenceCount.textContent = reviewedCount + "/6";
+        decisionCount.textContent = decidedCount + "/3";
+        trustValue.textContent = state.trust;
+        confidenceValue.textContent = state.confidence;
+
+        trustBadge.className = "badge";
+        if (state.trust >= 65) {
+          trustBadge.classList.add("good");
+          trustBadge.textContent = "Strategic fit is strong";
+        } else if (state.trust >= 40) {
+          trustBadge.classList.add("warn");
+          trustBadge.textContent = "Strategic clarity is still developing";
+        } else {
+          trustBadge.classList.add("bad");
+          trustBadge.textContent = "The current path is weakening the decision";
+        }
+
+        if (reviewedCount >= 3 && decision1Card.classList.contains("hidden")) {
+          decision1Card.classList.remove("hidden");
+          announce("First decision point unlocked.");
+        }
+
+        if (state.decisions.first && decision2Card.classList.contains("hidden")) {
+          decision2Card.classList.remove("hidden");
+          unlockEvidenceFromFirstDecision();
+          announce("Second decision point unlocked.");
+        }
+
+        if (state.decisions.second && decision3Card.classList.contains("hidden")) {
+          decision3Card.classList.remove("hidden");
+          unlockEvidenceFromSecondDecision();
+          announce("Third decision point unlocked.");
+        }
+
+        if (state.decisions.third && finalCard.classList.contains("hidden")) {
+          finalCard.classList.remove("hidden");
+          renderFinalOutcome();
+          announce("Final outcome ready.");
+        }
+      }
+
+      function startScenario() {
+        state.started = true;
+        dashboardCard.classList.remove("hidden");
+        state.reviewed.add("panel-experience");
+        updateStatus();
+        announce("Review started. Dashboard opened.");
+      }
+
+      function resetScenario() {
+        state.started = false;
+        state.reviewed = new Set();
+        state.decisions = { first:null, second:null, third:null };
+        state.trust = 50;
+        state.confidence = 0;
+        state.unlockedEvidence = [];
+
+        dashboardCard.classList.add("hidden");
+        decision1Card.classList.add("hidden");
+        decision2Card.classList.add("hidden");
+        decision3Card.classList.add("hidden");
+        finalCard.classList.add("hidden");
+
+        document.getElementById("decision1Feedback").className = "feedback hidden";
+        document.getElementById("decision2Feedback").className = "feedback hidden";
+        document.getElementById("decision3Feedback").className = "feedback hidden";
+        document.getElementById("decision1Feedback").innerHTML = "";
+        document.getElementById("decision2Feedback").innerHTML = "";
+        document.getElementById("decision3Feedback").innerHTML = "";
+        finalOutcome.innerHTML = "";
+
+        forensicsTab.classList.add("hidden");
+        forensicsPanel.classList.add("hidden");
+        forensicsContent.innerHTML = "";
+
+        activateTab("tab-experience", "panel-experience");
+        updateStatus();
+        announce("Scenario reset. You can replay the review.");
+      }
+
+      function activateTab(tabId, panelId) {
+        tabButtons.forEach(btn => {
+          const selected = btn.id === tabId;
+          btn.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach(panel => {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+
+        if (evidenceKeys.includes(panelId)) {
+          state.reviewed.add(panelId);
+          if (panelId === "panel-operations" || panelId === "panel-notes") {
+            state.confidence += 5;
+          } else {
+            state.confidence += 3;
+          }
+        }
+
+        updateStatus();
+      }
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const panelId = btn.getAttribute("aria-controls");
+          activateTab(btn.id, panelId);
+        });
+      });
+
+      function showFeedback(id, html, tone) {
+        const el = document.getElementById(id);
+        el.innerHTML = html;
+        el.className = "feedback " + tone;
+        el.classList.remove("hidden");
+        el.focus();
+      }
+
+      function unlockForensics(items) {
+        forensicsTab.classList.remove("hidden");
+        forensicsPanel.classList.remove("hidden");
+
+        items.forEach(item => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "data-item";
+          wrapper.innerHTML = `<strong>${item.title}</strong>${item.text}`;
+          forensicsContent.appendChild(wrapper);
+        });
+      }
+
+      function unlockEvidenceFromFirstDecision() {
+        if (state.unlockedEvidence.includes("first")) return;
+        state.unlockedEvidence.push("first");
+
+        if (state.decisions.first === "rootcause") {
+          unlockForensics([
+            {
+              title: "Analyst Review Note",
+              text: "The steepest satisfaction drop appears in departments that rely on more handoffs and scheduling coordination after the platform launch."
+            },
+            {
+              title: "Cross-Department Comparison",
+              text: "Service lines with stable staffing but more scheduling complexity show the largest increase in delays, pointing to process failure rather than headcount loss."
+            }
+          ]);
+          state.confidence += 12;
+        } else if (state.decisions.first === "staffing") {
+          unlockForensics([
+            {
+              title: "Capacity Review",
+              text: "Staffing pressure exists, but the timing of the complaint spike aligns more closely with the scheduling rollout than with a major workforce change."
+            },
+            {
+              title: "Diagnosis Warning",
+              text: "A staffing explanation may feel intuitive, but it does not explain why the sharpest problems appear in coordination-heavy patient journeys."
+            }
+          ]);
+          state.confidence += 6;
+        } else if (state.decisions.first === "messaging") {
+          unlockForensics([
+            {
+              title: "Patient Experience Note",
+              text: "Communication matters, but improving messaging alone will not remove the delays created by failed handoffs and inaccurate scheduling logic."
+            },
+            {
+              title: "Root Cause Warning",
+              text: "Better explanations can reduce frustration slightly, but they do not fix the operational source of the frustration."
+            }
+          ]);
+          state.confidence += 5;
+        }
+      }
+
+      function unlockEvidenceFromSecondDecision() {
+        if (state.unlockedEvidence.includes("second")) return;
+        state.unlockedEvidence.push("second");
+
+        unlockForensics([
+          {
+            title: "Benefit Comparison",
+            text: "Fixing the scheduling and coordination process is likely to reduce delays and improve patient satisfaction at the same time, creating broader value than a communication campaign alone."
+          },
+          {
+            title: "Framework Reminder",
+            text: "The strongest leadership decisions in this case connect evidence, root cause, and resource allocation instead of jumping to the most visible action."
+          }
+        ]);
+
+        state.confidence += 15;
+      }
+
+      document.querySelectorAll(".choice-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const type = btn.dataset.decision;
+          const value = btn.dataset.value;
+
+          if (type === "first") {
+            state.decisions.first = value;
+
+            if (value === "rootcause") {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Strong first step.</strong> This helps leadership test the explanation that best fits the timeline and the variation across departments. Diagnose the cause before investing heavily in a solution.",
+                "good"
+              );
+              state.confidence += 10;
+            } else if (value === "staffing") {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Plausible, but weaker.</strong> Staffing pressure may contribute, but the evidence points more strongly to a breakdown in scheduling and coordination after the platform change.",
+                "warn"
+              );
+              state.confidence += 5;
+            } else {
+              showFeedback(
+                "decision1Feedback",
+                "<strong>Incomplete focus.</strong> Communication matters, but improving messaging without diagnosing the operational breakdown may leave the real problem unresolved.",
+                "warn"
+              );
+              state.confidence += 4;
+            }
+          }
+
+          if (type === "second") {
+            state.decisions.second = value;
+
+            if (value === "fixprocess") {
+              state.trust += 16;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>Best strategic investment.</strong> This option directly targets the cause most strongly linked to declining satisfaction and should create more durable benefits than a visibility-only response.",
+                "good"
+              );
+            } else if (value === "hire") {
+              state.trust -= 8;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>Visible, but expensive.</strong> Adding staff may help in some areas, but it does not match the strongest evidence in the case as closely as fixing the process does.",
+                "warn"
+              );
+            } else {
+              state.trust -= 12;
+              showFeedback(
+                "decision2Feedback",
+                "<strong>Weak first response.</strong> A communication campaign may shape expectations, but it does not solve the operational failure that is producing the delays.",
+                "bad"
+              );
+            }
+          }
+
+          if (type === "third") {
+            state.decisions.third = value;
+
+            if (value === "rootonly") {
+              state.confidence += 10;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Good logic, but incomplete.</strong> Root cause analysis is necessary here, but leadership should also compare tradeoffs once the cause is clearer.",
+                "warn"
+              );
+            } else if (value === "hybrid") {
+              state.confidence += 16;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Excellent interpretation.</strong> Start with root cause analysis to confirm the operational breakdown, then use cost-benefit thinking to compare the strongest response options.",
+                "good"
+              );
+            } else if (value === "intuition") {
+              state.confidence -= 8;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Weak approach.</strong> This problem has enough evidence to support a structured decision. Intuition alone increases the risk of solving the wrong problem.",
+                "bad"
+              );
+            } else {
+              state.confidence += 6;
+              showFeedback(
+                "decision3Feedback",
+                "<strong>Useful, but incomplete.</strong> Cost-benefit analysis matters, but using it without first clarifying the strongest root cause can lead to a weak investment decision.",
+                "warn"
+              );
+            }
+          }
+
+          updateStatus();
+        });
+      });
+
+      function renderFinalOutcome() {
+        const first = state.decisions.first;
+        const second = state.decisions.second;
+        const third = state.decisions.third;
+
+        let title = "";
+        let summary = "";
+
+        if (first === "rootcause" && second === "fixprocess" && third === "hybrid") {
+          title = "Most Effective Outcome: Diagnose first, then invest in the strongest solution";
+          summary = `
+            <div class="feedback good">
+              <strong>${title}</strong><br><br>
+              The strongest path is to identify the scheduling and coordination breakdown as the most likely root cause,
+              confirm it through root cause analysis, and then use cost-benefit thinking to justify process fixes and team training.
+              This response aligns evidence, cause, and action.
+            </div>
+          `;
+        } else if (first === "rootcause" && second === "fixprocess") {
+          title = "Strong Outcome: The right problem was identified";
+          summary = `
+            <div class="feedback good">
+              <strong>${title}</strong><br><br>
+              You identified the strongest cause and chose the strongest initial response. A more structured framework choice would make the recommendation even stronger.
+            </div>
+          `;
+        } else if (second === "hire" || second === "campaign") {
+          title = "Mixed Outcome: The response targeted symptoms more than cause";
+          summary = `
+            <div class="feedback warn">
+              <strong>${title}</strong><br><br>
+              This path may create visible action, but it is less likely to solve the issue that is actually driving patient dissatisfaction.
+            </div>
+          `;
+        } else {
+          title = "Weak Outcome: The diagnosis and decision process were not fully aligned";
+          summary = `
+            <div class="feedback bad">
+              <strong>${title}</strong><br><br>
+              A stronger result would come from linking the timeline, complaint pattern, and department-level variation before choosing a response.
+            </div>
+          `;
+        }
+
+        const rootCauseAnswer = "The strongest root cause is a breakdown in scheduling and care coordination, because the patient experience decline accelerates after the platform launch and is concentrated in departments with more handoffs.";
+        const costBenefitAnswer = "The best first investment is fixing the scheduling and coordination process, because it directly addresses the cause most closely tied to delays and declining patient satisfaction.";
+        const frameworkAnswer = "The strongest approach is to begin with root cause analysis and then use cost-benefit thinking to compare response options. This sequence improves strategic fit and reduces the risk of solving the wrong problem.";
+        const nextStepAnswer = "Leadership should confirm the process failure, correct the scheduling and coordination breakdown, support teams with training, and then monitor whether delays and patient satisfaction improve.";
+
+        const answers = `
+          <div class="recommendations" aria-label="Scenario question answers">
+            <div class="rec"><strong>What is the most likely root cause?</strong><br>${rootCauseAnswer}</div>
+            <div class="rec"><strong>Which option creates the strongest benefit relative to cost?</strong><br>${costBenefitAnswer}</div>
+            <div class="rec"><strong>Which decision-making framework best fits this problem?</strong><br>${frameworkAnswer}</div>
+            <div class="rec"><strong>What should leadership do next?</strong><br>${nextStepAnswer}</div>
+          </div>
+        `;
+
+        const recommendations = `
+          <h3 style="margin-top:18px;">Strategic Takeaways</h3>
+          <div class="recommendations">
+            <div class="rec"><strong>Do not confuse visible symptoms with root cause:</strong> Staffing and communication matter, but they were not the strongest explanation in this case.</div>
+            <div class="rec"><strong>Use patterns, not assumptions:</strong> The timeline and department-level variation point more strongly to an internal process breakdown.</div>
+            <div class="rec"><strong>Cost-benefit works best after diagnosis:</strong> Comparing options is more useful once leadership understands what it is actually trying to fix.</div>
+            <div class="rec"><strong>Choose a framework that fits the problem:</strong> When the cause is uncertain, structured diagnosis should come before fast but shallow action.</div>
+            <div class="rec"><strong>Strategic decisions should connect cause, cost, and consequence:</strong> The best response solves the real problem and uses resources where they matter most.</div>
+          </div>
+        `;
+
+        let pathNote = "";
+        if (first === "staffing") {
+          pathNote = `
+            <div class="feedback warn" style="margin-top:16px;">
+              <strong>Replay insight:</strong> This branch shows how a plausible explanation can distract leaders from a stronger process-based root cause.
+            </div>
+          `;
+        } else if (second === "campaign") {
+          pathNote = `
+            <div class="feedback bad" style="margin-top:16px;">
+              <strong>Replay insight:</strong> This choice shows how a visible response can still be weak if it does not address the main operational breakdown.
+            </div>
+          `;
+        } else if (third === "intuition") {
+          pathNote = `
+            <div class="feedback bad" style="margin-top:16px;">
+              <strong>Replay insight:</strong> This path highlights why structured decision-making frameworks matter when multiple explanations are possible.
+            </div>
+          `;
+        }
+
+        finalOutcome.innerHTML = summary + answers + recommendations + pathNote;
+      }
+
+      startBtn.addEventListener("click", startScenario);
+      resetBtn.addEventListener("click", resetScenario);
+      replayBtn.addEventListener("click", resetScenario);
+
+      updateStatus();
+    })();
+  </script>
+</body>
+</html>
