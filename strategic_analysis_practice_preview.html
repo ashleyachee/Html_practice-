@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Strategic Analysis Practice</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #4b5563;
+      --border: #cbd5e1;
+      --border-strong: #64748b;
+      --accent: #0f4c81;
+      --accent-soft: #e8f1fb;
+      --error: #b91c1c;
+      --error-bg: #fef2f2;
+      --success: #166534;
+      --success-bg: #f0fdf4;
+      --info: #1d4ed8;
+      --info-bg: #eff6ff;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+      --focus: 3px solid #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    body { padding: 1rem; }
+
+    .activity {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3, legend { color: var(--text); }
+
+    h1 {
+      font-size: 1.9rem;
+      margin: 0 0 0.5rem 0;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    p { margin-top: 0; }
+
+    .instructions {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .scenario-box {
+      border: 2px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 1rem;
+      background: #fcfdff;
+    }
+
+    .scenario-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0 0 1rem 0;
+      min-width: 0;
+    }
+
+    legend {
+      font-weight: bold;
+      padding: 0 0.4rem;
+    }
+
+    .help-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .radio-group {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .radio-option input[type="radio"] {
+      margin-top: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .radio-option label {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .radio-description {
+      display: block;
+      font-weight: normal;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 720px) {
+      .grid.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      padding: 0.8rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    input:focus,
+    button:focus,
+    textarea:focus {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .framework-section[hidden] { display: none; }
+
+    .required-note {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: -0.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+    }
+
+    .field.has-error textarea { border-color: var(--error); }
+
+    .error-summary,
+    .status-box {
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .error-summary {
+      background: var(--error-bg);
+      border: 1px solid #fecaca;
+      color: #7f1d1d;
+    }
+
+    .status-box {
+      background: var(--success-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--success);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 0.8rem 1.15rem;
+      font: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .feedback-shell {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .feedback-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      background: #fff;
+    }
+
+    .feedback-card.compare {
+      background: var(--info-bg);
+      border-color: #bfdbfe;
+    }
+
+    .feedback-card.response {
+      background: var(--success-bg);
+      border-color: #bbf7d0;
+    }
+
+    .compare-list,
+    .response-list {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .compare-list li,
+    .response-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .framework-badge {
+      display: inline-block;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+      border: 0;
+      padding: 0;
+      margin: -1px;
+    }
+  </style>
+</head>
+<body>
+  <main class="activity" id="main-content">
+    <section class="panel" aria-labelledby="activity-title">
+      <h1 id="activity-title">Strategic Analysis Practice</h1>
+      <p class="instructions">
+        Read the scenario, choose either SWOT or STEEPLED, complete the analysis, and submit your work.
+        After you submit, you will see a built-in compare response that highlights what strong use of that framework might include.
+      </p>
+    </section>
+
+    <form id="analysis-form" novalidate>
+      <section class="panel" aria-labelledby="scenario-heading">
+        <h2 id="scenario-heading">Scenario</h2>
+        <div class="scenario-box">
+          <span class="scenario-label">Business Scenario</span>
+          <p id="scenario-text">
+            A regional grocery chain has seen a decline in customer loyalty over the past year. Competition from online retailers has increased, operating costs are rising, and customers are expressing concerns about product availability, convenience, and sustainability practices.
+          </p>
+        </div>
+      </section>
+
+      <div id="error-summary" class="error-summary" hidden tabindex="-1" aria-labelledby="error-summary-title">
+        <h2 id="error-summary-title">Please correct the following items</h2>
+        <div id="error-summary-list"></div>
+      </div>
+
+      <div id="status-message" class="status-box" hidden aria-live="polite"></div>
+      <div id="live-region" class="visually-hidden" aria-live="assertive" aria-atomic="true"></div>
+
+      <section class="panel" aria-labelledby="tool-selection-heading">
+        <h2 id="tool-selection-heading">1. Choose Your Analysis Tool</h2>
+        <fieldset>
+          <legend>Analysis framework <span aria-hidden="true">*</span></legend>
+          <p class="help-text">Select one framework. The matching response fields will appear below.</p>
+
+          <div class="radio-group" role="radiogroup" aria-describedby="framework-error">
+            <div class="radio-option">
+              <input type="radio" id="framework-swot" name="framework" value="SWOT" />
+              <label for="framework-swot">
+                SWOT Analysis
+                <span class="radio-description">Analyze the scenario using strengths, weaknesses, opportunities, and threats.</span>
+              </label>
+            </div>
+
+            <div class="radio-option">
+              <input type="radio" id="framework-steepled" name="framework" value="STEEPLED" />
+              <label for="framework-steepled">
+                STEEPLED Analysis
+                <span class="radio-description">Analyze the scenario using social, technological, economic, environmental, political, legal, ethical, and demographic factors.</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="framework-error" class="error-message" hidden></div>
+        </fieldset>
+      </section>
+
+      <section class="panel" aria-labelledby="response-heading">
+        <h2 id="response-heading">2. Complete Your Analysis</h2>
+        <p class="required-note">All visible fields are required.</p>
+
+        <div id="swot-section" class="framework-section" hidden aria-hidden="true">
+          <fieldset>
+            <legend>SWOT Analysis Response</legend>
+            <div class="grid two-col">
+              <div class="field">
+                <label for="strengths">Strengths</label>
+                <textarea id="strengths" name="strengths" data-framework="SWOT" data-label="Strengths"></textarea>
+                <div class="error-message" id="strengths-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="weaknesses">Weaknesses</label>
+                <textarea id="weaknesses" name="weaknesses" data-framework="SWOT" data-label="Weaknesses"></textarea>
+                <div class="error-message" id="weaknesses-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="opportunities">Opportunities</label>
+                <textarea id="opportunities" name="opportunities" data-framework="SWOT" data-label="Opportunities"></textarea>
+                <div class="error-message" id="opportunities-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="threats">Threats</label>
+                <textarea id="threats" name="threats" data-framework="SWOT" data-label="Threats"></textarea>
+                <div class="error-message" id="threats-error" hidden></div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div id="steepled-section" class="framework-section" hidden aria-hidden="true">
+          <fieldset>
+            <legend>STEEPLED Analysis Response</legend>
+            <div class="grid two-col">
+              <div class="field">
+                <label for="social">Social</label>
+                <textarea id="social" name="social" data-framework="STEEPLED" data-label="Social"></textarea>
+                <div class="error-message" id="social-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="technological">Technological</label>
+                <textarea id="technological" name="technological" data-framework="STEEPLED" data-label="Technological"></textarea>
+                <div class="error-message" id="technological-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="economic">Economic</label>
+                <textarea id="economic" name="economic" data-framework="STEEPLED" data-label="Economic"></textarea>
+                <div class="error-message" id="economic-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="environmental">Environmental</label>
+                <textarea id="environmental" name="environmental" data-framework="STEEPLED" data-label="Environmental"></textarea>
+                <div class="error-message" id="environmental-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="political">Political</label>
+                <textarea id="political" name="political" data-framework="STEEPLED" data-label="Political"></textarea>
+                <div class="error-message" id="political-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="legal">Legal</label>
+                <textarea id="legal" name="legal" data-framework="STEEPLED" data-label="Legal"></textarea>
+                <div class="error-message" id="legal-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="ethical">Ethical</label>
+                <textarea id="ethical" name="ethical" data-framework="STEEPLED" data-label="Ethical"></textarea>
+                <div class="error-message" id="ethical-error" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="demographic">Demographic</label>
+                <textarea id="demographic" name="demographic" data-framework="STEEPLED" data-label="Demographic"></textarea>
+                <div class="error-message" id="demographic-error" hidden></div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="reflection-heading">
+        <h2 id="reflection-heading">3. Reflection</h2>
+        <fieldset>
+          <legend>Framework Reflection</legend>
+          <div class="field">
+            <label for="reflection">Explain why this framework is a good fit for analyzing the scenario.</label>
+            <textarea id="reflection" name="reflection" data-label="Reflection"></textarea>
+            <div class="error-message" id="reflection-error" hidden></div>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="panel" aria-labelledby="submit-heading">
+        <h2 id="submit-heading">4. Submit and Compare</h2>
+        <p class="help-text">
+          Submit your analysis to compare your thinking with a sample response structure for the selected tool.
+        </p>
+        <div class="button-row">
+          <button type="submit" class="btn-primary">Submit and Compare</button>
+          <button type="reset" class="btn-secondary">Reset Form</button>
+        </div>
+      </section>
+    </form>
+
+    <section class="panel" id="feedback-section" aria-labelledby="feedback-heading" hidden>
+      <h2 id="feedback-heading">Submit-and-Compare Feedback</h2>
+      <div class="feedback-shell">
+        <div class="feedback-card response">
+          <div id="selected-framework-badge" class="framework-badge"></div>
+          <h3>Your submission is complete</h3>
+          <ul class="response-list" id="response-summary"></ul>
+        </div>
+
+        <div class="feedback-card compare">
+          <h3>What a strong response might include</h3>
+          <p id="compare-intro"></p>
+          <ul class="compare-list" id="compare-list"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("analysis-form");
+    const frameworkInputs = Array.from(document.querySelectorAll('input[name="framework"]'));
+    const swotSection = document.getElementById("swot-section");
+    const steepledSection = document.getElementById("steepled-section");
+    const reflection = document.getElementById("reflection");
+    const errorSummary = document.getElementById("error-summary");
+    const errorSummaryList = document.getElementById("error-summary-list");
+    const frameworkError = document.getElementById("framework-error");
+    const statusMessage = document.getElementById("status-message");
+    const liveRegion = document.getElementById("live-region");
+
+    const feedbackSection = document.getElementById("feedback-section");
+    const selectedFrameworkBadge = document.getElementById("selected-framework-badge");
+    const responseSummary = document.getElementById("response-summary");
+    const compareIntro = document.getElementById("compare-intro");
+    const compareList = document.getElementById("compare-list");
+
+    const swotFields = [
+      document.getElementById("strengths"),
+      document.getElementById("weaknesses"),
+      document.getElementById("opportunities"),
+      document.getElementById("threats")
+    ];
+
+    const steepledFields = [
+      document.getElementById("social"),
+      document.getElementById("technological"),
+      document.getElementById("economic"),
+      document.getElementById("environmental"),
+      document.getElementById("political"),
+      document.getElementById("legal"),
+      document.getElementById("ethical"),
+      document.getElementById("demographic")
+    ];
+
+    const allTextareas = [...swotFields, ...steepledFields, reflection];
+
+    const compareContent = {
+      SWOT: {
+        intro: "A strong SWOT response usually separates internal conditions from external conditions and connects each point clearly to the grocery chain scenario.",
+        items: [
+          "Strengths should focus on internal advantages, such as existing brand recognition, regional presence, supplier relationships, or community trust.",
+          "Weaknesses should identify internal problems, such as declining loyalty, product availability issues, limited convenience, or high operating costs.",
+          "Opportunities should point to external openings, such as growing interest in sustainability, delivery services, loyalty programs, or omnichannel shopping.",
+          "Threats should describe external pressures, such as online competitors, rising prices, changing customer expectations, and market disruption.",
+          "A strong response explains each category in relation to the scenario rather than listing generic business ideas."
+        ]
+      },
+      STEEPLED: {
+        intro: "A strong STEEPLED response usually scans the wider environment and explains how outside forces may affect the grocery chain's decisions and performance.",
+        items: [
+          "Social factors might include changing customer expectations around convenience, trust, and sustainable business practices.",
+          "Technological factors might include e-commerce platforms, inventory systems, mobile ordering, and delivery tools used by competitors.",
+          "Economic factors might include inflation, rising operating costs, price sensitivity, and pressure on household spending.",
+          "Environmental factors might include packaging waste, food sourcing, sustainability expectations, and energy use.",
+          "Political and legal factors might include food safety rules, labor policies, sourcing requirements, or local regulations.",
+          "Ethical factors might include responsible sourcing, transparency, fair labor, and honest sustainability claims.",
+          "Demographic factors might include shifts in age, family structure, location, or shopping preferences in the chain's region.",
+          "A strong response uses the categories to organize external analysis clearly and ties each point back to the scenario."
+        ]
+      }
+    };
+
+    function getSelectedFramework() {
+      const selected = frameworkInputs.find(input => input.checked);
+      return selected ? selected.value : "";
+    }
+
+    function getVisibleFrameworkFields() {
+      const framework = getSelectedFramework();
+      if (framework === "SWOT") return swotFields;
+      if (framework === "STEEPLED") return steepledFields;
+      return [];
+    }
+
+    function setSectionVisibility(section, isVisible) {
+      section.hidden = !isVisible;
+      section.setAttribute("aria-hidden", String(!isVisible));
+      section.querySelectorAll("textarea").forEach(textarea => {
+        if (isVisible) textarea.removeAttribute("disabled");
+        else textarea.setAttribute("disabled", "disabled");
+      });
+    }
+
+    function updateFrameworkVisibility() {
+      const selected = getSelectedFramework();
+      clearFrameworkError();
+      if (selected === "SWOT") {
+        setSectionVisibility(swotSection, true);
+        setSectionVisibility(steepledSection, false);
+      } else if (selected === "STEEPLED") {
+        setSectionVisibility(swotSection, false);
+        setSectionVisibility(steepledSection, true);
+      } else {
+        setSectionVisibility(swotSection, false);
+        setSectionVisibility(steepledSection, false);
+      }
+    }
+
+    function showErrorForField(field, message) {
+      const wrapper = field.closest(".field");
+      const errorEl = document.getElementById(field.id + "-error");
+      field.setAttribute("aria-invalid", "true");
+      field.setAttribute("aria-describedby", errorEl.id);
+      if (wrapper) wrapper.classList.add("has-error");
+      errorEl.textContent = message;
+      errorEl.hidden = false;
+    }
+
+    function clearErrorForField(field) {
+      const wrapper = field.closest(".field");
+      const errorEl = document.getElementById(field.id + "-error");
+      field.removeAttribute("aria-invalid");
+      field.removeAttribute("aria-describedby");
+      if (wrapper) wrapper.classList.remove("has-error");
+      errorEl.textContent = "";
+      errorEl.hidden = true;
+    }
+
+    function showFrameworkError(message) {
+      frameworkError.textContent = message;
+      frameworkError.hidden = false;
+      frameworkInputs.forEach(input => input.setAttribute("aria-invalid", "true"));
+    }
+
+    function clearFrameworkError() {
+      frameworkError.textContent = "";
+      frameworkError.hidden = true;
+      frameworkInputs.forEach(input => input.removeAttribute("aria-invalid"));
+    }
+
+    function clearAllErrors() {
+      clearFrameworkError();
+      allTextareas.forEach(clearErrorForField);
+      errorSummary.hidden = true;
+      errorSummaryList.innerHTML = "";
+    }
+
+    function clearStatus() {
+      statusMessage.hidden = true;
+      statusMessage.textContent = "";
+      statusMessage.className = "status-box";
+      liveRegion.textContent = "";
+    }
+
+    function setStatus(message) {
+      statusMessage.textContent = message;
+      statusMessage.hidden = false;
+      statusMessage.className = "status-box";
+      liveRegion.textContent = message;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function validateForm() {
+      clearAllErrors();
+      clearStatus();
+
+      const errors = [];
+      let firstInvalidElement = null;
+      const selectedFramework = getSelectedFramework();
+
+      if (!selectedFramework) {
+        const message = "Select either SWOT Analysis or STEEPLED Analysis.";
+        showFrameworkError(message);
+        errors.push(message);
+        firstInvalidElement = frameworkInputs[0];
+      }
+
+      getVisibleFrameworkFields().forEach(field => {
+        if (!field.value.trim()) {
+          const message = `Complete the ${field.dataset.label} field.`;
+          showErrorForField(field, message);
+          errors.push(message);
+          if (!firstInvalidElement) firstInvalidElement = field;
+        }
+      });
+
+      if (!reflection.value.trim()) {
+        const message = "Complete the reflection field.";
+        showErrorForField(reflection, message);
+        errors.push(message);
+        if (!firstInvalidElement) firstInvalidElement = reflection;
+      }
+
+      if (errors.length > 0) {
+        errorSummaryList.innerHTML = "<ul>" + errors.map(error => "<li>" + escapeHtml(error) + "</li>").join("") + "</ul>";
+        errorSummary.hidden = false;
+        liveRegion.textContent = "There are validation errors in the form.";
+        return { isValid: false, firstInvalidElement };
+      }
+
+      return { isValid: true, firstInvalidElement: null };
+    }
+
+    function renderCompareFeedback(selectedFramework) {
+      const completedFields = getVisibleFrameworkFields();
+      const frameworkData = compareContent[selectedFramework];
+
+      selectedFrameworkBadge.textContent = selectedFramework + " selected";
+      compareIntro.textContent = frameworkData.intro;
+
+      responseSummary.innerHTML = "";
+      const summaryItems = [
+        `You completed ${completedFields.length} ${selectedFramework} category fields.`,
+        "You included a written explanation of why the framework fits the scenario.",
+        "Use the compare notes below to review whether your ideas match the purpose of each category."
+      ];
+
+      summaryItems.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        responseSummary.appendChild(li);
+      });
+
+      compareList.innerHTML = "";
+      frameworkData.items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        compareList.appendChild(li);
+      });
+
+      feedbackSection.hidden = false;
+    }
+
+    function resetFeedback() {
+      feedbackSection.hidden = true;
+      selectedFrameworkBadge.textContent = "";
+      responseSummary.innerHTML = "";
+      compareIntro.textContent = "";
+      compareList.innerHTML = "";
+    }
+
+    frameworkInputs.forEach(input => {
+      input.addEventListener("change", updateFrameworkVisibility);
+    });
+
+    allTextareas.forEach(field => {
+      field.addEventListener("input", () => {
+        clearErrorForField(field);
+        clearStatus();
+      });
+    });
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const validation = validateForm();
+      if (!validation.isValid) {
+        validation.firstInvalidElement.focus();
+        return;
+      }
+
+      const selectedFramework = getSelectedFramework();
+      renderCompareFeedback(selectedFramework);
+      setStatus("Your response has been submitted. Review the compare feedback below.");
+      feedbackSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    form.addEventListener("reset", function() {
+      window.setTimeout(() => {
+        frameworkInputs.forEach(input => {
+          input.checked = false;
+          input.removeAttribute("aria-invalid");
+        });
+        clearAllErrors();
+        clearStatus();
+        resetFeedback();
+        updateFrameworkVisibility();
+        liveRegion.textContent = "The form has been reset.";
+      }, 0);
+    });
+
+    updateFrameworkVisibility();
+  </script>
+</body>
+</html>
