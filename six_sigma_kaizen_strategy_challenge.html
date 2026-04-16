@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Six Sigma or Kaizen? Strategy Challenge</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #4b5563;
+      --border: #cbd5e1;
+      --border-strong: #64748b;
+      --accent: #0f4c81;
+      --accent-soft: #e8f1fb;
+      --success: #166534;
+      --success-bg: #f0fdf4;
+      --info: #1d4ed8;
+      --info-bg: #eff6ff;
+      --warn: #9a3412;
+      --warn-bg: #fff7ed;
+      --error: #b91c1c;
+      --error-bg: #fef2f2;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+      --focus: 3px solid #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    body { padding: 1rem; }
+
+    .activity {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3, legend { color: var(--text); }
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.9rem;
+    }
+
+    h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1.25rem;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.05rem;
+    }
+
+    p { margin-top: 0; }
+
+    .instructions,
+    .help-text {
+      color: var(--muted);
+    }
+
+    .scenario-box {
+      border: 2px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 1rem;
+      background: #fcfdff;
+    }
+
+    .scenario-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0 0 1rem 0;
+      min-width: 0;
+    }
+
+    legend {
+      font-weight: bold;
+      padding: 0 0.35rem;
+    }
+
+    .choice-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .option {
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      padding: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .option input {
+      margin-top: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .option label {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .option span {
+      display: block;
+      font-weight: normal;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      padding: 0.8rem;
+      resize: vertical;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    textarea:focus,
+    input:focus,
+    button:focus {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+    }
+
+    .field.has-error textarea { border-color: var(--error); }
+
+    .error-summary,
+    .status-box {
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .error-summary {
+      background: var(--error-bg);
+      border: 1px solid #fecaca;
+      color: #7f1d1d;
+    }
+
+    .status-box {
+      background: var(--success-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--success);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 0.8rem 1.15rem;
+      font: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 155px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .feedback-shell {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .feedback-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      background: #fff;
+    }
+
+    .feedback-card.best-fit {
+      background: var(--success-bg);
+      border-color: #bbf7d0;
+    }
+
+    .feedback-card.compare {
+      background: var(--info-bg);
+      border-color: #bfdbfe;
+    }
+
+    .feedback-card.coaching {
+      background: var(--warn-bg);
+      border-color: #fed7aa;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: bold;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+      padding-left: 1.25rem;
+    }
+
+    li { margin-bottom: 0.45rem; }
+
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+      border: 0;
+      padding: 0;
+      margin: -1px;
+    }
+  </style>
+</head>
+<body>
+  <main class="activity">
+    <section class="panel" aria-labelledby="activity-title">
+      <h1 id="activity-title">Six Sigma or Kaizen? Strategy Challenge</h1>
+      <p class="instructions">
+        Read the scenario, choose the improvement approach that is the strongest fit, and explain your reasoning.
+        When you submit, you will see compare feedback showing why one option is stronger for this situation.
+      </p>
+    </section>
+
+    <form id="challenge-form" novalidate>
+      <section class="panel" aria-labelledby="scenario-heading">
+        <h2 id="scenario-heading">Scenario</h2>
+        <div class="scenario-box">
+          <span class="scenario-label">Workplace Scenario</span>
+          <p>
+            A warehouse has a growing problem with order mistakes. Some shifts have very few errors, while other shifts have many. Leadership wants to find the cause of the variation and reduce mistakes to a very low level.
+          </p>
+        </div>
+      </section>
+
+      <div id="error-summary" class="error-summary" hidden tabindex="-1" aria-labelledby="error-summary-title">
+        <h2 id="error-summary-title">Please correct the following items</h2>
+        <div id="error-summary-list"></div>
+      </div>
+
+      <div id="status-message" class="status-box" hidden aria-live="polite"></div>
+      <div id="live-region" class="visually-hidden" aria-live="assertive" aria-atomic="true"></div>
+
+      <section class="panel" aria-labelledby="choice-heading">
+        <h2 id="choice-heading">1. Choose the Best-Fit Approach</h2>
+        <fieldset>
+          <legend>Improvement approach <span aria-hidden="true">*</span></legend>
+          <p class="help-text">Select the approach that is the strongest fit for the scenario.</p>
+
+          <div class="choice-grid" role="radiogroup" aria-describedby="approach-error">
+            <div class="option">
+              <input type="radio" id="six-sigma" name="approach" value="Six Sigma" />
+              <label for="six-sigma">
+                Six Sigma
+                <span>Best for reducing variation, defects, and errors through careful analysis and measurement.</span>
+              </label>
+            </div>
+
+            <div class="option">
+              <input type="radio" id="kaizen" name="approach" value="Kaizen" />
+              <label for="kaizen">
+                Kaizen
+                <span>Best for continuous improvement through small, ongoing process changes and team involvement.</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="approach-error" class="error-message" hidden></div>
+        </fieldset>
+      </section>
+
+      <section class="panel" aria-labelledby="reasoning-heading">
+        <h2 id="reasoning-heading">2. Explain Your Reasoning</h2>
+        <fieldset>
+          <legend>Written response</legend>
+          <div class="field">
+            <label for="problem-type">What clues in the scenario helped you identify the type of problem?</label>
+            <textarea id="problem-type" name="problem-type"></textarea>
+            <div id="problem-type-error" class="error-message" hidden></div>
+          </div>
+
+          <div class="field">
+            <label for="reasoning">Explain why your chosen approach is the strongest fit for this scenario.</label>
+            <textarea id="reasoning" name="reasoning"></textarea>
+            <div id="reasoning-error" class="error-message" hidden></div>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="panel" aria-labelledby="submit-heading">
+        <h2 id="submit-heading">3. Submit and Compare</h2>
+        <p class="help-text">
+          Submit your response to compare your choice with the stronger application of the tool.
+        </p>
+        <div class="button-row">
+          <button type="submit" class="btn-primary">Submit and Compare</button>
+          <button type="reset" class="btn-secondary">Reset Form</button>
+        </div>
+      </section>
+    </form>
+
+    <section class="panel" id="feedback-section" aria-labelledby="feedback-heading" hidden>
+      <h2 id="feedback-heading">Submit-and-Compare Feedback</h2>
+      <div class="feedback-shell">
+        <div class="feedback-card best-fit">
+          <div id="result-badge" class="badge"></div>
+          <h3 id="result-title"></h3>
+          <p id="result-summary"></p>
+        </div>
+
+        <div class="feedback-card compare">
+          <h3>Why the stronger choice fits this scenario</h3>
+          <ul id="best-fit-list"></ul>
+        </div>
+
+        <div class="feedback-card coaching">
+          <h3>How to compare the two approaches</h3>
+          <ul id="compare-list"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('challenge-form');
+    const approachInputs = Array.from(document.querySelectorAll('input[name="approach"]'));
+    const problemType = document.getElementById('problem-type');
+    const reasoning = document.getElementById('reasoning');
+
+    const errorSummary = document.getElementById('error-summary');
+    const errorSummaryList = document.getElementById('error-summary-list');
+    const statusMessage = document.getElementById('status-message');
+    const liveRegion = document.getElementById('live-region');
+    const approachError = document.getElementById('approach-error');
+
+    const feedbackSection = document.getElementById('feedback-section');
+    const resultBadge = document.getElementById('result-badge');
+    const resultTitle = document.getElementById('result-title');
+    const resultSummary = document.getElementById('result-summary');
+    const bestFitList = document.getElementById('best-fit-list');
+    const compareList = document.getElementById('compare-list');
+
+    const strongerChoice = 'Six Sigma';
+
+    function getSelectedApproach() {
+      const selected = approachInputs.find(input => input.checked);
+      return selected ? selected.value : '';
+    }
+
+    function showApproachError(message) {
+      approachError.textContent = message;
+      approachError.hidden = false;
+      approachInputs.forEach(input => input.setAttribute('aria-invalid', 'true'));
+    }
+
+    function clearApproachError() {
+      approachError.textContent = '';
+      approachError.hidden = true;
+      approachInputs.forEach(input => input.removeAttribute('aria-invalid'));
+    }
+
+    function showFieldError(field, message) {
+      const wrapper = field.closest('.field');
+      const errorEl = document.getElementById(field.id + '-error');
+      field.setAttribute('aria-invalid', 'true');
+      field.setAttribute('aria-describedby', errorEl.id);
+      if (wrapper) wrapper.classList.add('has-error');
+      errorEl.textContent = message;
+      errorEl.hidden = false;
+    }
+
+    function clearFieldError(field) {
+      const wrapper = field.closest('.field');
+      const errorEl = document.getElementById(field.id + '-error');
+      field.removeAttribute('aria-invalid');
+      field.removeAttribute('aria-describedby');
+      if (wrapper) wrapper.classList.remove('has-error');
+      errorEl.textContent = '';
+      errorEl.hidden = true;
+    }
+
+    function clearAllErrors() {
+      clearApproachError();
+      clearFieldError(problemType);
+      clearFieldError(reasoning);
+      errorSummary.hidden = true;
+      errorSummaryList.innerHTML = '';
+    }
+
+    function clearStatus() {
+      statusMessage.hidden = true;
+      statusMessage.textContent = '';
+      liveRegion.textContent = '';
+    }
+
+    function setStatus(message) {
+      statusMessage.textContent = message;
+      statusMessage.hidden = false;
+      liveRegion.textContent = message;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function validateForm() {
+      clearAllErrors();
+      clearStatus();
+
+      const errors = [];
+      let firstInvalidElement = null;
+
+      if (!getSelectedApproach()) {
+        const message = 'Select either Six Sigma or Kaizen.';
+        showApproachError(message);
+        errors.push(message);
+        firstInvalidElement = approachInputs[0];
+      }
+
+      if (!problemType.value.trim()) {
+        const message = 'Complete the problem clues field.';
+        showFieldError(problemType, message);
+        errors.push(message);
+        if (!firstInvalidElement) firstInvalidElement = problemType;
+      }
+
+      if (!reasoning.value.trim()) {
+        const message = 'Complete the reasoning field.';
+        showFieldError(reasoning, message);
+        errors.push(message);
+        if (!firstInvalidElement) firstInvalidElement = reasoning;
+      }
+
+      if (errors.length > 0) {
+        errorSummaryList.innerHTML = '<ul>' + errors.map(error => '<li>' + escapeHtml(error) + '</li>').join('') + '</ul>';
+        errorSummary.hidden = false;
+        liveRegion.textContent = 'There are validation errors in the form.';
+        return { isValid: false, firstInvalidElement };
+      }
+
+      return { isValid: true, firstInvalidElement: null };
+    }
+
+    function renderFeedback(choice) {
+      bestFitList.innerHTML = '';
+      compareList.innerHTML = '';
+
+      const bestFitItems = [
+        'The scenario centers on variation because some shifts make very few errors while others make many.',
+        'The problem involves defects or mistakes, which makes quality control and error reduction especially important.',
+        'Leadership wants to identify the cause of the variation, which points to analysis and measurement rather than general improvement alone.',
+        'The goal is to reduce mistakes to a very low level, which aligns strongly with Six Sigma’s focus on minimizing defects.'
+      ];
+
+      const compareItems = [
+        'Six Sigma is usually the stronger fit when the main issue is inconsistency, errors, defects, or variation that must be measured and reduced.',
+        'Kaizen is usually the stronger fit when the main issue is everyday workflow inefficiency and the goal is steady, small improvements over time.',
+        'Kaizen could still support this workplace later, but Six Sigma is the better first choice because the core problem is inconsistent error rates.'
+      ];
+
+      bestFitItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        bestFitList.appendChild(li);
+      });
+
+      compareItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        compareList.appendChild(li);
+      });
+
+      if (choice === strongerChoice) {
+        resultBadge.textContent = 'Stronger choice selected';
+        resultTitle.textContent = 'Yes — Six Sigma is the strongest fit for this scenario.';
+        resultSummary.textContent = 'Your choice matches the strongest application of the tool. This situation is about variation, defects, and finding root causes through analysis.';
+      } else {
+        resultBadge.textContent = 'A stronger choice was available';
+        resultTitle.textContent = 'Kaizen could help, but Six Sigma is the stronger fit here.';
+        resultSummary.textContent = 'Kaizen supports continuous improvement, but this scenario is more specifically about inconsistent error rates and reducing defects, which aligns more directly with Six Sigma.';
+      }
+
+      feedbackSection.hidden = false;
+    }
+
+    function resetFeedback() {
+      feedbackSection.hidden = true;
+      resultBadge.textContent = '';
+      resultTitle.textContent = '';
+      resultSummary.textContent = '';
+      bestFitList.innerHTML = '';
+      compareList.innerHTML = '';
+    }
+
+    approachInputs.forEach(input => {
+      input.addEventListener('change', clearApproachError);
+    });
+
+    [problemType, reasoning].forEach(field => {
+      field.addEventListener('input', () => {
+        clearFieldError(field);
+        clearStatus();
+      });
+    });
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const validation = validateForm();
+      if (!validation.isValid) {
+        validation.firstInvalidElement.focus();
+        return;
+      }
+
+      renderFeedback(getSelectedApproach());
+      setStatus('Your response has been submitted. Review the compare feedback below.');
+      feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    form.addEventListener('reset', function() {
+      window.setTimeout(() => {
+        approachInputs.forEach(input => {
+          input.checked = false;
+          input.removeAttribute('aria-invalid');
+        });
+        clearAllErrors();
+        clearStatus();
+        resetFeedback();
+        liveRegion.textContent = 'The form has been reset.';
+      }, 0);
+    });
+  </script>
+</body>
+</html>
