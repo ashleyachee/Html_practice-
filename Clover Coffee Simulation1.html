@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>One Company, Four HR Paths</title>
+  <style>
+    :root{
+      --bg:#f7f4ef;
+      --card:#ffffff;
+      --text:#2f241d;
+      --muted:#5e5147;
+      --border:#d8cbbd;
+      --accent:#6b4f3b;
+      --accent-light:#efe4d8;
+      --visited:#edf6ee;
+      --visited-border:#6f8b72;
+      --focus:#0b57d0;
+      --radius:18px;
+      --shadow:0 8px 22px rgba(60, 40, 20, 0.08);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .wrapper{
+      max-width:1120px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .skip-link{
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+
+    .skip-link:focus{
+      left:16px;
+      top:16px;
+      width:auto;
+      height:auto;
+      padding:10px 14px;
+      background:#fff;
+      border:2px solid #000;
+      z-index:1000;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    header.card{
+      margin-bottom:18px;
+    }
+
+    h1,h2,h3{
+      margin:0 0 10px 0;
+      line-height:1.2;
+    }
+
+    h1{
+      font-size:clamp(1.9rem, 3vw, 2.5rem);
+    }
+
+    p{
+      margin:0 0 12px 0;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:0.96rem;
+    }
+
+    .intro{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .progress{
+      margin-top:18px;
+    }
+
+    .progress-bar{
+      height:14px;
+      background:#eadfd2;
+      border:1px solid #cfbfaf;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill{
+      width:0%;
+      height:100%;
+      background:var(--accent);
+      transition:width .2s ease;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .button-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    button{
+      font:inherit;
+    }
+
+    button.path-btn,
+    .reset-btn{
+      cursor:pointer;
+    }
+
+    .path-btn{
+      width:100%;
+      min-height:168px;
+      text-align:left;
+      border:2px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      padding:16px;
+      color:var(--text);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .path-btn:hover{
+      border-color:#a98a70;
+    }
+
+    .path-btn[aria-pressed="true"]{
+      border-color:var(--accent);
+      background:var(--accent-light);
+    }
+
+    .path-btn.visited{
+      border-color:var(--visited-border);
+      background:var(--visited);
+    }
+
+    .path-btn:focus-visible,
+    .reset-btn:focus-visible{
+      outline:3px solid var(--focus);
+      outline-offset:2px;
+    }
+
+    .path-title{
+      font-weight:700;
+      font-size:1.06rem;
+      margin-bottom:6px;
+    }
+
+    .path-desc{
+      color:var(--text);
+    }
+
+    .tag{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:48px;
+      padding:8px 12px;
+      border-radius:12px;
+      background:#f5eee7;
+      border:1px solid #dcccbc;
+      font-size:0.88rem;
+      font-weight:700;
+      text-align:center;
+      line-height:1.25;
+    }
+
+    .visited-text{
+      display:block;
+      margin-top:8px;
+      font-size:0.9rem;
+      font-weight:700;
+      color:#406347;
+      min-height:1.2em;
+    }
+
+    .display{
+      min-height:auto;
+      align-self:start;
+    }
+
+    .display-inner{
+      max-width:820px;
+    }
+
+    .placeholder{
+      border:2px dashed var(--border);
+      border-radius:16px;
+      padding:22px;
+      background:#fcfaf7;
+      min-height:106px;
+      display:flex;
+      align-items:center;
+    }
+
+    .case-box{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      background:#fffdfa;
+    }
+
+    .case-list{
+      padding-left:18px;
+      margin:12px 0 0 0;
+    }
+
+    .case-list li{
+      margin-bottom:10px;
+    }
+
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .reset-btn{
+      border:2px solid var(--accent);
+      background:#fff;
+      color:var(--accent);
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:700;
+    }
+
+    .reset-btn:hover{
+      background:#f7f0e8;
+    }
+
+    @media (max-width: 900px){
+      .intro,
+      .button-grid{
+        grid-template-columns:1fr;
+      }
+
+      .display-inner{
+        max-width:none;
+      }
+    }
+
+    @media (max-width: 620px){
+      .wrapper{
+        padding:16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to activity</a>
+
+  <div class="wrapper">
+    <header class="card">
+      <h1>One Company, Four HR Paths</h1>
+      <p>Explore how four HR paths could support one growing coffee company.</p>
+
+      <div class="intro">
+        <section aria-labelledby="overview-title">
+          <h2 id="overview-title">Company overview</h2>
+          <p>
+            <strong>Clover Cup Coffee</strong> is a fictional coffee company with busy cafés opening across the region.
+            Growth is exciting, but it has created people challenges:
+          </p>
+          <ul>
+            <li>hiring needs are growing fast</li>
+            <li>employees want more support and consistency</li>
+            <li>managers need help leading through change</li>
+            <li>policies are not always applied the same way</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="instructions-title">
+          <h2 id="instructions-title">What to do</h2>
+          <ol>
+            <li>Select each HR path in the dashboard.</li>
+            <li>Read the short case study details that appear below.</li>
+            <li>Use your course reflection space to decide which path feels most urgent and why.</li>
+          </ol>
+          <p class="small">Keyboard users: use Tab, then Enter or Space to open a section.</p>
+        </section>
+      </div>
+
+      <div class="progress" aria-label="Progress">
+        <h2 style="font-size:1.05rem;">Progress</h2>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText" class="small" aria-live="polite">You have explored 0 of 4 sections.</p>
+      </div>
+    </header>
+
+    <main id="main-content" class="layout">
+      <section class="card" aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title">HR Dashboard</h2>
+        <div class="button-grid">
+          <button type="button" class="path-btn" data-key="strategic" aria-pressed="false" aria-controls="caseDisplay">
+            <div>
+              <div class="path-title">Strategic Partner</div>
+              <div class="path-desc">Big-picture planning for people and growth.</div>
+            </div>
+            <div>
+              <div class="tag">Talent Acquisition &amp; Development</div>
+              <span class="visited-text" id="mark-strategic" aria-hidden="true"></span>
+            </div>
+          </button>
+
+          <button type="button" class="path-btn" data-key="champion" aria-pressed="false" aria-controls="caseDisplay">
+            <div>
+              <div class="path-title">Employee Champion</div>
+              <div class="path-desc">Support, fairness, and employee experience.</div>
+            </div>
+            <div>
+              <div class="tag">Total Rewards</div>
+              <span class="visited-text" id="mark-champion" aria-hidden="true"></span>
+            </div>
+          </button>
+
+          <button type="button" class="path-btn" data-key="change" aria-pressed="false" aria-controls="caseDisplay">
+            <div>
+              <div class="path-title">Change Agent</div>
+              <div class="path-desc">Helping people learn and adapt.</div>
+            </div>
+            <div>
+              <div class="tag">Performance Management</div>
+              <span class="visited-text" id="mark-change" aria-hidden="true"></span>
+            </div>
+          </button>
+
+          <button type="button" class="path-btn" data-key="admin" aria-pressed="false" aria-controls="caseDisplay">
+            <div>
+              <div class="path-title">Administrative Expert</div>
+              <div class="path-desc">Policies, consistency, and compliance.</div>
+            </div>
+            <div>
+              <div class="tag">Employment/Labor Law</div>
+              <span class="visited-text" id="mark-admin" aria-hidden="true"></span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <section class="card display" aria-labelledby="details-title">
+        <div class="display-inner">
+          <h2 id="details-title">Case Study Details</h2>
+
+          <div id="caseDisplay" aria-live="polite" aria-atomic="true">
+            <div class="placeholder">
+              <p>Select an HR path to see a short mini-case for Clover Cup Coffee.</p>
+            </div>
+          </div>
+
+          <div class="controls">
+            <p id="unlockText" class="small" aria-live="polite">Explore all four sections to view each case study detail.</p>
+            <button type="button" class="reset-btn" id="resetBtn">Reset activity</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const CASES = {
+      strategic: {
+        title: "Strategic Partner",
+        topic: "Talent Acquisition & Development",
+        scenario: "Clover Cup Coffee is opening new café locations, but some stores are short-staffed and managers are struggling to keep up with hiring.",
+        challenge: "The company needs enough people with the right skills in the right places.",
+        focus: "This HR path focuses on workforce planning, hiring, and developing talent for future growth.",
+        action: "HR could build a hiring plan, improve recruiting, and create training for shift leads who may become future store managers.",
+        why: "This helps the company grow without burning out current employees."
+      },
+      champion: {
+        title: "Employee Champion",
+        topic: "Total Rewards",
+        scenario: "Some baristas say support feels uneven across stores. Employees also have questions about scheduling, benefits, and recognition.",
+        challenge: "Employees want to feel valued, treated fairly, and supported.",
+        focus: "This HR path focuses on employee experience and total rewards, including benefits, recognition, and workplace support.",
+        action: "HR could gather employee feedback, improve communication about benefits, and recommend more consistent recognition practices.",
+        why: "When employees feel supported, they are more likely to stay and do their best work."
+      },
+      change: {
+        title: "Change Agent",
+        topic: "Performance Management",
+        scenario: "Clover Cup Coffee started using a new check-in system for goals and feedback, but managers are using it very differently.",
+        challenge: "Managers need help giving clear feedback and using the new process well.",
+        focus: "This HR path focuses on training and helping people adapt to change.",
+        action: "HR could train managers on coaching, goal setting, and regular performance conversations.",
+        why: "This makes expectations clearer and helps employees improve over time."
+      },
+      admin: {
+        title: "Administrative Expert",
+        topic: "Employment/Labor Law",
+        scenario: "Different stores are handling attendance, breaks, and documentation in different ways.",
+        challenge: "The company needs consistency and compliance across locations.",
+        focus: "This HR path focuses on policy, records, trust, and stable HR systems.",
+        action: "HR could review current practices, clarify policies, and train managers on consistent documentation.",
+        why: "This reduces confusion, supports fairness, and lowers legal risk."
+      }
+    };
+
+    const visited = new Set();
+    const buttons = document.querySelectorAll(".path-btn");
+    const caseDisplay = document.getElementById("caseDisplay");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const unlockText = document.getElementById("unlockText");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function renderCase(key){
+      const data = CASES[key];
+      if(!data) return;
+
+      buttons.forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.key === key ? "true" : "false");
+      });
+
+      visited.add(key);
+      updateProgress();
+      updateVisitedMarks();
+
+      caseDisplay.innerHTML = `
+        <article class="case-box" aria-labelledby="case-title">
+          <h3 id="case-title">${data.title}</h3>
+          <p><strong>Topic:</strong> ${data.topic}</p>
+          <ul class="case-list">
+            <li><strong>Scenario:</strong> ${data.scenario}</li>
+            <li><strong>Challenge:</strong> ${data.challenge}</li>
+            <li><strong>Focus:</strong> ${data.focus}</li>
+            <li><strong>HR action:</strong> ${data.action}</li>
+            <li><strong>Why it matters:</strong> ${data.why}</li>
+          </ul>
+        </article>
+      `;
+
+      if(visited.size === 4){
+        unlockText.textContent = "You have explored all four HR paths. Use your course reflection space to decide which seems most urgent.";
+      }
+    }
+
+    function updateProgress(){
+      const count = visited.size;
+      progressFill.style.width = (count / 4) * 100 + "%";
+      progressText.textContent = `You have explored ${count} of 4 sections.`;
+    }
+
+    function updateVisitedMarks(){
+      ["strategic","champion","change","admin"].forEach(key => {
+        const mark = document.getElementById(`mark-${key}`);
+        const button = document.querySelector(`[data-key="${key}"]`);
+        const seen = visited.has(key);
+
+        if(mark) mark.textContent = seen ? "Visited" : "";
+        if(button) button.classList.toggle("visited", seen);
+      });
+    }
+
+    function resetActivity(){
+      visited.clear();
+
+      buttons.forEach(button => {
+        button.setAttribute("aria-pressed", "false");
+        button.classList.remove("visited");
+      });
+
+      ["strategic","champion","change","admin"].forEach(key => {
+        const mark = document.getElementById(`mark-${key}`);
+        if(mark) mark.textContent = "";
+      });
+
+      caseDisplay.innerHTML = `
+        <div class="placeholder">
+          <p>Select an HR path to see a short mini-case for Clover Cup Coffee.</p>
+        </div>
+      `;
+
+      unlockText.textContent = "Explore all four sections to view each case study detail.";
+      updateProgress();
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        renderCase(button.dataset.key);
+      });
+    });
+
+    resetBtn.addEventListener("click", resetActivity);
+
+    updateProgress();
+  </script>
+</body>
+</html>
