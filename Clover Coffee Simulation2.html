@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>One Company, Four HR Paths</title>
+  <style>
+    :root{
+      --bg:#f8f5f0;
+      --card:#ffffff;
+      --text:#33261f;
+      --muted:#68584c;
+      --border:#d9ccbd;
+      --accent:#7a573d;
+      --accent-light:#f2e6d9;
+      --brand:#335c4a;
+      --brand-dark:#2b4d3e;
+      --brand-light:#e7f1ec;
+      --brand-box:#edf6f0;
+      --brand-box-border:#9ab8a7;
+      --visited:#eef6f0;
+      --visited-border:#7b9a84;
+      --focus:#0b57d0;
+      --radius:18px;
+      --shadow:0 10px 24px rgba(60, 40, 20, 0.08);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg, #fbf8f4 0%, var(--bg) 100%);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .wrapper{
+      max-width:1120px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .skip-link{
+      position:absolute;
+      left:-9999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+
+    .skip-link:focus{
+      left:16px;
+      top:16px;
+      width:auto;
+      height:auto;
+      padding:10px 14px;
+      background:#fff;
+      border:2px solid #000;
+      z-index:1000;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+
+    header.card{
+      margin-bottom:18px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .brand-banner{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:16px 18px;
+      margin:-24px -24px 20px -24px;
+      background:
+        radial-gradient(circle at 86% 18%, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 8%, transparent 9%),
+        radial-gradient(circle at 92% 24%, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 7%, transparent 8%),
+        linear-gradient(135deg, var(--brand-dark) 0%, #3e7159 100%);
+      color:#fff;
+      position:relative;
+    }
+
+    .brand-banner::after{
+      content:"";
+      position:absolute;
+      right:28px;
+      top:-8px;
+      width:220px;
+      height:150px;
+      opacity:0.12;
+      background:
+        radial-gradient(circle at 30% 40%, transparent 0 23px, rgba(255,255,255,0.8) 24px 25px, transparent 26px),
+        radial-gradient(circle at 58% 20%, transparent 0 23px, rgba(255,255,255,0.8) 24px 25px, transparent 26px),
+        radial-gradient(circle at 64% 58%, transparent 0 23px, rgba(255,255,255,0.8) 24px 25px, transparent 26px),
+        radial-gradient(circle at 36% 66%, transparent 0 23px, rgba(255,255,255,0.8) 24px 25px, transparent 26px);
+      transform:rotate(-12deg);
+      pointer-events:none;
+      border-radius:20px;
+      mask-image:linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.15));
+      -webkit-mask-image:linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.15));
+    }
+
+    .logo-mark{
+      width:82px;
+      height:82px;
+      border-radius:50%;
+      flex:0 0 auto;
+      background:#fff;
+      display:grid;
+      place-items:center;
+      box-shadow:0 8px 18px rgba(0,0,0,0.12);
+      border:2px solid rgba(255,255,255,0.35);
+    }
+
+    .logo-mark svg{
+      width:58px;
+      height:58px;
+      display:block;
+    }
+
+    .brand-text{
+      min-width:0;
+      position:relative;
+      z-index:1;
+    }
+
+    .brand-name{
+      font-size:1.65rem;
+      font-weight:700;
+      line-height:1.1;
+      margin:0 0 4px 0;
+      letter-spacing:0.01em;
+      color:#fff;
+    }
+
+    .brand-tag{
+      margin:0;
+      font-size:1rem;
+      color:#eef7f2;
+    }
+
+    h1,h2,h3{
+      margin:0 0 10px 0;
+      line-height:1.2;
+    }
+
+    h1{
+      font-size:clamp(1.9rem, 3vw, 2.5rem);
+    }
+
+    p{
+      margin:0 0 12px 0;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:0.96rem;
+    }
+
+    .intro{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:24px;
+      margin-top:16px;
+      align-items:start;
+    }
+
+    .todo-side{
+      background:var(--brand-box);
+      border:2px solid var(--brand-box-border);
+      border-radius:18px;
+      padding:18px 20px;
+    }
+
+    .todo-head{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .todo-icon{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:var(--brand);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+    }
+
+    .todo-icon svg{
+      width:22px;
+      height:22px;
+      display:block;
+    }
+
+    .todo-side h2{
+      color:var(--brand-dark);
+      margin:0;
+    }
+
+    .todo-side ol{
+      margin:0 0 12px 24px;
+      padding:0;
+    }
+
+    .todo-side li{
+      margin-bottom:8px;
+    }
+
+    .progress{
+      margin-top:18px;
+    }
+
+    .progress-bar{
+      height:14px;
+      background:#eadfd2;
+      border:1px solid #cfbfaf;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg, var(--accent) 0%, #9d7557 100%);
+      transition:width .2s ease;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .button-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+
+    button{
+      font:inherit;
+    }
+
+    button.path-btn,
+    .reset-btn{
+      cursor:pointer;
+    }
+
+    .path-btn{
+      width:100%;
+      text-align:left;
+      border:2px solid var(--border);
+      border-radius:20px;
+      background:#fff;
+      padding:0;
+      color:var(--text);
+      overflow:hidden;
+      align-self:start;
+    }
+
+    .path-btn:hover{
+      border-color:#ad8a6d;
+    }
+
+    .path-btn:focus-visible,
+    .reset-btn:focus-visible{
+      outline:3px solid var(--focus);
+      outline-offset:2px;
+    }
+
+    .path-btn.is-open{
+      border-color:var(--accent);
+      background:var(--accent-light);
+    }
+
+    .path-btn.visited:not(.is-open){
+      border-color:var(--visited-border);
+      background:var(--visited);
+    }
+
+    .path-summary{
+      width:100%;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .path-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .path-title{
+      font-weight:700;
+      font-size:1.06rem;
+      margin-bottom:6px;
+    }
+
+    .path-desc{
+      color:var(--text);
+    }
+
+    .path-meta{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .tag{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:48px;
+      padding:8px 12px;
+      border-radius:12px;
+      background:#f7efe7;
+      border:1px solid #dcccbc;
+      font-size:0.88rem;
+      font-weight:700;
+      text-align:center;
+      line-height:1.25;
+    }
+
+    .visited-text{
+      display:block;
+      font-size:0.9rem;
+      font-weight:700;
+      color:#406347;
+      min-height:1.2em;
+    }
+
+    .chevron{
+      flex:0 0 auto;
+      font-size:1.05rem;
+      line-height:1;
+      color:var(--muted);
+      margin-top:2px;
+      transition:transform .2s ease;
+    }
+
+    .path-btn.is-open .chevron{
+      color:var(--accent);
+      transform:rotate(180deg);
+    }
+
+    .path-panel{
+      display:none;
+      padding:0 18px 18px 18px;
+    }
+
+    .path-btn.is-open .path-panel{
+      display:block;
+    }
+
+    .case-box{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      background:#fffdfa;
+    }
+
+    .case-list{
+      padding-left:22px;
+      margin:12px 0 0 0;
+    }
+
+    .case-list li{
+      margin-bottom:10px;
+    }
+
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .reset-btn{
+      border:2px solid var(--brand);
+      background:#fff;
+      color:var(--brand);
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:700;
+    }
+
+    .reset-btn:hover{
+      background:var(--brand-light);
+    }
+
+    .dashboard-note{
+      background:#fcfaf6;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:14px;
+    }
+
+    @media (max-width: 900px){
+      .intro,
+      .button-grid{
+        grid-template-columns:1fr;
+      }
+
+      .brand-banner{
+        align-items:flex-start;
+      }
+
+      .brand-banner::after{
+        display:none;
+      }
+    }
+
+    @media (max-width: 620px){
+      .wrapper{
+        padding:16px;
+      }
+
+      .brand-banner{
+        flex-direction:column;
+        gap:12px;
+      }
+
+      .logo-mark{
+        width:68px;
+        height:68px;
+      }
+
+      .todo-head{
+        align-items:flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to activity</a>
+
+  <div class="wrapper">
+    <header class="card">
+      <div class="brand-banner" aria-label="Clover Cup Coffee brand header">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <!-- stem -->
+            <path d="M31 29 L31 18" stroke="#2F5A47" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- clover leaves -->
+            <path d="M31 16 C31 11, 24 10, 23 16 C23 21, 29 21, 31 18 Z" fill="#2F5A47"/>
+            <path d="M33 18 C35 21, 41 21, 41 16 C40 10, 33 11, 33 16 Z" fill="#2F5A47"/>
+            <path d="M31 20 C29 23, 23 23, 23 28 C24 34, 31 31, 31 26 Z" fill="#2F5A47"/>
+            <path d="M33 26 C33 31, 40 34, 41 28 C41 23, 35 23, 33 20 Z" fill="#2F5A47"/>
+            <!-- coffee cup -->
+            <path d="M18 31 H41 V35 C41 42 36 47 29.5 47 C23 47 18 42 18 35 Z" fill="#B97A4A" stroke="#7A573D" stroke-width="2"/>
+            <path d="M41 33 H45 C48 33 50 35 50 38 C50 41 48 43 45 43 H42" fill="none" stroke="#7A573D" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M16 49 H43" stroke="#7A573D" stroke-width="3" stroke-linecap="round"/>
+            <!-- coffee surface -->
+            <path d="M20 31 C24 29.5 35 29.5 39 31" stroke="#6B4329" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <p class="brand-name">Clover Cup Coffee</p>
+          <p class="brand-tag">Environmentally conscious brews, transparent pricing.</p>
+        </div>
+      </div>
+
+      <h1>One Company, Four HR Paths</h1>
+      <p>Explore how four HR paths could support one growing coffee company.</p>
+
+      <div class="intro">
+        <section aria-labelledby="overview-title">
+          <h2 id="overview-title">Company overview</h2>
+          <p>
+            <strong>Clover Cup Coffee</strong> is a fictional coffee company with busy cafés opening across the region.
+            Growth is exciting, but it has created people challenges:
+          </p>
+          <ul>
+            <li>hiring needs are growing fast</li>
+            <li>employees want more support and consistency</li>
+            <li>managers need help leading through change</li>
+            <li>policies are not always applied the same way</li>
+          </ul>
+        </section>
+
+        <section class="todo-side" aria-labelledby="todo-title">
+          <div class="todo-head">
+            <div class="todo-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3C8 3 5 6 5 10c0 6 7 11 7 11s7-5 7-11c0-4-3-7-7-7Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M8 12c4-1 7-4 8-8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h2 id="todo-title">What to do</h2>
+          </div>
+          <ol>
+            <li>Select an HR path in the dashboard.</li>
+            <li>Read the short case study that expands inside that card.</li>
+            <li>Use your course reflection space to decide which path feels most urgent and why.</li>
+          </ol>
+          <p class="small">Keyboard users: use Tab, then Enter or Space to open or close a section.</p>
+        </section>
+      </div>
+
+      <div class="progress" aria-label="Progress">
+        <h2 style="font-size:1.05rem;">Progress</h2>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText" class="small" aria-live="polite">You have explored 0 of 4 sections.</p>
+      </div>
+    </header>
+
+    <main id="main-content" class="layout">
+      <section class="card" aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title">HR Dashboard</h2>
+        <div class="dashboard-note small">Each section stays collapsed until clicked. Opening one section will close the others.</div>
+
+        <div class="button-grid">
+          <button
+            type="button"
+            class="path-btn"
+            data-key="strategic"
+            aria-expanded="false"
+            aria-controls="panel-strategic"
+          >
+            <div class="path-summary">
+              <div class="path-header">
+                <div>
+                  <div class="path-title">Strategic Partner</div>
+                  <div class="path-desc">Big-picture planning for people and growth.</div>
+                </div>
+                <span class="chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="path-meta">
+                <div class="tag">Talent Acquisition &amp; Development</div>
+                <span class="visited-text" id="mark-strategic" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="path-panel" id="panel-strategic">
+              <article class="case-box">
+                <h3>Strategic Partner</h3>
+                <p><strong>Topic:</strong> Talent Acquisition &amp; Development</p>
+                <ul class="case-list">
+                  <li><strong>Scenario:</strong> Clover Cup Coffee is opening new café locations, but some stores are short-staffed and managers are struggling to keep up with hiring.</li>
+                  <li><strong>Challenge:</strong> The company needs enough people with the right skills in the right places.</li>
+                  <li><strong>Focus:</strong> This HR path focuses on workforce planning, hiring, and developing talent for future growth.</li>
+                  <li><strong>HR action:</strong> HR could build a hiring plan, improve recruiting, and create training for shift leads who may become future store managers.</li>
+                  <li><strong>Why it matters:</strong> This helps the company grow without burning out current employees.</li>
+                </ul>
+              </article>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="path-btn"
+            data-key="champion"
+            aria-expanded="false"
+            aria-controls="panel-champion"
+          >
+            <div class="path-summary">
+              <div class="path-header">
+                <div>
+                  <div class="path-title">Employee Champion</div>
+                  <div class="path-desc">Support, fairness, and employee experience.</div>
+                </div>
+                <span class="chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="path-meta">
+                <div class="tag">Total Rewards</div>
+                <span class="visited-text" id="mark-champion" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="path-panel" id="panel-champion">
+              <article class="case-box">
+                <h3>Employee Champion</h3>
+                <p><strong>Topic:</strong> Total Rewards</p>
+                <ul class="case-list">
+                  <li><strong>Scenario:</strong> Some baristas say support feels uneven across stores. Employees also have questions about scheduling, benefits, and recognition.</li>
+                  <li><strong>Challenge:</strong> Employees want to feel valued, treated fairly, and supported.</li>
+                  <li><strong>Focus:</strong> This HR path focuses on employee experience and total rewards, including benefits, recognition, and workplace support.</li>
+                  <li><strong>HR action:</strong> HR could gather employee feedback, improve communication about benefits, and recommend more consistent recognition practices.</li>
+                  <li><strong>Why it matters:</strong> When employees feel supported, they are more likely to stay and do their best work.</li>
+                </ul>
+              </article>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="path-btn"
+            data-key="change"
+            aria-expanded="false"
+            aria-controls="panel-change"
+          >
+            <div class="path-summary">
+              <div class="path-header">
+                <div>
+                  <div class="path-title">Change Agent</div>
+                  <div class="path-desc">Helping people learn and adapt.</div>
+                </div>
+                <span class="chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="path-meta">
+                <div class="tag">Performance Management</div>
+                <span class="visited-text" id="mark-change" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="path-panel" id="panel-change">
+              <article class="case-box">
+                <h3>Change Agent</h3>
+                <p><strong>Topic:</strong> Performance Management</p>
+                <ul class="case-list">
+                  <li><strong>Scenario:</strong> Clover Cup Coffee started using a new check-in system for goals and feedback, but managers are using it very differently.</li>
+                  <li><strong>Challenge:</strong> Managers need help giving clear feedback and using the new process well.</li>
+                  <li><strong>Focus:</strong> This HR path focuses on training and helping people adapt to change.</li>
+                  <li><strong>HR action:</strong> HR could train managers on coaching, goal setting, and regular performance conversations.</li>
+                  <li><strong>Why it matters:</strong> This makes expectations clearer and helps employees improve over time.</li>
+                </ul>
+              </article>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="path-btn"
+            data-key="admin"
+            aria-expanded="false"
+            aria-controls="panel-admin"
+          >
+            <div class="path-summary">
+              <div class="path-header">
+                <div>
+                  <div class="path-title">Administrative Expert</div>
+                  <div class="path-desc">Policies, consistency, and compliance.</div>
+                </div>
+                <span class="chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="path-meta">
+                <div class="tag">Employment/Labor Law</div>
+                <span class="visited-text" id="mark-admin" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="path-panel" id="panel-admin">
+              <article class="case-box">
+                <h3>Administrative Expert</h3>
+                <p><strong>Topic:</strong> Employment/Labor Law</p>
+                <ul class="case-list">
+                  <li><strong>Scenario:</strong> Different stores are handling attendance, breaks, and documentation in different ways.</li>
+                  <li><strong>Challenge:</strong> The company needs consistency and compliance across locations.</li>
+                  <li><strong>Focus:</strong> This HR path focuses on policy, records, trust, and stable HR systems.</li>
+                  <li><strong>HR action:</strong> HR could review current practices, clarify policies, and train managers on consistent documentation.</li>
+                  <li><strong>Why it matters:</strong> This reduces confusion, supports fairness, and lowers legal risk.</li>
+                </ul>
+              </article>
+            </div>
+          </button>
+        </div>
+
+        <div class="controls">
+          <p id="unlockText" class="small" aria-live="polite">Explore all four sections to view each case study detail.</p>
+          <button type="button" class="reset-btn" id="resetBtn">Reset activity</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const visited = new Set();
+    const buttons = document.querySelectorAll(".path-btn");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const unlockText = document.getElementById("unlockText");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function closeAllPanels(){
+      buttons.forEach(button => {
+        button.classList.remove("is-open");
+        button.setAttribute("aria-expanded", "false");
+      });
+    }
+
+    function togglePanel(button){
+      const isOpen = button.classList.contains("is-open");
+
+      if(isOpen){
+        button.classList.remove("is-open");
+        button.setAttribute("aria-expanded", "false");
+      } else {
+        closeAllPanels();
+        button.classList.add("is-open");
+        button.setAttribute("aria-expanded", "true");
+        visited.add(button.dataset.key);
+      }
+
+      updateVisitedMarks();
+      updateProgress();
+
+      if(visited.size === 4){
+        unlockText.textContent = "You have explored all four HR paths. Use your course reflection space to decide which seems most urgent.";
+      } else {
+        unlockText.textContent = "Explore all four sections to view each case study detail.";
+      }
+    }
+
+    function updateProgress(){
+      const count = visited.size;
+      progressFill.style.width = (count / 4) * 100 + "%";
+      progressText.textContent = `You have explored ${count} of 4 sections.`;
+    }
+
+    function updateVisitedMarks(){
+      ["strategic","champion","change","admin"].forEach(key => {
+        const mark = document.getElementById(`mark-${key}`);
+        const button = document.querySelector(`[data-key="${key}"]`);
+        const seen = visited.has(key);
+
+        if(mark) mark.textContent = seen ? "Visited" : "";
+        if(button) button.classList.toggle("visited", seen);
+      });
+    }
+
+    function resetActivity(){
+      visited.clear();
+      closeAllPanels();
+
+      ["strategic","champion","change","admin"].forEach(key => {
+        const mark = document.getElementById(`mark-${key}`);
+        const button = document.querySelector(`[data-key="${key}"]`);
+        if(mark) mark.textContent = "";
+        if(button) button.classList.remove("visited");
+      });
+
+      unlockText.textContent = "Explore all four sections to view each case study detail.";
+      updateProgress();
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        togglePanel(button);
+      });
+    });
+
+    resetBtn.addEventListener("click", resetActivity);
+
+    updateProgress();
+  </script>
+</body>
+</html>
