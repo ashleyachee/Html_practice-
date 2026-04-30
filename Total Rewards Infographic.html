@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Types of Compensation</title>
+<style>
+  :root {
+    --navy: #07345c;
+    --blue: #c9def6;
+    --teal: #9fc9c9;
+    --pink: #eca0a0;
+    --bg: #f7f9fc;
+    --white: #ffffff;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  .wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+
+  .instructions {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 1rem;
+  }
+
+  .bubble-grid {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .bubble-button {
+    width: 155px;
+    height: 155px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .bubble-button.base { background: var(--blue); }
+  .bubble-button.variable { background: var(--teal); }
+  .bubble-button.incentive { background: var(--pink); }
+
+  .bubble-button:hover {
+    transform: scale(1.03);
+  }
+
+  .bubble-button:focus-visible {
+    outline: 4px solid #f5b642;
+    outline-offset: 6px;
+  }
+
+  .details {
+    margin-top: 24px;
+    padding: 20px;
+    background: #eef5fb;
+    border-left: 7px solid var(--navy);
+    border-radius: 12px;
+    min-height: 100px;
+  }
+
+  .details h3 {
+    margin: 0 0 8px;
+    font-size: 1.3rem;
+  }
+
+  .details p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 520px) {
+    .card {
+      padding: 18px;
+    }
+
+    .bubble-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bubble-button {
+      width: 145px;
+      height: 145px;
+      font-size: 1.1rem;
+    }
+  }
+</style>
+</head>
+
+<body>
+<main class="wrapper">
+  <section class="card" aria-labelledby="title">
+    <h2 id="title">Types of Compensation</h2>
+    <p class="instructions">Select each bubble to reveal more information.</p>
+
+    <div class="bubble-grid">
+      <button class="bubble-button base" type="button" onclick="showDetails('base')">
+        Base<br>Pay
+      </button>
+
+      <button class="bubble-button variable" type="button" onclick="showDetails('variable')">
+        Variable<br>Pay
+      </button>
+
+      <button class="bubble-button incentive" type="button" onclick="showDetails('incentive')">
+        Incentive<br>Pay
+      </button>
+    </div>
+
+    <div id="details" class="details" aria-live="polite">
+      <h3>Choose a compensation type</h3>
+      <p>Select a bubble above to learn what that type of compensation means.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  const content = {
+    base: {
+      title: "Base Pay",
+      text: "Base pay is the fixed amount an employee earns for regular work. It may be paid as an hourly wage or an annual salary and provides predictable income."
+    },
+    variable: {
+      title: "Variable Pay",
+      text: "Variable pay changes based on results, performance, or business conditions. Examples include bonuses, commission, and profit-sharing."
+    },
+    incentive: {
+      title: "Incentive Pay",
+      text: "Incentive pay rewards employees for achieving specific goals, such as productivity, sales, quality, or project completion."
+    }
+  };
+
+  function showDetails(type) {
+    const details = document.getElementById("details");
+    details.innerHTML = `
+      <h3>${content[type].title}</h3>
+      <p>${content[type].text}</p>
+    `;
+  }
+</script>
+</body>
+</html>
