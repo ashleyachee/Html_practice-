@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Cultural Web Interactive</title>
+  <style>
+    :root {
+      --card: #ffffff;
+      --ink: #1f2a44;
+      --muted: #5b6780;
+      --line: #d9e1ee;
+      --accent: #4666c9;
+      --accent-2: #7b5cc7;
+      --soft: #eef3ff;
+      --soft-2: #f5f1ff;
+      --shadow: 0 10px 28px rgba(31, 42, 68, 0.08);
+      --radius: 18px;
+      --focus: 3px solid #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 70ch;
+    }
+
+    .web-section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .web-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .web-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 68ch;
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .ghost-btn,
+    .bubble {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      border-radius: 999px;
+    }
+
+    .ghost-btn {
+      padding: 10px 14px;
+      min-height: 44px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .ghost-btn:hover,
+    .bubble:hover {
+      border-color: var(--accent);
+    }
+
+    .ghost-btn:focus-visible,
+    .bubble:focus-visible {
+      outline: var(--focus);
+      outline-offset: 3px;
+    }
+
+    .web-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .diagram {
+      position: relative;
+      min-height: 560px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(70, 102, 201, 0.08) 0 90px, transparent 91px),
+        radial-gradient(circle at center, rgba(123, 92, 199, 0.08) 0 200px, transparent 201px),
+        #ffffff;
+      border: 1px dashed #cdd7eb;
+      overflow: hidden;
+    }
+
+    .center-node {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 170px;
+      min-height: 170px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 14px 28px rgba(70, 102, 201, 0.24);
+      z-index: 1;
+    }
+
+    .center-node strong {
+      font-size: 1.25rem;
+    }
+
+    .bubble {
+      position: absolute;
+      width: 154px;
+      min-height: 60px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(31, 42, 68, 0.08);
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+      z-index: 2;
+    }
+
+    .bubble[aria-pressed="true"] {
+      background: var(--soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 12px 26px rgba(70, 102, 201, 0.18);
+    }
+
+    .bubble.pop {
+      animation: pulseClick 320ms ease;
+    }
+
+    @keyframes pulseClick {
+      0% { box-shadow: 0 10px 22px rgba(31, 42, 68, 0.08); }
+      50% { box-shadow: 0 0 0 6px rgba(70, 102, 201, 0.16), 0 12px 26px rgba(70, 102, 201, 0.18); }
+      100% { box-shadow: 0 10px 22px rgba(31, 42, 68, 0.08); }
+    }
+
+    .b-stories { top: 18px; left: 50%; transform: translateX(-50%); }
+    .b-symbols { top: 108px; right: 16px; }
+    .b-routines { bottom: 108px; right: 16px; }
+    .b-controls { bottom: 18px; left: 50%; transform: translateX(-50%); }
+    .b-structure { bottom: 108px; left: 16px; }
+    .b-power { top: 108px; left: 16px; }
+
+    .detail-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: white;
+      padding: 18px;
+      min-height: 560px;
+    }
+
+    .detail-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+    }
+
+    .detail-intro {
+      margin-top: 0;
+      color: var(--ink);
+    }
+
+    .detail-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 14px;
+      background: #fcfdff;
+    }
+
+    .detail-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .detail-box p {
+      margin: 0;
+    }
+
+    .interaction-note {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--soft), var(--soft-2));
+      border: 1px solid #d8ddf7;
+    }
+
+    .interaction-note h4 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .interaction-note p {
+      margin: 0;
+      color: var(--ink);
+    }
+
+    @media (max-width: 900px) {
+      .web-grid { grid-template-columns: 1fr; }
+      .detail-card { min-height: auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ghost-btn,
+      .bubble,
+      .bubble.pop {
+        transition: none;
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>The Cultural Web</h1>
+      <p>
+        Explore six parts of organizational culture. Select any bubble in the web to see a plain-language explanation.
+      </p>
+    </section>
+
+    <section class="web-section">
+      <div class="web-header">
+        <div>
+          <h2>Interactive cultural web</h2>
+          <p>
+            Click a bubble to explore how each element shapes culture.
+          </p>
+        </div>
+        <div class="toggle-row">
+          <button class="ghost-btn" id="resetBtn" type="button">Reset</button>
+        </div>
+      </div>
+
+      <div class="web-grid">
+        <div class="diagram" aria-label="Interactive cultural web diagram">
+          <div class="center-node">
+            <strong>Culture</strong>
+          </div>
+
+          <button class="bubble b-stories" type="button" data-key="stories" aria-pressed="false">Stories</button>
+          <button class="bubble b-symbols" type="button" data-key="symbols" aria-pressed="false">Symbols</button>
+          <button class="bubble b-routines" type="button" data-key="routines" aria-pressed="false">Rituals &amp; routines</button>
+          <button class="bubble b-controls" type="button" data-key="controls" aria-pressed="false">Controls</button>
+          <button class="bubble b-structure" type="button" data-key="structure" aria-pressed="false">Structure</button>
+          <button class="bubble b-power" type="button" data-key="power" aria-pressed="false">Power</button>
+        </div>
+
+        <div class="detail-card" aria-live="polite" aria-atomic="true">
+          <h3 id="detailTitle">Select a bubble</h3>
+          <p class="detail-intro" id="detailText">Click a part of the web to learn more.</p>
+
+          <div class="detail-box">
+            <strong>Definition</strong>
+            <p id="detailDefinition">Each part of the cultural web highlights one visible or invisible influence on how people behave in an organization.</p>
+          </div>
+
+          <div class="detail-box">
+            <strong>Why it matters</strong>
+            <p id="detailWhy">These elements shape expectations, reinforce values, and affect how people experience the workplace.</p>
+          </div>
+
+          <div class="detail-box">
+            <strong>Example</strong>
+            <p id="detailExample">Select a bubble to see a simple workplace example.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="interaction-note">
+        <h4>How the elements work together</h4>
+        <p>
+          The cultural web works as a system, not as six separate parts. Stories, symbols, routines, power, structure, and controls all support and reinforce one another. For example, people with influence may shape routines, routines may strengthen certain stories, and controls may reward the same behaviors that the structure and symbols already signal as important. Looking at all of the elements together helps students see how culture is created, maintained, and sometimes changed.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const content = {
+      stories: {
+        title: 'Stories',
+        text: 'Stories help explain what people remember, repeat, and learn from inside an organization.',
+        definition: 'Stories are the shared accounts people tell about past events, successes, failures, heroes, or turning points. They often get passed from experienced employees to newer ones and help define what the organization seems to admire or criticize.',
+        why: 'Stories matter because they teach culture informally. Even when no rule is written down, repeated stories can show what kinds of behavior are respected, what mistakes are remembered, and what people are expected to value.',
+        example: 'If employees constantly hear about the person who stayed late every night to rescue a project, they may learn that long hours and personal sacrifice are seen as signs of commitment.'
+      },
+      symbols: {
+        title: 'Symbols',
+        text: 'Symbols show the visible side of culture and shape how people interpret the organization.',
+        definition: 'Symbols include logos, workspace design, titles, dress expectations, status markers, and even the language people use. These visible signals can communicate whether the culture feels formal, collaborative, exclusive, innovative, or hierarchical.',
+        why: 'Symbols matter because they create quick impressions about belonging, professionalism, and power. They often tell people what is valued before anyone says it directly.',
+        example: 'If leaders work in large private offices while most employees are kept in crowded spaces, that symbol may reinforce hierarchy and distance between levels of the organization.'
+      },
+      routines: {
+        title: 'Rituals & routines',
+        text: 'Rituals and routines reveal what happens over and over again in everyday organizational life.',
+        definition: 'Rituals and routines are the repeated patterns that shape how people work, meet, solve problems, celebrate, and communicate. Because they happen so often, they can feel normal even when they send strong cultural messages.',
+        why: 'They matter because repetition turns behavior into expectation. Routines show what is normal, what gets rewarded, and whether people are encouraged to participate, speak up, collaborate, or stay quiet.',
+        example: 'If team meetings always begin with one manager doing all of the talking and there is no time for discussion, employees may learn that listening is valued more than contributing ideas.'
+      },
+      power: {
+        title: 'Power',
+        text: 'Power helps explain who truly influences decisions, priorities, and accepted ways of thinking.',
+        definition: 'Power structures describe where real influence sits in an organization. This may include formal authority, such as senior leadership, but it can also include informal influence held by respected individuals, long-time employees, or dominant groups.',
+        why: 'Power matters because culture is often shaped by the people with the strongest voice. Those individuals can reinforce fairness and inclusion, or they can maintain patterns that leave others unheard or excluded.',
+        example: 'A long-serving employee with no management title may still shape major decisions because colleagues look to them before making choices or sharing opinions.'
+      },
+      structure: {
+        title: 'Structure',
+        text: 'Structure shows how roles, reporting lines, and responsibilities are arranged.',
+        definition: 'Organizational structure includes hierarchy, accountability, team boundaries, and role clarity. It also includes informal lines of influence, such as who gets access to special opportunities or whose opinion carries extra weight even without a higher title.',
+        why: 'Structure matters because it affects access, communication, and fairness. A clear and supportive structure can help people work effectively, while an unclear or overly rigid one can create confusion, delay, and inequality.',
+        example: 'In a very layered organization, even small decisions may need several approvals, which can slow work and make lower-level employees feel that they have little voice.'
+      },
+      controls: {
+        title: 'Controls',
+        text: 'Controls show what an organization measures, monitors, rewards, or corrects.',
+        definition: 'Controls include performance measures, budgets, quality checks, approval systems, and reward structures. These systems help manage the organization, but they also send strong messages about what outcomes and behaviors matter most.',
+        why: 'Controls matter because people usually respond to what is measured and rewarded. If the control systems emphasize speed, profit, or individual output, employees often align their behavior with those signals.',
+        example: 'If a company says teamwork is important but only rewards individual performance, employees may compete rather than collaborate because the control system points them in that direction.'
+      }
+    };
+
+    const bubbles = document.querySelectorAll('.bubble');
+    const title = document.getElementById('detailTitle');
+    const text = document.getElementById('detailText');
+    const definition = document.getElementById('detailDefinition');
+    const why = document.getElementById('detailWhy');
+    const example = document.getElementById('detailExample');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function setActiveBubble(activeButton) {
+      bubbles.forEach((btn) => {
+        const isActive = btn === activeButton;
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    bubbles.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const data = content[btn.dataset.key];
+        if (!data) return;
+
+        setActiveBubble(btn);
+        btn.classList.remove('pop');
+        void btn.offsetWidth;
+        btn.classList.add('pop');
+
+        title.textContent = data.title;
+        text.textContent = data.text;
+        definition.textContent = data.definition;
+        why.textContent = data.why;
+        example.textContent = data.example;
+      });
+
+      btn.addEventListener('animationend', () => {
+        btn.classList.remove('pop');
+      });
+    });
+
+    resetBtn.addEventListener('click', () => {
+      bubbles.forEach((btn) => btn.setAttribute('aria-pressed', 'false'));
+      title.textContent = 'Select a bubble';
+      text.textContent = 'Click a part of the web to learn more.';
+      definition.textContent = 'Each part of the cultural web highlights one visible or invisible influence on how people behave in an organization.';
+      why.textContent = 'These elements shape expectations, reinforce values, and affect how people experience the workplace.';
+      example.textContent = 'Select a bubble to see a simple workplace example.';
+    });
+  </script>
+</body>
+</html>
