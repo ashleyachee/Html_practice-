@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Types of Change Sorting Activity</title>
+  <style>
+    :root {
+      --navy: #0b2d4d;
+      --blue: #0f77a5;
+      --light-blue: #e8f4fb;
+      --green: #2f7d32;
+      --orange: #ef7d00;
+      --purple: #5b4bb7;
+      --teal: #008c8c;
+      --gray: #f5f7fa;
+      --dark-gray: #333;
+      --border: #d9e2ec;
+      --correct: #dff3e4;
+      --incorrect: #fde2e2;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: var(--dark-gray);
+    }
+
+    .activity-wrapper {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .activity-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .activity-header h2 {
+      color: var(--navy);
+      font-size: 2rem;
+      margin: 0 0 8px;
+    }
+
+    .activity-header p {
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .instructions {
+      background: var(--light-blue);
+      border-left: 6px solid var(--blue);
+      padding: 14px 18px;
+      margin: 20px 0;
+      border-radius: 8px;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .scorebar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0 20px;
+      padding: 12px 14px;
+      background: var(--gray);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .scorebar strong {
+      color: var(--navy);
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      background: var(--blue);
+      color: white;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .scenario-card {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .scenario-card h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1.05rem;
+    }
+
+    .scenario-card p {
+      margin: 0 0 12px;
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .scenario-card select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+      background: #fff;
+    }
+
+    .scenario-card.correct {
+      border-color: #3a9d52;
+      background: var(--correct);
+    }
+
+    .scenario-card.incorrect {
+      border-color: #d9534f;
+      background: var(--incorrect);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .type-guide {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .type-box {
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+      min-height: 105px;
+    }
+
+    .type-box h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .type-box p {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .anticipatory { background: var(--green); }
+    .reactive { background: var(--blue); }
+    .crisis { background: var(--orange); }
+    .disruptive { background: var(--purple); }
+    .evolutionary { background: var(--teal); }
+
+    .final-message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #fff7e6;
+      border: 1px solid #ffd591;
+      display: none;
+      line-height: 1.45;
+    }
+
+    .final-message.show {
+      display: block;
+    }
+
+    @media (max-width: 650px) {
+      .activity-wrapper { padding: 16px; }
+      .activity-header h2 { font-size: 1.55rem; }
+      .scorebar { align-items: stretch; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="activity-wrapper">
+    <section class="activity-header">
+      <h2>Types of Change Sorting Activity</h2>
+      <p>Read each scenario and choose the type of change it best represents. Use the guide below if you need a reminder.</p>
+    </section>
+
+    <section class="instructions" aria-label="Instructions">
+      <strong>Instructions:</strong> For each card, select one type of change: anticipatory, reactive, crisis, disruptive, or evolutionary. When you are finished, select <strong>Check Answers</strong> to receive feedback.
+    </section>
+
+    <section class="type-guide" aria-label="Types of change guide">
+      <div class="type-box anticipatory">
+        <h4>Anticipatory Change</h4>
+        <p>Planned in advance based on trends, forecasts, or expected opportunities.</p>
+      </div>
+      <div class="type-box reactive">
+        <h4>Reactive Change</h4>
+        <p>Occurs after a problem, pressure, or performance issue has already appeared.</p>
+      </div>
+      <div class="type-box crisis">
+        <h4>Crisis Change</h4>
+        <p>Requires urgent action because a serious threat or emergency is unfolding.</p>
+      </div>
+      <div class="type-box disruptive">
+        <h4>Disruptive Change</h4>
+        <p>Challenges existing ways of working, often because of major innovation or market shifts.</p>
+      </div>
+      <div class="type-box evolutionary">
+        <h4>Evolutionary Change</h4>
+        <p>Gradual improvement over time through small adjustments and continuous learning.</p>
+      </div>
+    </section>
+
+    <section class="scorebar" aria-label="Score and controls">
+      <div><strong>Score:</strong> <span id="score">Not checked yet</span></div>
+      <div>
+        <button type="button" onclick="checkAnswers()">Check Answers</button>
+        <button type="button" onclick="resetActivity()" style="background:#66788a;">Reset</button>
+      </div>
+    </section>
+
+    <section class="cards-grid" id="cardsGrid" aria-label="Scenario cards"></section>
+
+    <section class="final-message" id="finalMessage" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const scenarios = [
+      {
+        title: "Scenario 1: Preparing for New Regulations",
+        text: "A financial services company learns that new federal reporting requirements will take effect next year. Leaders begin updating systems and training employees before the rules are required.",
+        answer: "anticipatory",
+        feedback: "This is anticipatory change because leaders are preparing in advance for an expected external requirement."
+      },
+      {
+        title: "Scenario 2: Responding to Customer Complaints",
+        text: "A retail company notices a sharp increase in customer complaints about delayed shipping. Leaders revise workflows and add support staff after the problem affects customer satisfaction.",
+        answer: "reactive",
+        feedback: "This is reactive change because leaders respond after a problem has already emerged."
+      },
+      {
+        title: "Scenario 3: Cybersecurity Breach",
+        text: "A hospital experiences a cybersecurity attack that disrupts patient scheduling systems. Leaders immediately activate emergency protocols and communicate urgent next steps to staff.",
+        answer: "crisis",
+        feedback: "This is crisis change because leaders must act quickly during an urgent and high-risk situation."
+      },
+      {
+        title: "Scenario 4: Industry Shift from AI",
+        text: "A software company sees that AI tools are changing customer expectations and making some existing products less competitive. Leaders rethink their product strategy and invest in new capabilities.",
+        answer: "disruptive",
+        feedback: "This is disruptive change because a major innovation is challenging existing products, processes, and strategy."
+      },
+      {
+        title: "Scenario 5: Continuous Process Improvement",
+        text: "A manufacturing team holds monthly reviews to identify small ways to reduce waste, improve safety, and increase efficiency. Leaders support these gradual improvements over time.",
+        answer: "evolutionary",
+        feedback: "This is evolutionary change because improvements are gradual, ongoing, and controlled."
+      },
+      {
+        title: "Scenario 6: Planning for Workforce Trends",
+        text: "A university predicts that more students will want flexible online options. Leaders begin redesigning programs before enrollment patterns shift significantly.",
+        answer: "anticipatory",
+        feedback: "This is anticipatory change because leaders are acting early based on projected future needs."
+      }
+    ];
+
+    const options = [
+      { value: "", label: "Select a type of change" },
+      { value: "anticipatory", label: "Anticipatory Change" },
+      { value: "reactive", label: "Reactive Change" },
+      { value: "crisis", label: "Crisis Change" },
+      { value: "disruptive", label: "Disruptive Change" },
+      { value: "evolutionary", label: "Evolutionary Change" }
+    ];
+
+    function buildCards() {
+      const grid = document.getElementById("cardsGrid");
+      grid.innerHTML = "";
+
+      scenarios.forEach((scenario, index) => {
+        const card = document.createElement("article");
+        card.className = "scenario-card";
+        card.id = `card-${index}`;
+
+        const selectOptions = options.map(option =>
+          `<option value="${option.value}">${option.label}</option>`
+        ).join("");
+
+        card.innerHTML = `
+          <div>
+            <h3>${scenario.title}</h3>
+            <p>${scenario.text}</p>
+          </div>
+          <div>
+            <label for="select-${index}" class="sr-only">Choose change type</label>
+            <select id="select-${index}" aria-label="Choose change type for ${scenario.title}">
+              ${selectOptions}
+            </select>
+            <div class="feedback" id="feedback-${index}"></div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function checkAnswers() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      scenarios.forEach((scenario, index) => {
+        const card = document.getElementById(`card-${index}`);
+        const select = document.getElementById(`select-${index}`);
+        const feedback = document.getElementById(`feedback-${index}`);
+        const selected = select.value;
+
+        card.classList.remove("correct", "incorrect");
+        feedback.classList.add("show");
+
+        if (!selected) {
+          unanswered += 1;
+          card.classList.add("incorrect");
+          feedback.innerHTML = `<strong>Try this one:</strong> Choose a type of change before checking your answer.`;
+          return;
+        }
+
+        if (selected === scenario.answer) {
+          correctCount += 1;
+          card.classList.add("correct");
+          feedback.innerHTML = `<strong>Correct.</strong> ${scenario.feedback}`;
+        } else {
+          card.classList.add("incorrect");
+          const correctLabel = options.find(option => option.value === scenario.answer).label;
+          feedback.innerHTML = `<strong>Not quite.</strong> The best answer is <strong>${correctLabel}</strong>. ${scenario.feedback}`;
+        }
+      });
+
+      document.getElementById("score").textContent = `${correctCount} out of ${scenarios.length}`;
+
+      const finalMessage = document.getElementById("finalMessage");
+      finalMessage.classList.add("show");
+
+      if (unanswered > 0) {
+        finalMessage.innerHTML = `You left ${unanswered} card${unanswered === 1 ? "" : "s"} unanswered. Review the feedback, make a selection for each card, and check your answers again.`;
+      } else if (correctCount === scenarios.length) {
+        finalMessage.innerHTML = "Great work. You correctly matched each scenario to the type of change. This shows that you can distinguish how leaders may need to respond in different change situations.";
+      } else {
+        finalMessage.innerHTML = "Review the cards marked in red. Pay close attention to whether the change was planned in advance, triggered by a problem, caused by an emergency, driven by disruption, or developed gradually over time.";
+      }
+    }
+
+    function resetActivity() {
+      scenarios.forEach((scenario, index) => {
+        const card = document.getElementById(`card-${index}`);
+        const select = document.getElementById(`select-${index}`);
+        const feedback = document.getElementById(`feedback-${index}`);
+
+        select.value = "";
+        card.classList.remove("correct", "incorrect");
+        feedback.classList.remove("show");
+        feedback.innerHTML = "";
+      });
+
+      document.getElementById("score").textContent = "Not checked yet";
+      document.getElementById("finalMessage").classList.remove("show");
+      document.getElementById("finalMessage").innerHTML = "";
+    }
+
+    buildCards();
+  </script>
+</body>
+</html>
