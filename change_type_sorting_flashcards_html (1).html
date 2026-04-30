@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Types of Change Sorting Activity</title>
+  <style>
+    :root {
+      --navy: #0b2d4d; --blue: #0f77a5; --light-blue: #e8f4fb;
+      --green: #2f7d32; --orange: #ef7d00; --purple: #5b4bb7; --teal: #008c8c;
+      --gray: #f5f7fa; --dark-gray: #333; --border: #d9e2ec;
+      --correct: #dff3e4; --incorrect: #fde2e2;
+    }
+    body { margin:0; font-family: Arial, Helvetica, sans-serif; color: var(--dark-gray); }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 18px; }
+    h2 { color: var(--navy); margin: 0 0 6px; }
+    .sub { margin: 0 0 12px; }
+
+    .guide { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 14px; }
+    .box { border-radius: 8px; padding: 8px; color: #fff; font-size: 0.85rem; }
+    .anticipatory{background:var(--green)} .reactive{background:var(--blue)}
+    .crisis{background:var(--orange)} .disruptive{background:var(--purple)} .evolutionary{background:var(--teal)}
+
+    .card { border: 2px solid var(--border); border-radius: 12px; padding: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .card.correct{ border-color:#3a9d52; background: var(--correct);} 
+    .card.incorrect{ border-color:#d9534f; background: var(--incorrect);} 
+
+    .title { color: var(--navy); margin: 0 0 6px; font-weight: 700; }
+    .text { margin: 0 0 10px; line-height: 1.45; }
+    select { width:100%; padding:10px; border-radius:8px; border:1px solid var(--border);} 
+
+    .controls { display:flex; gap:8px; justify-content: space-between; align-items:center; margin-top: 10px; }
+    button { border:none; border-radius:8px; padding:10px 12px; background: var(--blue); color:#fff; font-weight:700; cursor:pointer; }
+    .secondary{ background:#66788a; }
+
+    .meta { display:flex; justify-content: space-between; margin: 10px 0; font-size: 0.9rem; }
+    .feedback { margin-top:8px; font-size:0.9rem; display:none; }
+    .feedback.show{ display:block; }
+
+    @media (max-width:600px){ .guide{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h2>Types of Change Sorting</h2>
+    <p class="sub">Answer one scenario at a time, then select Next.</p>
+
+    <div class="guide">
+      <div class="box anticipatory">Anticipatory: planned in advance</div>
+      <div class="box reactive">Reactive: after a problem appears</div>
+      <div class="box crisis">Crisis: urgent, high-risk</div>
+      <div class="box disruptive">Disruptive: major shift or innovation</div>
+      <div class="box evolutionary">Evolutionary: gradual improvement</div>
+    </div>
+
+    <div class="meta">
+      <div>Progress: <span id="progress"></span></div>
+      <div>Score: <span id="score">0</span></div>
+    </div>
+
+    <section id="card" class="card" aria-live="polite"></section>
+
+    <div class="controls">
+      <button class="secondary" onclick="prev()">Back</button>
+      <div>
+        <button onclick="check()">Check</button>
+        <button onclick="next()">Next</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const scenarios = [
+      { title: "Preparing for New Regulations", text: "A financial services company learns that new federal reporting requirements will take effect next year. Leaders begin updating systems and training employees well before the deadline.", answer: "anticipatory", feedback: "Prepared in advance for expected change." },
+      { title: "Customer Complaints Rise", text: "A retail company notices a sharp increase in customer complaints about delayed shipping. Leaders respond by revising workflows and adding support staff to address the issue.", answer: "reactive", feedback: "Responds after a problem appears." },
+      { title: "Cybersecurity Breach", text: "A hospital experiences a cybersecurity attack that disrupts patient scheduling and records systems. Leaders immediately activate emergency protocols and communicate urgent next steps to staff.", answer: "crisis", feedback: "Urgent, high-risk response." },
+      { title: "AI Shifts Market", text: "A software company sees that AI tools are rapidly changing customer expectations and making some products less competitive. Leaders decide to redesign their product strategy and invest in new capabilities.", answer: "disruptive", feedback: "Major shift requires rethinking strategy." },
+      { title: "Continuous Improvement", text: "A manufacturing team holds monthly reviews to identify ways to reduce waste and improve efficiency. Leaders support these small, ongoing improvements over time.", answer: "evolutionary", feedback: "Gradual ongoing change." },
+      { title: "Future Enrollment Trends", text: "A university predicts that more students will want flexible online learning options in the coming years. Leaders begin redesigning programs before enrollment patterns shift significantly.", answer: "anticipatory", feedback: "Acts early based on forecasts." }
+    ];
+
+    const options = ["", "anticipatory", "reactive", "crisis", "disruptive", "evolutionary"];
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+    }
+
+    shuffle(scenarios);
+
+    let index = 0;
+    let score = 0;
+    const answers = new Array(scenarios.length).fill(null);
+
+    function render(){
+      const s = scenarios[index];
+      const el = document.getElementById('card');
+      const selected = answers[index] || "";
+
+      el.classList.remove('correct','incorrect');
+
+      el.innerHTML = `
+        <div class="title">Scenario ${index+1}</div>
+        <div class="text">${s.text}</div>
+        <select id="sel">
+          <option value="">Select a type</option>
+          <option value="anticipatory" ${selected==='anticipatory'?'selected':''}>Anticipatory</option>
+          <option value="reactive" ${selected==='reactive'?'selected':''}>Reactive</option>
+          <option value="crisis" ${selected==='crisis'?'selected':''}>Crisis</option>
+          <option value="disruptive" ${selected==='disruptive'?'selected':''}>Disruptive</option>
+          <option value="evolutionary" ${selected==='evolutionary'?'selected':''}>Evolutionary</option>
+        </select>
+        <div id="fb" class="feedback"></div>
+      `;
+
+      document.getElementById('progress').textContent = `${index+1} of ${scenarios.length}`;
+      document.getElementById('score').textContent = score;
+    }
+
+    function check(){
+      const sel = document.getElementById('sel').value;
+      const s = scenarios[index];
+      const fb = document.getElementById('fb');
+      const el = document.getElementById('card');
+
+      if(!sel){ fb.textContent = 'Select an answer first.'; fb.classList.add('show'); return; }
+
+      answers[index] = sel;
+      fb.classList.add('show');
+
+      if(sel === s.answer){
+        el.classList.add('correct');
+        fb.innerHTML = `<strong>Correct.</strong> ${s.feedback}`;
+        if(!s._counted){ score++; s._counted=true; }
+      } else {
+        el.classList.add('incorrect');
+        fb.innerHTML = `<strong>Not quite.</strong> Correct answer: <strong>${s.answer}</strong>. ${s.feedback}`;
+      }
+
+      document.getElementById('score').textContent = score;
+    }
+
+    function next(){ if(index < scenarios.length-1){ index++; render(); } }
+    function prev(){ if(index > 0){ index--; render(); } }
+
+    render();
+  </script>
+</body>
+</html>
