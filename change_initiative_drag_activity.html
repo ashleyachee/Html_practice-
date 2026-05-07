@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choosing a Change Model Activity</title>
+  <style>
+    :root {
+      --blue: #123c69;
+      --blue-light: #eaf2fb;
+      --green: #3f6f3a;
+      --green-light: #edf6ec;
+      --gray: #f7f9fb;
+      --text: #1f2933;
+      --border: #c8d3df;
+      --correct: #1f7a3f;
+      --incorrect: #b42318;
+      --focus: #ffbf47;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: #ffffff;
+      line-height: 1.5;
+    }
+
+    .activity {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      background: var(--blue-light);
+      border-left: 8px solid var(--blue);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 1.6rem;
+    }
+
+    h2, h3 { margin-top: 0; }
+
+    .instructions { margin: 0; }
+
+    .tip {
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .bank, .models {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--gray);
+      padding: 16px;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-left: 8px solid var(--blue);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: grab;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .card:focus, .dropzone:focus, button:focus {
+      outline: 4px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .card.selected {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+
+    .card.correct {
+      border-color: var(--correct);
+      background: #f0fff4;
+    }
+
+    .card.incorrect {
+      border-color: var(--incorrect);
+      background: #fff5f5;
+    }
+
+    .dropzones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .dropzone {
+      background: #ffffff;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 250px;
+    }
+
+    .dropzone[data-model="lewin"] { border-color: var(--blue); }
+    .dropzone[data-model="kotter"] { border-color: var(--green); }
+    .dropzone[data-model="adkar"] { border-color: #5a4d8f; }
+
+    .dropzone h3 {
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+
+    .dropzone p {
+      font-size: 0.92rem;
+      margin: 0 0 12px;
+    }
+
+    .placed {
+      display: grid;
+      gap: 10px;
+      min-height: 120px;
+    }
+
+    .controls {
+      margin: 18px 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+
+    .primary { background: var(--blue); color: #ffffff; }
+    .secondary { background: #e5e7eb; color: #111827; }
+
+    .feedback {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      min-height: 48px;
+    }
+
+    .explanations {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--green-light);
+      border: 1px solid #b9d8b7;
+    }
+
+    .explanations.show { display: block; }
+
+    @media (min-width: 900px) {
+      .workspace {
+        grid-template-columns: 0.9fr 1.4fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="activity">
+    <section class="header" aria-labelledby="activity-title">
+      <h1 id="activity-title">Choosing the Best Change Model</h1>
+      <p class="instructions">Drag each scenario to the change model that would be the best fit: Lewin, Kotter, or ADKAR.</p>
+      <p class="tip"><strong>Tip:</strong> You can also click a scenario, then click a model box to place it.</p>
+    </section>
+
+    <div class="controls">
+      <button class="primary" type="button" id="checkBtn">Check Answers</button>
+      <button class="secondary" type="button" id="resetBtn">Reset</button>
+    </div>
+
+    <section class="workspace" aria-label="Change model sorting activity">
+      <section class="bank" aria-labelledby="scenario-heading">
+        <h2 id="scenario-heading">Scenarios</h2>
+        <div class="cards" id="cardBank">
+          <div class="card" draggable="true" tabindex="0" data-answer="lewin" id="card1">
+            A team is moving from an old workflow to a new standardized process.
+          </div>
+          <div class="card" draggable="true" tabindex="0" data-answer="kotter" id="card2">
+            An organization-wide transformation requires urgency, communication, and visible short-term wins.
+          </div>
+          <div class="card" draggable="true" tabindex="0" data-answer="adkar" id="card3">
+            Employees adopting new software need training, practice, and reinforcement.
+          </div>
+          <div class="card" draggable="true" tabindex="0" data-answer="kotter" id="card4">
+            Leaders want to create a shared vision and change organizational culture.
+          </div>
+          <div class="card" draggable="true" tabindex="0" data-answer="adkar" id="card5">
+            Employees understand the change but still need motivation to adopt the new behavior.
+          </div>
+          <div class="card" draggable="true" tabindex="0" data-answer="lewin" id="card6">
+            A company wants a simple framework to help employees unlearn old habits and stabilize new routines.
+          </div>
+        </div>
+      </section>
+
+      <section class="models" aria-labelledby="model-heading">
+        <h2 id="model-heading">Change Models</h2>
+        <div class="dropzones">
+          <section class="dropzone" tabindex="0" data-model="lewin" aria-label="Lewin drop zone">
+            <h3>Lewin</h3>
+            <p>Best for clear transitions from a current state to a new stable state.</p>
+            <div class="placed"></div>
+          </section>
+
+          <section class="dropzone" tabindex="0" data-model="kotter" aria-label="Kotter drop zone">
+            <h3>Kotter</h3>
+            <p>Best for large-scale change requiring urgency, vision, communication, and momentum.</p>
+            <div class="placed"></div>
+          </section>
+
+          <section class="dropzone" tabindex="0" data-model="adkar" aria-label="ADKAR drop zone">
+            <h3>ADKAR</h3>
+            <p>Best for individual adoption, readiness, training, ability, and reinforcement.</p>
+            <div class="placed"></div>
+          </section>
+        </div>
+      </section>
+    </section>
+
+    <div id="feedback" class="feedback" role="status" aria-live="polite">Place each scenario under a model, then choose <strong>Check Answers</strong>.</div>
+
+    <section class="explanations" id="explanations">
+      <h2>Answer Explanations</h2>
+      <p><strong>Lewin:</strong> Use when the change has a clear current state, transition, and future state that needs to be stabilized.</p>
+      <p><strong>Kotter:</strong> Use when the change is large, complex, and requires urgency, leadership alignment, communication, and momentum.</p>
+      <p><strong>ADKAR:</strong> Use when success depends on individuals adopting new behaviors through awareness, desire, knowledge, ability, and reinforcement.</p>
+    </section>
+  </main>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const dropzones = Array.from(document.querySelectorAll('.dropzone'));
+    const bank = document.getElementById('cardBank');
+    const feedback = document.getElementById('feedback');
+    const explanations = document.getElementById('explanations');
+    let draggedCard = null;
+    let selectedCard = null;
+
+    cards.forEach(card => {
+      card.addEventListener('dragstart', event => {
+        draggedCard = card;
+        event.dataTransfer.setData('text/plain', card.id);
+      });
+
+      card.addEventListener('dragend', () => {
+        draggedCard = null;
+      });
+
+      card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('selected'));
+        selectedCard = card;
+        card.classList.add('selected');
+        feedback.textContent = 'Scenario selected. Now click the model box where it belongs.';
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener('dragover', event => event.preventDefault());
+
+      zone.addEventListener('drop', event => {
+        event.preventDefault();
+        const id = event.dataTransfer.getData('text/plain');
+        const card = document.getElementById(id) || draggedCard;
+        if (card) placeCard(card, zone);
+      });
+
+      zone.addEventListener('click', () => {
+        if (selectedCard) {
+          placeCard(selectedCard, zone);
+          selectedCard.classList.remove('selected');
+          selectedCard = null;
+        }
+      });
+    });
+
+    function placeCard(card, zone) {
+      card.classList.remove('correct', 'incorrect', 'selected');
+      zone.querySelector('.placed').appendChild(card);
+      feedback.textContent = 'Scenario placed. Continue sorting or check your answers.';
+    }
+
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      let correct = 0;
+      let placed = 0;
+
+      cards.forEach(card => {
+        card.classList.remove('correct', 'incorrect');
+        const zone = card.closest('.dropzone');
+        if (!zone) return;
+        placed++;
+        if (zone.dataset.model === card.dataset.answer) {
+          correct++;
+          card.classList.add('correct');
+        } else {
+          card.classList.add('incorrect');
+        }
+      });
+
+      feedback.innerHTML = 'You placed <strong>' + correct + ' of ' + cards.length + '</strong> scenarios correctly.';
+      if (placed < cards.length) {
+        feedback.innerHTML += ' Some scenarios are still in the scenario bank.';
+      } else if (correct === cards.length) {
+        feedback.innerHTML += ' Great work!';
+      } else {
+        feedback.innerHTML += ' Review the highlighted cards and try again.';
+      }
+      explanations.classList.add('show');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      cards.forEach(card => {
+        card.classList.remove('correct', 'incorrect', 'selected');
+        bank.appendChild(card);
+      });
+      selectedCard = null;
+      explanations.classList.remove('show');
+      feedback.innerHTML = 'Activity reset. Place each scenario under a model, then choose <strong>Check Answers</strong>.';
+    });
+  </script>
+</body>
+</html>
