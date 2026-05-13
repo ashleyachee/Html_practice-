@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leadership Communication During Change</title>
+  <style>
+    :root {
+      --navy: #0b2d4d;
+      --blue: #0f77a5;
+      --green: #2f7d32;
+      --purple: #5b3f92;
+      --orange: #ef7d00;
+      --red: #c0392b;
+      --teal: #168c9c;
+      --light-blue: #e8f4fb;
+      --light-green: #e8f5e9;
+      --light-purple: #f3effa;
+      --light-orange: #fff3e4;
+      --light-red: #fdecea;
+      --light-teal: #e8f8fa;
+      --border: #d9e2ec;
+      --text: #263238;
+      --muted: #5f6b76;
+      --gray: #f6f8fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .activity {
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+    }
+
+    h2 {
+      color: var(--navy);
+      text-align: center;
+      margin: 0 0 8px;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+    }
+
+    .intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 18px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .instruction {
+      background: var(--light-blue);
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .leader-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .leader-btn {
+      border: 2px solid var(--border);
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 10px;
+      cursor: pointer;
+      text-align: center;
+      color: var(--text);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      min-height: 150px;
+    }
+
+    .leader-btn:hover,
+    .leader-btn:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      outline: none;
+    }
+
+    .leader-btn.active {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(11, 45, 77, 0.14);
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.9rem;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .transparent .avatar { background: var(--green); }
+    .silent .avatar { background: var(--red); }
+    .inconsistent .avatar { background: var(--orange); }
+    .empathetic .avatar { background: var(--teal); }
+
+    .leader-btn h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .leader-btn p {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .result-card {
+      display: none;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: var(--gray);
+      padding: 18px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .result-card.show { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .result-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.7rem;
+      flex-shrink: 0;
+    }
+
+    .result-title h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.25rem;
+    }
+
+    .result-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .effects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .effect-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .effect-label {
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .meter {
+      height: 10px;
+      background: #edf1f5;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .effect-note {
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .detail-box {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 12px;
+      line-height: 1.45;
+    }
+
+    .detail-box strong {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+
+    .reflection {
+      margin-top: 16px;
+      background: #fff;
+      border-left: 6px solid var(--purple);
+      border-radius: 12px;
+      padding: 12px 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 850px) {
+      .leader-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .effects,
+      .details {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .wrap { padding: 12px; }
+      .activity { padding: 14px; }
+      .leader-grid { grid-template-columns: 1fr; }
+      .leader-btn { min-height: auto; }
+      .result-header { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="activity" aria-labelledby="activityTitle">
+      <h2 id="activityTitle">Leadership Communication During Change</h2>
+      <p class="intro">Different leadership communication behaviors can shape how employees experience change. Select each leadership style to see its likely effect on trust, clarity, and commitment.</p>
+
+      <div class="instruction">
+        <strong>Activity:</strong> Click each communication style. As you review the effects, consider which behaviors help employees understand the change and stay engaged.
+      </div>
+
+      <div class="leader-grid" role="list" aria-label="Leadership communication styles">
+        <button class="leader-btn transparent" type="button" onclick="showStyle('transparent', this)" role="listitem">
+          <div class="avatar" aria-hidden="true">✓</div>
+          <h3>Transparent Communicator</h3>
+          <p>Shares what is known, explains what is uncertain, and provides honest updates.</p>
+        </button>
+
+        <button class="leader-btn silent" type="button" onclick="showStyle('silent', this)" role="listitem">
+          <div class="avatar" aria-hidden="true">…</div>
+          <h3>Silent Leader</h3>
+          <p>Waits too long to communicate or avoids addressing difficult questions.</p>
+        </button>
+
+        <button class="leader-btn inconsistent" type="button" onclick="showStyle('inconsistent', this)" role="listitem">
+          <div class="avatar" aria-hidden="true">?</div>
+          <h3>Inconsistent Messenger</h3>
+          <p>Sends mixed signals or communicates different messages to different groups.</p>
+        </button>
+
+        <button class="leader-btn empathetic" type="button" onclick="showStyle('empathetic', this)" role="listitem">
+          <div class="avatar" aria-hidden="true">♥</div>
+          <h3>Empathetic Leader</h3>
+          <p>Listens to concerns, acknowledges emotions, and connects change to people’s needs.</p>
+        </button>
+      </div>
+
+      <div id="resultCard" class="result-card" aria-live="polite"></div>
+
+      <div class="reflection">
+        <strong>Reflection:</strong> Effective change leaders do more than announce decisions. They build understanding, reduce uncertainty, and create trust through visible, consistent, and responsive communication.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const styles = {
+      transparent: {
+        title: "Transparent Communicator",
+        subtitle: "Creates trust by being honest and timely.",
+        icon: "✓",
+        color: "#2f7d32",
+        trust: 90,
+        clarity: 85,
+        commitment: 80,
+        trustNote: "Employees are more likely to trust leaders who communicate openly.",
+        clarityNote: "Clear explanations reduce rumors and confusion.",
+        commitmentNote: "People are more willing to support change when they understand it.",
+        likelyReaction: "Employees may still have concerns, but they are more likely to feel informed and respected.",
+        leadershipMove: "Share what is known, explain what is still uncertain, and provide regular updates as information changes."
+      },
+      silent: {
+        title: "Silent Leader",
+        subtitle: "Creates uncertainty by leaving information gaps.",
+        icon: "…",
+        color: "#c0392b",
+        trust: 25,
+        clarity: 20,
+        commitment: 30,
+        trustNote: "Silence can make employees question whether leaders are hiding information.",
+        clarityNote: "Employees may rely on rumors when official communication is missing.",
+        commitmentNote: "People are less likely to commit when they do not understand what is happening.",
+        likelyReaction: "Employees may feel anxious, confused, or resistant because they are left to fill in the blanks.",
+        leadershipMove: "Communicate early, even if every detail is not finalized. Acknowledge uncertainty rather than avoiding it."
+      },
+      inconsistent: {
+        title: "Inconsistent Messenger",
+        subtitle: "Creates confusion through mixed messages.",
+        icon: "?",
+        color: "#ef7d00",
+        trust: 40,
+        clarity: 30,
+        commitment: 35,
+        trustNote: "Conflicting messages can weaken confidence in leadership.",
+        clarityNote: "Employees may not know which message to believe or follow.",
+        commitmentNote: "Mixed signals make it harder for employees to align around the change.",
+        likelyReaction: "Employees may delay action, interpret the change differently, or question whether leaders are aligned.",
+        leadershipMove: "Align leaders on key messages before communicating broadly. Use shared talking points and consistent updates."
+      },
+      empathetic: {
+        title: "Empathetic Leader",
+        subtitle: "Builds commitment by listening and responding.",
+        icon: "♥",
+        color: "#168c9c",
+        trust: 85,
+        clarity: 75,
+        commitment: 88,
+        trustNote: "Employees are more likely to trust leaders who acknowledge real concerns.",
+        clarityNote: "Dialogue helps leaders clarify misunderstandings as they arise.",
+        commitmentNote: "People are more likely to engage when they feel heard and supported.",
+        likelyReaction: "Employees may feel more comfortable asking questions, sharing concerns, and participating in the change.",
+        leadershipMove: "Create opportunities for dialogue, listen actively, and respond with specific support or follow-up actions."
+      }
+    };
+
+    function showStyle(styleKey, button) {
+      const data = styles[styleKey];
+      const resultCard = document.getElementById('resultCard');
+
+      document.querySelectorAll('.leader-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      resultCard.className = 'result-card show';
+      resultCard.innerHTML = `
+        <div class="result-header">
+          <div class="result-icon" style="background:${data.color};" aria-hidden="true">${data.icon}</div>
+          <div class="result-title">
+            <h3>${data.title}</h3>
+            <p>${data.subtitle}</p>
+          </div>
+        </div>
+
+        <div class="effects" aria-label="Likely effects of this communication style">
+          <div class="effect-box">
+            <div class="effect-label">Trust</div>
+            <div class="meter"><div class="meter-fill" style="width:${data.trust}%; background:${data.color};"></div></div>
+            <div class="effect-note">${data.trustNote}</div>
+          </div>
+
+          <div class="effect-box">
+            <div class="effect-label">Clarity</div>
+            <div class="meter"><div class="meter-fill" style="width:${data.clarity}%; background:${data.color};"></div></div>
+            <div class="effect-note">${data.clarityNote}</div>
+          </div>
+
+          <div class="effect-box">
+            <div class="effect-label">Commitment</div>
+            <div class="meter"><div class="meter-fill" style="width:${data.commitment}%; background:${data.color};"></div></div>
+            <div class="effect-note">${data.commitmentNote}</div>
+          </div>
+        </div>
+
+        <div class="details">
+          <div class="detail-box">
+            <strong>Likely employee reaction</strong>
+            ${data.likelyReaction}
+          </div>
+          <div class="detail-box">
+            <strong>Better leadership move</strong>
+            ${data.leadershipMove}
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
