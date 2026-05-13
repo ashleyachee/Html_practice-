@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common Organizational Barriers to Change</title>
+  <style>
+    :root {
+      --navy: #0b2d4d;
+      --blue: #0f77a5;
+      --green: #2f7d32;
+      --orange: #ef7d00;
+      --purple: #5b3f92;
+      --teal: #168c9c;
+      --gold: #d99a00;
+      --light-blue: #e8f4fb;
+      --light-green: #e8f5e9;
+      --light-orange: #fff3e4;
+      --light-purple: #f3effa;
+      --light-teal: #e8f8fa;
+      --light-gold: #fff7dc;
+      --gray: #f6f8fb;
+      --border: #d9e2ec;
+      --text: #263238;
+      --muted: #5f6b76;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .activity {
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      text-align: center;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .barrier-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .barrier-btn {
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      cursor: pointer;
+      padding: 12px 10px;
+      min-height: 150px;
+      height: 150px;
+      text-align: center;
+      color: var(--navy);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .barrier-btn:hover,
+    .barrier-btn:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(0,0,0,0.12);
+      outline: none;
+    }
+
+    .barrier-btn.active {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(11,45,77,0.14);
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .barrier-btn span.label {
+      display: block;
+      font-weight: 800;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .communication {
+      background: linear-gradient(180deg, #e8f4fb 0%, #d7ecfb 100%);
+    }
+
+    .leadership {
+      background: linear-gradient(180deg, #e8f5e9 0%, #d8eedb 100%);
+    }
+
+    .resources {
+      background: linear-gradient(180deg, #fff3e4 0%, #ffe3c0 100%);
+    }
+
+    .goals {
+      background: linear-gradient(180deg, #f3effa 0%, #e6dcf8 100%);
+    }
+
+    .culture {
+      background: linear-gradient(180deg, #e8f8fa 0%, #d3f0f4 100%);
+    }
+
+    .silos {
+      background: linear-gradient(180deg, #fff7dc 0%, #ffedb0 100%);
+    }
+
+    .training {
+      background: linear-gradient(180deg, #eaf4ff 0%, #d6e8ff 100%);
+    }
+
+    .communication .icon { background: var(--blue); }
+    .leadership .icon { background: var(--green); }
+    .resources .icon { background: var(--orange); }
+    .goals .icon { background: var(--purple); }
+    .culture .icon { background: var(--teal); }
+    .silos .icon { background: var(--gold); }
+    .training .icon { background: var(--blue); }
+
+    .display-card {
+      display: grid;
+      grid-template-columns: 0.9fr 1.2fr 1.1fr;
+      gap: 14px;
+      align-items: stretch;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      background: var(--gray);
+      padding: 16px;
+      min-height: 260px;
+    }
+
+    .display-section {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      line-height: 1.45;
+    }
+
+    .display-section h3,
+    .display-section h4 {
+      margin: 0 0 10px;
+      color: var(--navy);
+    }
+
+    .big-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+
+    .barrier-title {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.25rem;
+      line-height: 1.15;
+    }
+
+    .what-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .what-list li { margin: 8px 0; }
+
+    .impact-box {
+      border-left: 6px solid var(--blue);
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--light-blue);
+      margin-top: 8px;
+    }
+
+    .leader-response {
+      margin-top: 12px;
+      padding: 12px;
+      background: #ffffff;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .leader-response strong {
+      color: var(--navy);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .nav-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-btn.secondary { background: #66788a; }
+
+    .takeaway {
+      margin-top: 16px;
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(135deg, #eef4fb 0%, #dfeeff 100%);
+      border-left: 6px solid var(--navy);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 850px) {
+      .barrier-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .display-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding: 12px; }
+      .activity { padding: 14px; }
+      .barrier-grid { grid-template-columns: 1fr; }
+      .barrier-btn { min-height: auto; display: flex; align-items: center; gap: 12px; text-align: left; }
+      .icon { margin: 0; flex-shrink: 0; }
+      .nav-row { flex-direction: column; }
+      .nav-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="activity" aria-labelledby="activityTitle">
+      <h2 id="activityTitle">Common Organizational Barriers to Change</h2>
+      <p class="intro">Select each barrier to see what it looks like, how it affects change, and how leaders can respond.</p>
+
+      <div class="barrier-grid" role="tablist" aria-label="Organizational barriers">
+        <button class="barrier-btn communication active" type="button" onclick="showBarrier(0, this)">
+          <span class="icon" aria-hidden="true">💬</span>
+          <span class="label">Communication Breakdowns</span>
+        </button>
+        <button class="barrier-btn leadership" type="button" onclick="showBarrier(1, this)">
+          <span class="icon" aria-hidden="true">🚩</span>
+          <span class="label">Lack of Leadership Support</span>
+        </button>
+        <button class="barrier-btn resources" type="button" onclick="showBarrier(2, this)">
+          <span class="icon" aria-hidden="true">⚙</span>
+          <span class="label">Limited Resources</span>
+        </button>
+        <button class="barrier-btn goals" type="button" onclick="showBarrier(3, this)">
+          <span class="icon" aria-hidden="true">🎯</span>
+          <span class="label">Unclear Goals and Planning</span>
+        </button>
+        <button class="barrier-btn culture" type="button" onclick="showBarrier(4, this)">
+          <span class="icon" aria-hidden="true">🔒</span>
+          <span class="label">Culture That Resists Change</span>
+        </button>
+        <button class="barrier-btn silos" type="button" onclick="showBarrier(5, this)">
+          <span class="icon" aria-hidden="true">↔</span>
+          <span class="label">Siloed Departments</span>
+        </button>
+        <button class="barrier-btn training" type="button" onclick="showBarrier(6, this)">
+          <span class="icon" aria-hidden="true">📘</span>
+          <span class="label">Lack of Training and Support</span>
+        </button>
+      </div>
+
+      <div class="display-card" id="displayCard" aria-live="polite"></div>
+
+      <div class="nav-row">
+        <button class="nav-btn secondary" type="button" onclick="changeBarrier(-1)">Previous</button>
+        <button class="nav-btn" type="button" onclick="changeBarrier(1)">Next Barrier</button>
+      </div>
+
+      <div class="takeaway">
+        <strong>Key takeaway:</strong> Organizational barriers can slow or block change. Leaders strengthen change efforts when they identify barriers early and remove the obstacles that keep employees from adapting successfully.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const barriers = [
+      {
+        title: "Communication Breakdowns",
+        icon: "💬",
+        color: "#0f77a5",
+        bg: "#e8f4fb",
+        looks: [
+          "Information is not shared clearly.",
+          "Messages are inconsistent.",
+          "Employees are left guessing about what is changing."
+        ],
+        impact: "Creates confusion, rumors, and uncertainty. This can increase resistance and reduce trust.",
+        response: "Communicate early, repeat key messages, and provide space for questions."
+      },
+      {
+        title: "Lack of Leadership Support",
+        icon: "🚩",
+        color: "#2f7d32",
+        bg: "#e8f5e9",
+        looks: [
+          "Leaders are not visible during the change.",
+          "Leaders do not model the new behaviors.",
+          "Employees receive no clear direction from leadership."
+        ],
+        impact: "Employees may lose confidence in the change and question whether it really matters.",
+        response: "Make leaders visible, aligned, and consistent in both words and actions."
+      },
+      {
+        title: "Limited Resources",
+        icon: "⚙",
+        color: "#ef7d00",
+        bg: "#fff3e4",
+        looks: [
+          "Teams lack enough time or budget.",
+          "Tools or technology are insufficient.",
+          "Employees are overloaded with competing work."
+        ],
+        impact: "Employees may feel the change is unrealistic and become frustrated or disengaged.",
+        response: "Provide the time, tools, staffing, and budget needed to implement the change."
+      },
+      {
+        title: "Unclear Goals and Planning",
+        icon: "🎯",
+        color: "#5b3f92",
+        bg: "#f3effa",
+        looks: [
+          "Goals are vague or not aligned.",
+          "There is no clear implementation plan.",
+          "Success is not defined."
+        ],
+        impact: "Employees may not understand what is changing, why it matters, or how success will be measured.",
+        response: "Define the vision, goals, priorities, timeline, and success measures."
+      },
+      {
+        title: "Culture That Resists Change",
+        icon: "🔒",
+        color: "#168c9c",
+        bg: "#e8f8fa",
+        looks: [
+          "People say, 'We have always done it this way.'",
+          "The organization avoids risk.",
+          "New ideas are not valued or rewarded."
+        ],
+        impact: "A resistant culture can discourage innovation and block new initiatives before they gain momentum.",
+        response: "Model openness to change, reward learning, and connect change to shared values."
+      },
+      {
+        title: "Siloed Departments",
+        icon: "↔",
+        color: "#d99a00",
+        bg: "#fff7dc",
+        looks: [
+          "Departments work in isolation.",
+          "Teams do not share information or resources.",
+          "Different groups have conflicting priorities."
+        ],
+        impact: "Change efforts become inconsistent because teams are not aligned or coordinated.",
+        response: "Create cross-functional communication and shared accountability for the change."
+      },
+      {
+        title: "Lack of Training and Support",
+        icon: "📘",
+        color: "#0f77a5",
+        bg: "#e8f4fb",
+        looks: [
+          "Employees do not have the skills they need.",
+          "Training is rushed or incomplete.",
+          "Support is not available when challenges arise."
+        ],
+        impact: "Employees may feel unprepared and may avoid, delay, or abandon the change.",
+        response: "Offer training, coaching, job aids, and ongoing support after implementation."
+      }
+    ];
+
+    let currentBarrier = 0;
+
+    function showBarrier(index, button) {
+      currentBarrier = index;
+      document.querySelectorAll('.barrier-btn').forEach(btn => btn.classList.remove('active'));
+      if (button) button.classList.add('active');
+      else document.querySelectorAll('.barrier-btn')[index].classList.add('active');
+
+      const item = barriers[index];
+      const display = document.getElementById('displayCard');
+      display.innerHTML = `
+        <div class="display-section">
+          <div class="big-icon" style="background:${item.color};" aria-hidden="true">${item.icon}</div>
+          <h3 class="barrier-title">${item.title}</h3>
+        </div>
+        <div class="display-section">
+          <h4>What It Looks Like</h4>
+          <ul class="what-list">
+            ${item.looks.map(text => `<li>${text}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="display-section">
+          <h4>Impact on Change</h4>
+          <div class="impact-box" style="background:${item.bg}; border-left-color:${item.color};">${item.impact}</div>
+          <div class="leader-response">
+            <strong>Leader response:</strong>
+            ${item.response}
+          </div>
+        </div>
+      `;
+    }
+
+    function changeBarrier(direction) {
+      currentBarrier = (currentBarrier + direction + barriers.length) % barriers.length;
+      showBarrier(currentBarrier);
+    }
+
+    showBarrier(0);
+  </script>
+</body>
+</html>
