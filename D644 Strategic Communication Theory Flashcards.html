@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strategic Communication Theory Flashcards</title>
+  <style>
+    :root {
+      --navy:#17324d;
+      --blue:#2563eb;
+      --light-blue:#eaf2ff;
+      --teal:#0f766e;
+      --cream:#fffaf0;
+      --white:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6472;
+      --border:#d7deea;
+      --success-bg:#e9f8ef;
+      --success:#176b3a;
+      --error-bg:#fff1f1;
+      --error:#9b1c1c;
+      --focus:#facc15;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height:1.5;
+      color:var(--ink);
+      background:linear-gradient(180deg, var(--cream), #fff 40%);
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 28px;
+      border-radius: 22px;
+      box-shadow: 0 10px 24px rgba(23, 50, 77, 0.18);
+    }
+
+    .eyebrow {
+      display:inline-block;
+      background:rgba(255,255,255,.15);
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:.9rem;
+      margin-bottom:10px;
+    }
+
+    h1 {
+      margin:0 0 10px;
+      font-size:clamp(1.6rem, 3vw, 2.45rem);
+      line-height:1.15;
+    }
+
+    header p { margin:0; max-width:780px; font-size:1.05rem; }
+
+    h2 {
+      color: var(--navy);
+      margin: 0 0 10px;
+      font-size: 1.4rem;
+    }
+
+    h3 { margin: 0 0 8px; color: var(--navy); }
+
+    .intro, .flashcard-area, .practice, .takeaway {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 22px;
+      box-shadow: 0 8px 18px rgba(31, 41, 55, .06);
+    }
+
+    .flashcard-topline {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .progress-bar {
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background:#e5e7eb;
+      overflow:hidden;
+      margin: 10px 0 18px;
+    }
+
+    .progress-fill {
+      height:100%;
+      width:14.28%;
+      background: var(--teal);
+      transition: width .25s ease;
+    }
+
+    .card-shell {
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff, var(--light-blue));
+      padding: clamp(18px, 4vw, 34px);
+      min-height: 360px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .card-icon {
+      font-size:2.4rem;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .definition {
+      background: white;
+      border-left: 6px solid var(--teal);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 16px 0;
+    }
+
+    .card-grid {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top: 12px;
+    }
+
+    .mini-box {
+      background: #fff;
+      border:1px solid var(--border);
+      border-radius: 14px;
+      padding:14px;
+    }
+
+    .mini-box strong {
+      display:block;
+      color:var(--navy);
+      margin-bottom:4px;
+    }
+
+    .button-row {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .left-buttons, .right-buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .primary-btn, .secondary-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--navy);
+      color: white;
+    }
+
+    .primary-btn:hover { background:#0f2235; }
+
+    .secondary-btn {
+      background: var(--light-blue);
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+
+    .secondary-btn:hover { background:#dceafe; }
+
+    button:focus-visible, select:focus-visible {
+      outline: 4px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .practice-item {
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      margin-top:14px;
+      background:#fff;
+    }
+
+    label {
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    select {
+      width:100%;
+      max-width:460px;
+      padding:10px 12px;
+      border:2px solid var(--border);
+      border-radius:10px;
+      font-size:1rem;
+      background:white;
+    }
+
+    .feedback {
+      margin-top:10px;
+      padding:12px;
+      border-radius:12px;
+      display:none;
+    }
+
+    .feedback.correct {
+      display:block;
+      background:var(--success-bg);
+      color:var(--success);
+      border:1px solid #b8e4c8;
+    }
+
+    .feedback.incorrect {
+      display:block;
+      background:var(--error-bg);
+      color:var(--error);
+      border:1px solid #f3c2c2;
+    }
+
+    .score {
+      margin-top:16px;
+      font-weight:700;
+      color:var(--navy);
+    }
+
+    .sr-only {
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    @media (max-width: 700px) {
+      .wrap { padding:14px; }
+      header { padding:22px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .card-shell { min-height:auto; }
+      .button-row { justify-content:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <span class="eyebrow">Interactive Flashcards</span>
+      <h1>Strategic Communication Theories</h1>
+      <p>Click through one theory at a time. Each card gives you a simple definition, a business example, and a quick reminder of when the theory is useful.</p>
+    </header>
+
+    <section class="intro" aria-labelledby="intro-heading">
+      <h2 id="intro-heading">How to Use This Activity</h2>
+      <p>Use the Next and Previous buttons to move through the flashcards. After reviewing the cards, complete the short practice check at the bottom.</p>
+    </section>
+
+    <section class="flashcard-area" aria-labelledby="flashcard-heading">
+      <div class="flashcard-topline">
+        <h2 id="flashcard-heading">Theory Flashcard</h2>
+        <div class="progress-text" id="progressText" aria-live="polite">Card 1 of 7</div>
+      </div>
+      <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+      <article class="card-shell" aria-labelledby="cardTitle" aria-describedby="cardBody">
+        <div class="card-icon" id="cardIcon" aria-hidden="true">💬</div>
+        <h3 id="cardTitle">Transactional Communication</h3>
+        <div id="cardBody">
+          <div class="definition"><strong>Simple definition:</strong> Communication is a two-way exchange where people adjust based on messages and feedback.</div>
+          <div class="card-grid">
+            <div class="mini-box"><strong>Business example</strong><span>A customer and support representative exchange information to solve a service issue.</span></div>
+            <div class="mini-box"><strong>Use it when</strong><span>You want to build understanding through listening, responding, and clarifying.</span></div>
+          </div>
+        </div>
+      </article>
+
+      <div class="button-row" aria-label="Flashcard controls">
+        <div class="left-buttons">
+          <button class="secondary-btn" type="button" id="prevBtn">Previous</button>
+          <button class="primary-btn" type="button" id="nextBtn">Next</button>
+        </div>
+        <div class="right-buttons">
+          <button class="secondary-btn" type="button" id="restartBtn">Start Over</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="practice" aria-labelledby="practice-heading">
+      <h2 id="practice-heading">Quick Check</h2>
+      <p>Choose the theory that best matches each situation.</p>
+
+      <div class="practice-item">
+        <label for="q1">1. A company asks customers to vote on a new seasonal drink.</label>
+        <select id="q1" data-answer="Co-Creation Theory">
+          <option value="">Select one</option>
+          <option>Co-Creation Theory</option>
+          <option>EPPM</option>
+          <option>Situational Crisis Communication Theory</option>
+        </select>
+        <div class="feedback" id="f1"></div>
+      </div>
+
+      <div class="practice-item">
+        <label for="q2">2. A company warns customers about a product safety issue and explains exactly what to do next.</label>
+        <select id="q2" data-answer="EPPM">
+          <option value="">Select one</option>
+          <option>Constitutive Theory</option>
+          <option>EPPM</option>
+          <option>Transactional Communication</option>
+        </select>
+        <div class="feedback" id="f2"></div>
+      </div>
+
+      <div class="practice-item">
+        <label for="q3">3. A company prepares customers for competitor criticism by addressing concerns before they spread.</label>
+        <select id="q3" data-answer="Inoculation Theory">
+          <option value="">Select one</option>
+          <option>Theory of Planned Behavior</option>
+          <option>Inoculation Theory</option>
+          <option>Co-Creation Theory</option>
+        </select>
+        <div class="feedback" id="f3"></div>
+      </div>
+
+      <div class="button-row">
+        <div class="left-buttons">
+          <button class="primary-btn" type="button" id="checkBtn">Check My Work</button>
+          <button class="secondary-btn" type="button" id="resetBtn">Reset</button>
+        </div>
+      </div>
+      <div class="score" id="score" aria-live="polite"></div>
+    </section>
+
+    <section class="takeaway" aria-labelledby="takeaway-heading">
+      <h2 id="takeaway-heading">Key Takeaway</h2>
+      <p>Communication theories help professionals choose messages and tactics based on the situation, audience, and goal.</p>
+    </section>
+  </main>
+
+  <script>
+    const cards = [
+      {
+        icon: '💬',
+        title: 'Transactional Communication',
+        definition: 'Communication is a two-way exchange where people adjust based on messages and feedback.',
+        example: 'A customer and support representative exchange information to solve a service issue.',
+        use: 'You want to build understanding through listening, responding, and clarifying.'
+      },
+      {
+        icon: '🏢',
+        title: 'Constitutive Theory',
+        definition: 'Communication helps create how people understand an organization, its identity, and its culture.',
+        example: 'Leaders, employees, ads, and customer service all shape how people understand a company brand.',
+        use: 'You want to understand how messages shape reputation, culture, or brand identity.'
+      },
+      {
+        icon: '🤝',
+        title: 'Co-Creation Theory',
+        definition: 'Organizations and stakeholders create value together through participation and collaboration.',
+        example: 'A coffee shop invites customers to taste-test and vote on a new blend.',
+        use: 'You want customers or stakeholders to help shape a product, service, or campaign.'
+      },
+      {
+        icon: '🧠',
+        title: 'Theory of Planned Behavior',
+        definition: 'People are more likely to act when they have a positive attitude, feel social support, and believe the action is doable.',
+        example: 'A campaign encourages product use by showing benefits, social approval, and simple steps to get started.',
+        use: 'You want to influence or predict whether people will take an action.'
+      },
+      {
+        icon: '⚠️',
+        title: 'Extended Parallel Processing Model',
+        definition: 'People respond better to risk messages when they understand the threat and know what action they can take.',
+        example: 'A recall message explains the seriousness of the issue and gives clear steps for customers to stay safe.',
+        use: 'You need to communicate risk without leaving the audience confused or helpless.'
+      },
+      {
+        icon: '🛡️',
+        title: 'Inoculation Theory',
+        definition: 'People can become more resistant to persuasion when they hear a weak opposing argument and a strong response first.',
+        example: 'A company addresses likely competitor claims before customers encounter those claims elsewhere.',
+        use: 'You want to prepare an audience for criticism, misinformation, or competing arguments.'
+      },
+      {
+        icon: '🚨',
+        title: 'Situational Crisis Communication Theory',
+        definition: 'Crisis messages should match the type of crisis, the organization’s responsibility, and its reputation.',
+        example: 'A company chooses corrective action and apology after a serious product failure.',
+        use: 'You need to protect trust and reputation during a crisis.'
+      }
+    ];
+
+    let currentIndex = 0;
+    const cardIcon = document.getElementById('cardIcon');
+    const cardTitle = document.getElementById('cardTitle');
+    const cardBody = document.getElementById('cardBody');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function renderCard() {
+      const card = cards[currentIndex];
+      cardIcon.textContent = card.icon;
+      cardTitle.textContent = card.title;
+      cardBody.innerHTML = `
+        <div class="definition"><strong>Simple definition:</strong> ${card.definition}</div>
+        <div class="card-grid">
+          <div class="mini-box"><strong>Business example</strong><span>${card.example}</span></div>
+          <div class="mini-box"><strong>Use it when</strong><span>${card.use}</span></div>
+        </div>
+      `;
+      progressText.textContent = 'Card ' + (currentIndex + 1) + ' of ' + cards.length;
+      progressFill.style.width = (((currentIndex + 1) / cards.length) * 100) + '%';
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.textContent = currentIndex === cards.length - 1 ? 'Back to First Card' : 'Next';
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        renderCard();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex === cards.length - 1) {
+        currentIndex = 0;
+      } else {
+        currentIndex += 1;
+      }
+      renderCard();
+    });
+
+    restartBtn.addEventListener('click', () => {
+      currentIndex = 0;
+      renderCard();
+    });
+
+    const explanations = {
+      q1: 'Correct: Co-creation involves inviting customers or stakeholders into the creation process.',
+      q2: 'Correct: EPPM is useful for risk communication because it explains the threat and the action people can take.',
+      q3: 'Correct: Inoculation theory prepares people to resist future criticism or competing arguments.'
+    };
+
+    const incorrect = {
+      q1: 'Not quite. This situation is about customers helping create or choose the final offering.',
+      q2: 'Not quite. This situation is about communicating both a threat and the steps customers can take.',
+      q3: 'Not quite. This situation is about preparing people for criticism before they encounter it.'
+    };
+
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      let correct = 0;
+      const selects = document.querySelectorAll('select[data-answer]');
+
+      selects.forEach((select, index) => {
+        const feedback = document.getElementById('f' + (index + 1));
+        const isCorrect = select.value === select.dataset.answer;
+        feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+        feedback.textContent = isCorrect ? explanations[select.id] : incorrect[select.id];
+        if (isCorrect) correct += 1;
+      });
+
+      document.getElementById('score').textContent = 'You matched ' + correct + ' out of ' + selects.length + ' correctly.';
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('select[data-answer]').forEach((select) => { select.value = ''; });
+      document.querySelectorAll('.feedback').forEach((feedback) => {
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+      });
+      document.getElementById('score').textContent = '';
+    });
+
+    renderCard();
+  </script>
+</body>
+</html>
