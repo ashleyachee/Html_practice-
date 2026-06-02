@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build the Insomnia Cookies Marketing Profile</title>
+  <style>
+    :root {
+      --purple: #4b2e83;
+      --purple-dark: #321d5c;
+      --purple-light: #efe8ff;
+      --gold: #f7c948;
+      --cream: #fff8ec;
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --border: #d9d4e7;
+      --success-bg: #e8f7ee;
+      --success: #176b3a;
+      --error-bg: #fff1f1;
+      --error: #9b1c1c;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--cream), #ffffff 38%);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      background: var(--purple);
+      color: white;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(50, 29, 92, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -70px;
+      top: -60px;
+      border-radius: 50%;
+      background: rgba(247, 201, 72, 0.22);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      line-height: 1.15;
+    }
+
+    header p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .instructions, .practice, .summary-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 22px;
+      box-shadow: 0 8px 18px rgba(31,41,55,0.06);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--purple-dark);
+      font-size: 1.45rem;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--purple-dark);
+      font-size: 1.15rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+      align-items: start;
+    }
+
+    .profile-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(31,41,55,0.06);
+      align-self: start;
+    }
+
+    .card-toggle {
+      width: 100%;
+      min-height: 124px;
+      border: 0;
+      background: linear-gradient(180deg, #ffffff, var(--purple-light));
+      color: var(--ink);
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-toggle:hover {
+      background: linear-gradient(180deg, #ffffff, #e4d8ff);
+    }
+
+    .card-toggle:focus-visible, select:focus-visible, button:focus-visible {
+      outline: 4px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--purple-dark);
+    }
+
+    .card-hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card-content {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 18px 20px 20px;
+      background: #ffffff;
+    }
+
+    .profile-card.open .card-content {
+      display: block;
+    }
+
+    .profile-card.open {
+      border-color: var(--purple);
+    }
+
+    ul {
+      margin: 8px 0 14px 20px;
+      padding: 0;
+    }
+
+    li { margin-bottom: 6px; }
+
+    .marketing-connection {
+      background: var(--cream);
+      border-left: 5px solid var(--gold);
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .practice-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+      background: #ffffff;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+      max-width: 460px;
+      padding: 10px 12px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      background: white;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .primary-btn, .secondary-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--purple);
+      color: white;
+    }
+
+    .primary-btn:hover { background: var(--purple-dark); }
+
+    .secondary-btn {
+      background: var(--purple-light);
+      color: var(--purple-dark);
+      border: 1px solid var(--border);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .feedback.correct {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #b8e4c8;
+    }
+
+    .feedback.incorrect {
+      display: block;
+      background: var(--error-bg);
+      color: var(--error);
+      border: 1px solid #f3c2c2;
+    }
+
+    .score {
+      margin-top: 16px;
+      font-weight: 700;
+      color: var(--purple-dark);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini {
+      background: var(--purple-light);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .mini strong {
+      color: var(--purple-dark);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 850px) {
+      .card-grid, .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { padding: 14px; }
+      header { padding: 22px; }
+      .card-grid, .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-toggle { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <span class="eyebrow">Interactive Case Snapshot</span>
+      <h1>Build the Insomnia Cookies Marketing Profile</h1>
+      <p>Explore the case in short sections. Then match evidence from the company story to the marketing concept it best represents.</p>
+    </header>
+
+    <section class="instructions" aria-labelledby="instructions-heading">
+      <h2 id="instructions-heading">How to Use This Activity</h2>
+      <p>Select each card to reveal a short case summary and a marketing connection. When you are ready, complete the practice section at the bottom.</p>
+    </section>
+
+    <section aria-labelledby="profile-heading">
+      <h2 id="profile-heading" class="sr-only">Marketing Profile Cards</h2>
+      <div class="card-grid">
+        <article class="profile-card">
+          <button class="card-toggle" id="brand-toggle" aria-expanded="false" aria-controls="brand-panel">
+            <span class="icon" aria-hidden="true">🍪</span>
+            <span class="card-title">Brand</span>
+            <span class="card-hint">How the company wants customers to remember it</span>
+          </button>
+          <div class="card-content" id="brand-panel" role="region" aria-labelledby="brand-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>Insomnia Cookies is positioned as a playful late-night bakery.</li>
+              <li>The purple logo, moon-like cookie mark, and fun language help create a recognizable identity.</li>
+              <li>The brand refers to customers as “Insomniacs,” reinforcing the late-night theme.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> Brand identity helps customers quickly understand what makes the company different.</div>
+          </div>
+        </article>
+
+        <article class="profile-card">
+          <button class="card-toggle" id="target-toggle" aria-expanded="false" aria-controls="target-panel">
+            <span class="icon" aria-hidden="true">🎯</span>
+            <span class="card-title">Target Market</span>
+            <span class="card-hint">Who the company is trying to reach</span>
+          </button>
+          <div class="card-content" id="target-panel" role="region" aria-labelledby="target-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>The original audience was college students who wanted warm cookies delivered late at night.</li>
+              <li>The company’s hours, delivery model, app, and campus promotion all align with student routines.</li>
+              <li>The brand has expanded, but the student-centered origin still shapes the value proposition.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> Strong segmentation helps the company design offerings around real customer behavior.</div>
+          </div>
+        </article>
+
+        <article class="profile-card">
+          <button class="card-toggle" id="product-toggle" aria-expanded="false" aria-controls="product-panel">
+            <span class="icon" aria-hidden="true">📦</span>
+            <span class="card-title">Product Strategy</span>
+            <span class="card-hint">How the product line has expanded</span>
+          </button>
+          <div class="card-content" id="product-panel" role="region" aria-labelledby="product-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>The company began with warm cookie delivery and later added deluxe cookies, ice cream, brownies, cookie cakes, and catering.</li>
+              <li>Seasonal, vegan, and gluten-free options help serve different preferences and occasions.</li>
+              <li>CookieLab lets customers customize cookies and shakes, creating a more experiential product.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> Product expansion can support growth while keeping the core brand promise recognizable.</div>
+          </div>
+        </article>
+
+        <article class="profile-card">
+          <button class="card-toggle" id="communications-toggle" aria-expanded="false" aria-controls="communications-panel">
+            <span class="icon" aria-hidden="true">📣</span>
+            <span class="card-title">Marketing Communications</span>
+            <span class="card-hint">How the company reaches and reminds customers</span>
+          </button>
+          <div class="card-content" id="communications-panel" role="region" aria-labelledby="communications-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>Word of mouth on college campuses has been central to the brand’s growth.</li>
+              <li>Campus marketing representatives distribute cookies and promote the brand at events.</li>
+              <li>The company also uses social media, email, print advertising, and promotional campaigns.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> IMC works best when messages and channels reinforce the same brand promise.</div>
+          </div>
+        </article>
+
+        <article class="profile-card">
+          <button class="card-toggle" id="technology-toggle" aria-expanded="false" aria-controls="technology-panel">
+            <span class="icon" aria-hidden="true">📱</span>
+            <span class="card-title">Technology</span>
+            <span class="card-hint">How digital tools support convenience</span>
+          </button>
+          <div class="card-content" id="technology-panel" role="region" aria-labelledby="technology-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>The mobile app lets customers find stores, browse menus, reorder favorites, and track delivery.</li>
+              <li>Real-time order information helps stores bake and deliver cookies while they are fresh.</li>
+              <li>Cookie Dough points encourage repeat purchases and make loyalty visible to customers.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> Technology can improve customer satisfaction by reducing friction in the buying process.</div>
+          </div>
+        </article>
+
+        <article class="profile-card">
+          <button class="card-toggle" id="growth-toggle" aria-expanded="false" aria-controls="growth-panel">
+            <span class="icon" aria-hidden="true">📈</span>
+            <span class="card-title">Growth Strategy</span>
+            <span class="card-hint">How the company expands the business</span>
+          </button>
+          <div class="card-content" id="growth-panel" role="region" aria-labelledby="growth-toggle">
+            <h3>Key Takeaways</h3>
+            <ul>
+              <li>Insomnia Cookies expanded from a campus delivery idea to hundreds of company-owned stores.</li>
+              <li>The company chose not to franchise so it could maintain control over operations and innovation.</li>
+              <li>New formats such as CookieLab and event spaces create additional ways for customers to engage.</li>
+            </ul>
+            <div class="marketing-connection"><strong>Marketing connection:</strong> Growth strategy should align with the brand, customer experience, and operational capabilities.</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="practice" aria-labelledby="practice-heading">
+      <h2 id="practice-heading">Practice: Match the Evidence to the Marketing Concept</h2>
+      <p>Choose the concept that best matches each piece of evidence from the case.</p>
+
+      <div class="practice-item">
+        <label for="q1">1. “Customers are called Insomniacs.”</label>
+        <select id="q1" data-answer="Brand Positioning">
+          <option value="">Select one</option>
+          <option>Technology Enablement</option>
+          <option>Brand Positioning</option>
+          <option>Product Line Extension</option>
+          <option>Distribution Channel</option>
+        </select>
+        <div class="feedback" id="f1"></div>
+      </div>
+
+      <div class="practice-item">
+        <label for="q2">2. CookieLab lets guests customize cookies with different bases, mix-ins, and toppings.</label>
+        <select id="q2" data-answer="Product Development">
+          <option value="">Select one</option>
+          <option>Product Development</option>
+          <option>Market Decline</option>
+          <option>Print Advertising</option>
+          <option>Cost Reduction</option>
+        </select>
+        <div class="feedback" id="f2"></div>
+      </div>
+
+      <div class="practice-item">
+        <label for="q3">3. The mobile app lets customers reorder favorites and track delivery.</label>
+        <select id="q3" data-answer="Technology Enablement">
+          <option value="">Select one</option>
+          <option>Brand Repositioning</option>
+          <option>Technology Enablement</option>
+          <option>Franchising Strategy</option>
+          <option>Product Deletion</option>
+        </select>
+        <div class="feedback" id="f3"></div>
+      </div>
+
+      <div class="practice-item">
+        <label for="q4">4. Campus representatives distribute cookies and promote the brand at events.</label>
+        <select id="q4" data-answer="Word-of-Mouth Marketing">
+          <option value="">Select one</option>
+          <option>Word-of-Mouth Marketing</option>
+          <option>Supply Chain Management</option>
+          <option>Price Skimming</option>
+          <option>Product Warranty</option>
+        </select>
+        <div class="feedback" id="f4"></div>
+      </div>
+
+      <div class="button-row">
+        <button class="primary-btn" type="button" id="checkBtn">Check My Work</button>
+        <button class="secondary-btn" type="button" id="resetBtn">Reset</button>
+      </div>
+      <div class="score" id="score" aria-live="polite"></div>
+    </section>
+
+    <section class="summary-box" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Case Takeaway</h2>
+      <p>Insomnia Cookies succeeds by connecting a clear target market, memorable positioning, convenient technology, and product expansion to one central customer promise: warm cookies delivered when customers want them.</p>
+      <div class="summary-grid" aria-label="Marketing profile summary">
+        <div class="mini"><strong>Positioning</strong> Late-night, playful, convenient</div>
+        <div class="mini"><strong>Core Audience</strong> Students and late-night snackers</div>
+        <div class="mini"><strong>Value Promise</strong> Warm cookies delivered quickly</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const cards = document.querySelectorAll('.profile-card');
+    cards.forEach((card) => {
+      const button = card.querySelector('.card-toggle');
+      button.addEventListener('click', () => {
+        const wasOpen = card.classList.contains('open');
+
+        cards.forEach((otherCard) => {
+          otherCard.classList.remove('open');
+          const otherButton = otherCard.querySelector('.card-toggle');
+          if (otherButton) {
+            otherButton.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        if (!wasOpen) {
+          card.classList.add('open');
+          button.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    const explanations = {
+      q1: 'Correct: This language reinforces the playful late-night brand identity and helps customers feel part of the brand community.',
+      q2: 'Correct: CookieLab expands the product experience by allowing customers to personalize what they buy.',
+      q3: 'Correct: The app uses technology to make ordering, reordering, loyalty, and delivery tracking easier for customers.',
+      q4: 'Correct: Campus representatives help create awareness and encourage peer-to-peer promotion.'
+    };
+
+    const incorrect = {
+      q1: 'Not quite. This is about the way the brand presents itself and names its customer community.',
+      q2: 'Not quite. This evidence is about expanding and customizing the product experience.',
+      q3: 'Not quite. This evidence is about using digital tools to improve convenience and satisfaction.',
+      q4: 'Not quite. This evidence is about promotion through people, events, and campus conversations.'
+    };
+
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      let correct = 0;
+      const selects = document.querySelectorAll('select[data-answer]');
+
+      selects.forEach((select, index) => {
+        const feedback = document.getElementById('f' + (index + 1));
+        const isCorrect = select.value === select.dataset.answer;
+        feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+        feedback.textContent = isCorrect ? explanations[select.id] : incorrect[select.id];
+        if (isCorrect) correct += 1;
+      });
+
+      document.getElementById('score').textContent = 'You matched ' + correct + ' out of ' + selects.length + ' correctly.';
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('select[data-answer]').forEach((select) => { select.value = ''; });
+      document.querySelectorAll('.feedback').forEach((feedback) => {
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+      });
+      document.getElementById('score').textContent = '';
+    });
+  </script>
+</body>
+</html>
