@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STEEPLED Analysis Interactive Infographic</title>
+<style>
+:root{
+  --bg:#f7faff;--surface:#fff;--text:#1f2a37;--muted:#5b6777;
+  --accent:#2457c5;--border:#cfd8e6;--focus:3px solid #111827;
+  --social:#dbeafe;--tech:#ede9fe;--econ:#dcfce7;--env:#d1fae5;
+  --political:#fee2e2;--legal:#fef3c7;--ethical:#fce7f3;--demo:#e0f2fe;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);
+  color:var(--text);line-height:1.45;
+}
+.wrapper{max-width:900px;margin:0 auto;padding:16px}
+.hero{
+  background:linear-gradient(135deg,#173b89,#2457c5);
+  color:white;border-radius:20px;padding:20px;margin-bottom:14px;
+}
+.hero h1{margin:0 0 6px;font-size:clamp(1.6rem,3vw,2.3rem)}
+.hero p{margin:0;font-size:1rem;max-width:760px}
+.instructions{
+  background:#fff;border:1px solid var(--border);border-radius:16px;
+  padding:14px 16px;margin-bottom:14px;
+}
+.instructions h2{margin:0 0 4px;font-size:1.2rem}
+.instructions p{margin:0;color:var(--muted)}
+
+.accordion{
+  background:#fff;border:1px solid var(--border);border-radius:18px;
+  overflow:hidden;
+}
+details{
+  background:#fff;border-bottom:1px solid var(--border);
+}
+details:last-child{border-bottom:none}
+summary{
+  list-style:none;cursor:pointer;padding:0;
+}
+summary::-webkit-details-marker{display:none}
+.summary-inner{
+  min-height:78px;padding:12px 18px;display:grid;
+  grid-template-columns:54px 1fr 42px;gap:14px;align-items:center;
+}
+.icon{
+  width:54px;height:54px;border-radius:16px;display:flex;
+  align-items:center;justify-content:center;font-size:1.55rem;
+  font-weight:700;border:1px solid rgba(0,0,0,.08);
+}
+.social .icon,.social .detail-head{background:var(--social)}
+.tech .icon,.tech .detail-head{background:var(--tech)}
+.econ .icon,.econ .detail-head{background:var(--econ)}
+.env .icon,.env .detail-head{background:var(--env)}
+.political .icon,.political .detail-head{background:var(--political)}
+.legal .icon,.legal .detail-head{background:var(--legal)}
+.ethical .icon,.ethical .detail-head{background:var(--ethical)}
+.demo .icon,.demo .detail-head{background:var(--demo)}
+.summary-text h3{margin:0;font-size:1.22rem}
+.summary-text p{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+.plus{
+  width:38px;height:38px;border-radius:999px;border:2px solid var(--accent);
+  color:var(--accent);display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:700;background:#fff;
+}
+details[open] .plus::before{content:"−"}
+details:not([open]) .plus::before{content:"+"}
+.detail-body{
+  border-top:1px solid var(--border);
+  padding:14px 18px 18px;
+}
+.detail-head{
+  border-radius:14px;padding:12px 14px;margin-bottom:12px;
+  border:1px solid rgba(0,0,0,.06);
+}
+.detail-head p{margin:4px 0 0}
+.content-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+}
+.content-grid section{
+  border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;
+}
+.content-grid h4{margin:0 0 6px;font-size:1rem}
+.content-grid ul{margin:0;padding-left:18px}
+.content-grid li+li{margin-top:4px}
+.content-grid p{margin:0}
+.takeaway{
+  margin-top:14px;background:#12284f;color:white;border-radius:18px;padding:16px;
+}
+.takeaway p{margin:0}
+summary:focus,summary:focus-visible{outline:var(--focus);outline-offset:-3px}
+@media(max-width:760px){
+  .content-grid{grid-template-columns:1fr}
+  .summary-inner{grid-template-columns:48px 1fr 38px;padding:12px}
+  .icon{width:48px;height:48px}
+}
+</style>
+</head>
+<body>
+<main class="wrapper">
+  <section class="hero" aria-labelledby="page-title">
+    <h1 id="page-title">STEEPLED Analysis</h1>
+    <p>Click each element to explore external forces that can shape business decisions.</p>
+  </section>
+
+  <section class="instructions" aria-labelledby="elements-heading">
+    <h2 id="elements-heading">Explore the eight elements</h2>
+    <p>Use each panel to review the core idea, examples, and practical questions.</p>
+  </section>
+
+  <section class="accordion" aria-label="STEEPLED elements">
+    <details class="social">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">S</div>
+          <div class="summary-text">
+            <h3>Social</h3>
+            <p>Values, lifestyles, attitudes, and behaviors.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Social forces shape demand, brand expectations, workplace culture, and consumer preferences.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Changing values</li><li>Work-life expectations</li><li>Lifestyle trends</li></ul></section>
+          <section><h4>Simple example</h4><p>A company may offer healthier or more flexible options as customer preferences shift.</p></section>
+          <section><h4>Ask this</h4><p>How are behaviors or values changing customer expectations?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="tech">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">T</div>
+          <div class="summary-text">
+            <h3>Technological</h3>
+            <p>Innovation, digital tools, and new systems.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Technology can change how organizations create value, communicate, produce, analyze data, and serve customers.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Automation and AI</li><li>Software platforms</li><li>Cybersecurity</li></ul></section>
+          <section><h4>Simple example</h4><p>A retailer may use chatbots or dashboards to improve service and efficiency.</p></section>
+          <section><h4>Ask this</h4><p>What technologies could improve or disrupt the business model?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="econ">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">E</div>
+          <div class="summary-text">
+            <h3>Economic</h3>
+            <p>Financial conditions, costs, spending, and growth.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Economic conditions affect purchasing power, pricing, hiring, investment, and stability.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Inflation</li><li>Interest rates</li><li>Consumer confidence</li></ul></section>
+          <section><h4>Simple example</h4><p>During inflation, costs may rise while customers become more price-sensitive.</p></section>
+          <section><h4>Ask this</h4><p>How might economic conditions affect demand or costs?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="env">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">E</div>
+          <div class="summary-text">
+            <h3>Environmental</h3>
+            <p>Sustainability, resources, climate, and waste.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Environmental factors include climate risks, resource use, waste, and sustainability expectations.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Climate disruptions</li><li>Resource use</li><li>Waste reduction</li></ul></section>
+          <section><h4>Simple example</h4><p>A manufacturer may redesign packaging to reduce waste.</p></section>
+          <section><h4>Ask this</h4><p>What environmental pressures affect reputation or planning?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="political">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">P</div>
+          <div class="summary-text">
+            <h3>Political</h3>
+            <p>Government priorities, policy, and stability.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Political forces include policy shifts, funding priorities, taxation, trade, and stability.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Policy changes</li><li>Trade conditions</li><li>Public funding</li></ul></section>
+          <section><h4>Simple example</h4><p>A healthcare company may adjust strategy based on government funding priorities.</p></section>
+          <section><h4>Ask this</h4><p>Are political decisions creating risks or opportunities?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="legal">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">L</div>
+          <div class="summary-text">
+            <h3>Legal</h3>
+            <p>Laws, regulations, and compliance requirements.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Legal factors shape hiring, contracts, data use, product standards, advertising, and compliance.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Employment law</li><li>Privacy rules</li><li>Industry compliance</li></ul></section>
+          <section><h4>Simple example</h4><p>A business may change data practices to meet privacy requirements.</p></section>
+          <section><h4>Ask this</h4><p>What legal requirements could raise costs or risk?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="ethical">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">E</div>
+          <div class="summary-text">
+            <h3>Ethical</h3>
+            <p>Fairness, responsibility, integrity, and trust.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Ethical factors involve doing what is responsible, fair, and trustworthy for stakeholders.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Transparency</li><li>Responsible sourcing</li><li>Stakeholder trust</li></ul></section>
+          <section><h4>Simple example</h4><p>An organization may avoid a tactic that feels misleading or harmful.</p></section>
+          <section><h4>Ask this</h4><p>Would stakeholders see this as fair and responsible?</p></section>
+        </div>
+      </div>
+    </details>
+
+    <details class="demo">
+      <summary>
+        <div class="summary-inner">
+          <div class="icon" aria-hidden="true">D</div>
+          <div class="summary-text">
+            <h3>Demographic</h3>
+            <p>Population characteristics, labor, and market needs.</p>
+          </div>
+          <div class="plus" aria-hidden="true"></div>
+        </div>
+      </summary>
+      <div class="detail-body">
+        <div class="detail-head"><strong>Core idea:</strong><p>Demographic factors examine age, income, education, location, and population change.</p></div>
+        <div class="content-grid">
+          <section><h4>What to look for</h4><ul><li>Age distribution</li><li>Income levels</li><li>Migration patterns</li></ul></section>
+          <section><h4>Simple example</h4><p>An aging population may increase demand for healthcare or accessibility-focused products.</p></section>
+          <section><h4>Ask this</h4><p>How might population shifts change customer or workforce needs?</p></section>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="takeaway" aria-label="Main takeaway">
+    <p><strong>Main takeaway:</strong> STEEPLED helps managers scan the external environment so they can identify opportunities, risks, and strategic priorities.</p>
+  </section>
+</main>
+</body>
+</html>
