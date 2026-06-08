@@ -1,8 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDO Activity</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+iframe {
+  width: 100%;
+  height: 100vh;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
 <iframe
   src="https://app.rubiqssuite.com/engage/play/56847853-b552-44db-81f3-03cac1492c08?embed=1"
-  width="100%"
-  height="600"
-  style="border: 0; max-width: 100%;"
   allowfullscreen
-  loading="lazy"
-></iframe>
+  loading="lazy">
+</iframe>
+
+</body>
+</html>
