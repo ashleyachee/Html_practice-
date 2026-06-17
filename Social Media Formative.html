@@ -1,0 +1,189 @@
+<div class="assessment-container">
+    <div class="assessment-header">
+        <h2>Check Your Understanding</h2>
+        <p>Sort each example into the correct social media metric.</p>
+    </div>
+
+    <div class="assessment-body">
+
+        <div class="question-card">
+            <p><strong>1.</strong> A short video is funny, useful, and easy to send to friends.</p>
+            <select data-answer="Shareability">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <div class="question-card">
+            <p><strong>2.</strong> A post receives 500 shares after being published.</p>
+            <select data-answer="Amplification">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <div class="question-card">
+            <p><strong>3.</strong> Followers comment on a brand’s post and ask questions.</p>
+            <select data-answer="Engagement">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <div class="question-card">
+            <p><strong>4.</strong> An influencer’s tutorial is so helpful that viewers send it to others.</p>
+            <select data-answer="Shareability">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <div class="question-card">
+            <p><strong>5.</strong> A company tracks how often its post is shared across social media.</p>
+            <select data-answer="Amplification">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <div class="question-card">
+            <p><strong>6.</strong> Users like, react to, and reply to a sponsored influencer post.</p>
+            <select data-answer="Engagement">
+                <option value="">Select an answer</option>
+                <option>Shareability</option>
+                <option>Amplification</option>
+                <option>Engagement</option>
+            </select>
+        </div>
+
+        <button onclick="checkAnswers()">Check Answers</button>
+
+        <div id="results"></div>
+
+    </div>
+</div>
+
+<style>
+.assessment-container {
+    max-width: 900px;
+    margin: 20px auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    background: #ffffff;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.assessment-header {
+    background: linear-gradient(135deg, #0056b3, #0078d4);
+    color: white;
+    padding: 24px 30px;
+}
+
+.assessment-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.assessment-header p {
+    margin-top: 8px;
+    opacity: .9;
+}
+
+.assessment-body {
+    padding: 24px;
+    background: #f8fafc;
+}
+
+.question-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    transition: transform .2s ease;
+}
+
+.question-card:hover {
+    transform: translateY(-2px);
+}
+
+.question-card p {
+    margin-top: 0;
+    color: #1f2937;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+}
+
+button {
+    background: #0078d4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background .2s ease;
+}
+
+button:hover {
+    background: #005ea6;
+}
+
+.correct {
+    border: 2px solid #22c55e !important;
+    background-color: #f0fdf4;
+}
+
+.incorrect {
+    border: 2px solid #ef4444 !important;
+    background-color: #fef2f2;
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+</style>
+
+<script>
+function checkAnswers() {
+
+    let score = 0;
+
+    document.querySelectorAll('select').forEach(select => {
+
+        select.classList.remove('correct','incorrect');
+
+        if(select.value === select.dataset.answer){
+            score++;
+            select.classList.add('correct');
+        } else {
+            select.classList.add('incorrect');
+        }
+    });
+
+    document.getElementById('results').innerHTML =
+        `✅ You answered <strong>${score} out of 6</strong> correctly.`;
+}
+</script>
