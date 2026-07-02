@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Communication Law & Ethics Clickable Infographic</title>
+  <style>
+    :root {
+      --navy: #12324a;
+      --blue: #1f6f9f;
+      --teal: #168a8f;
+      --mint: #dff5f2;
+      --light-blue: #eaf5fb;
+      --cream: #fffaf0;
+      --orange: #d87921;
+      --purple: #7257a5;
+      --green: #3b8754;
+      --red: #b24a4a;
+      --gray: #4b5563;
+      --border: #c9d7df;
+      --white: #ffffff;
+      --shadow: 0 10px 28px rgba(18, 50, 74, 0.16);
+      --focus: #ffbf47;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f8fb;
+      color: var(--navy);
+      line-height: 1.5;
+    }
+
+    .law-infographic {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .intro-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+      margin: 0 0 8px;
+      color: var(--navy);
+    }
+
+    .intro-card p {
+      margin: 0;
+      color: var(--gray);
+      max-width: 820px;
+    }
+
+    .hub-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.85fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .visual-card,
+    .detail-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .visual-card {
+      min-height: 680px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hub {
+      position: relative;
+      width: min(100%, 560px);
+      height: 630px;
+      margin: 0 auto;
+    }
+
+    .center-bubble {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      box-shadow: 0 16px 32px rgba(18, 50, 74, 0.28);
+      z-index: 2;
+    }
+
+    .center-bubble span {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin-top: 6px;
+      opacity: 0.92;
+    }
+
+    .connector {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 2px;
+      height: 220px;
+      background: #c7d9e5;
+      transform-origin: top center;
+      z-index: 0;
+    }
+
+    .connector.c1 { transform: rotate(0deg); }
+    .connector.c2 { transform: rotate(72deg); }
+    .connector.c3 { transform: rotate(144deg); }
+    .connector.c4 { transform: rotate(216deg); }
+    .connector.c5 { transform: rotate(288deg); }
+
+    .topic-button {
+      position: absolute;
+      width: 136px;
+      height: 136px;
+      border-radius: 50%;
+      border: 4px solid var(--white);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(18, 50, 74, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topic-button:hover,
+    .topic-button[aria-pressed="true"] {
+      transform: scale(1.05);
+      box-shadow: 0 16px 28px rgba(18, 50, 74, 0.25);
+    }
+
+    .topic-button:focus-visible,
+    .close-button:focus-visible {
+      outline: 4px solid var(--focus);
+      outline-offset: 4px;
+    }
+
+    .speech { background: var(--blue); left: 50%; top: 0; transform: translateX(-50%); }
+    .defamation { background: var(--purple); left: 0; top: 245px; }
+    .gdpr { background: var(--green); right: 0; top: 245px; }
+    .deception { background: var(--red); left: 74px; bottom: 0; }
+    .canspam { background: var(--orange); right: 74px; bottom: 0; }
+
+    .speech:hover,
+    .speech[aria-pressed="true"] { transform: translateX(-50%) scale(1.05); }
+
+    .detail-card {
+      padding: 0;
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-header {
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--light-blue), var(--mint));
+      border-radius: 20px 20px 0 0;
+    }
+
+    .detail-header h2 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+    }
+
+    .detail-header p {
+      margin: 0;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .detail-content {
+      padding: 22px;
+      flex: 1;
+    }
+
+    .empty-state {
+      border: 2px dashed #b7ccd8;
+      border-radius: 16px;
+      padding: 22px;
+      background: #f8fbfd;
+      color: var(--gray);
+    }
+
+    .detail-panel {
+      display: none;
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    .detail-panel.active {
+      display: block;
+    }
+
+    .detail-panel h3 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 1.35rem;
+    }
+
+    .info-block {
+      border-left: 5px solid var(--teal);
+      background: #f7fbfc;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 13px;
+    }
+
+    .info-block strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+
+    .info-block p,
+    .info-block ul {
+      margin: 0;
+      color: var(--gray);
+    }
+
+    .info-block ul {
+      padding-left: 20px;
+    }
+
+    .close-button {
+      margin-top: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .summary-card {
+      margin-top: 20px;
+      background: var(--cream);
+      border: 1px solid #ead7aa;
+      border-radius: 18px;
+      padding: 18px 20px;
+      color: var(--navy);
+    }
+
+    .summary-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--gray);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 820px) {
+      .law-infographic {
+        padding: 14px;
+      }
+
+      .hub-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .visual-card,
+      .detail-card {
+        min-height: auto;
+      }
+
+      .hub {
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+        gap: 12px;
+        padding-top: 14px;
+      }
+
+      .center-bubble,
+      .connector {
+        display: none;
+      }
+
+      .topic-button {
+        position: static;
+        width: 100%;
+        height: auto;
+        min-height: 92px;
+        border-radius: 16px;
+      }
+
+      .topic-button:hover,
+      .topic-button[aria-pressed="true"],
+      .speech:hover,
+      .speech[aria-pressed="true"] {
+        transform: none;
+      }
+
+      .speech {
+        grid-column: 1 / -1;
+      }
+    }
+
+
+    @media (max-width: 640px) {
+      .hub {
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding-top: 14px;
+      }
+
+      .center-bubble,
+      .connector {
+        display: none;
+      }
+
+      .topic-button {
+        position: static;
+        width: 100%;
+        height: auto;
+        min-height: 86px;
+        border-radius: 16px;
+      }
+
+      .topic-button:hover,
+      .topic-button[aria-pressed="true"],
+      .speech:hover,
+      .speech[aria-pressed="true"] {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="law-infographic" aria-labelledby="activity-title">
+    <section class="intro-card">
+      <h1 id="activity-title">Communication Law & Ethics Hub</h1>
+      <p>Select each topic to explore how legal and ethical limits shape professional communication, advertising, email marketing, reputation, and privacy.</p>
+    </section>
+
+    <section class="hub-layout" aria-label="Clickable communication law infographic">
+      <div class="visual-card">
+        <div class="hub" aria-label="Communication law topics">
+          <div class="connector c1" aria-hidden="true"></div>
+          <div class="connector c2" aria-hidden="true"></div>
+          <div class="connector c3" aria-hidden="true"></div>
+          <div class="connector c4" aria-hidden="true"></div>
+          <div class="connector c5" aria-hidden="true"></div>
+
+          <div class="center-bubble" aria-hidden="true">
+            <div>Communication Law & Ethics<span>Balancing expression, trust, privacy, and consumer protection</span></div>
+          </div>
+
+          <button class="topic-button speech" type="button" data-topic="speech" aria-controls="details" aria-pressed="false">Free Speech & Commercial Speech</button>
+          <button class="topic-button defamation" type="button" data-topic="defamation" aria-controls="details" aria-pressed="false">Defamation</button>
+          <button class="topic-button gdpr" type="button" data-topic="gdpr" aria-controls="details" aria-pressed="false">GDPR</button>
+          <button class="topic-button deception" type="button" data-topic="deception" aria-controls="details" aria-pressed="false">Deception</button>
+          <button class="topic-button canspam" type="button" data-topic="canspam" aria-controls="details" aria-pressed="false">CAN-SPAM</button>
+        </div>
+      </div>
+
+      <aside class="detail-card" id="details" aria-live="polite">
+        <div class="detail-header">
+          <h2>Explore the Topics</h2>
+          <p>Click a bubble to reveal a short explanation, why it matters, and an example.</p>
+        </div>
+        <div class="detail-content">
+          <div class="empty-state" id="empty-state">
+            Start by selecting one of the bubbles in the infographic.
+          </div>
+
+          <article class="detail-panel" id="panel-speech" tabindex="-1">
+            <h3>Free Speech & Commercial Speech</h3>
+            <div class="info-block">
+              <strong>What is it?</strong>
+              <p>The First Amendment protects many forms of expression, including commercial speech such as advertising. However, commercial speech can be regulated to prevent misleading or deceptive claims.</p>
+            </div>
+            <div class="info-block">
+              <strong>Why it matters</strong>
+              <p>Organizations can promote products and ideas, but advertising must be truthful and should not mislead consumers.</p>
+            </div>
+            <div class="info-block">
+              <strong>Example</strong>
+              <p>A company may advertise a product's benefits, but it cannot make false claims about what the product can do.</p>
+            </div>
+          </article>
+
+          <article class="detail-panel" id="panel-defamation" tabindex="-1">
+            <h3>Defamation: Libel and Slander</h3>
+            <div class="info-block">
+              <strong>What is it?</strong>
+              <p>Defamation is a false statement communicated to someone else that harms a person's or organization's reputation.</p>
+            </div>
+            <div class="info-block">
+              <strong>Key distinction</strong>
+              <ul>
+                <li><strong>Libel:</strong> written or published defamatory communication</li>
+                <li><strong>Slander:</strong> spoken defamatory communication</li>
+              </ul>
+            </div>
+            <div class="info-block">
+              <strong>Example</strong>
+              <p>Publishing a false claim that a competitor committed fraud could damage its reputation and create legal risk.</p>
+            </div>
+          </article>
+
+          <article class="detail-panel" id="panel-deception" tabindex="-1">
+            <h3>Deception</h3>
+            <div class="info-block">
+              <strong>What is it?</strong>
+              <p>Deception involves false or misleading communication, including false advertising, misleading statements, or marketing tactics that distort the truth.</p>
+            </div>
+            <div class="info-block">
+              <strong>Why it matters</strong>
+              <p>Deceptive communication undermines trust and may violate consumer protection laws, leading to fines, lawsuits, or reputational harm.</p>
+            </div>
+            <div class="info-block">
+              <strong>Example</strong>
+              <p>An advertisement that says “unlimited service” while hiding strict usage limits may mislead consumers.</p>
+            </div>
+          </article>
+
+          <article class="detail-panel" id="panel-canspam" tabindex="-1">
+            <h3>CAN-SPAM</h3>
+            <div class="info-block">
+              <strong>What is it?</strong>
+              <p>The CAN-SPAM Act is a U.S. law that regulates commercial email communication.</p>
+            </div>
+            <div class="info-block">
+              <strong>Key requirements</strong>
+              <ul>
+                <li>Use accurate sender information</li>
+                <li>Avoid deceptive subject lines or headers</li>
+                <li>Provide a clear way to unsubscribe</li>
+              </ul>
+            </div>
+            <div class="info-block">
+              <strong>Example</strong>
+              <p>A promotional email should clearly identify the sender and include a working unsubscribe option.</p>
+            </div>
+          </article>
+
+          <article class="detail-panel" id="panel-gdpr" tabindex="-1">
+            <h3>General Data Protection Regulation (GDPR)</h3>
+            <div class="info-block">
+              <strong>What is it?</strong>
+              <p>The GDPR is the European Union's data privacy regulation. It applies to organizations that process the personal data of EU residents, even if the organization is located outside the EU.</p>
+            </div>
+            <div class="info-block">
+              <strong>Why it matters</strong>
+              <p>Organizations must handle personal data responsibly, including how data is collected, used, protected, and supported by consent where required.</p>
+            </div>
+            <div class="info-block">
+              <strong>Example</strong>
+              <p>A website may need to explain how it uses personal data and ask for consent before collecting certain information.</p>
+            </div>
+          </article>
+
+          <button class="close-button" type="button" id="reset-button">Reset view</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="summary-card" aria-labelledby="summary-title">
+      <h2 id="summary-title">Key takeaway</h2>
+      <p>Free speech is important, but professional communication also has legal and ethical limits. Defamation laws, commercial speech rules, CAN-SPAM, and GDPR help protect reputations, consumers, and personal privacy.</p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.topic-button');
+      const panels = document.querySelectorAll('.detail-panel');
+      const emptyState = document.getElementById('empty-state');
+      const resetButton = document.getElementById('reset-button');
+
+      function showPanel(topic) {
+        buttons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.topic === topic));
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.remove('active');
+        });
+
+        emptyState.style.display = 'none';
+        const activePanel = document.getElementById('panel-' + topic);
+        if (activePanel) {
+          activePanel.classList.add('active');
+          activePanel.focus({ preventScroll: true });
+        }
+      }
+
+      function resetView() {
+        buttons.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+        panels.forEach((panel) => panel.classList.remove('active'));
+        emptyState.style.display = 'block';
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => showPanel(button.dataset.topic));
+      });
+
+      resetButton.addEventListener('click', resetView);
+    })();
+  </script>
+</body>
+</html>
