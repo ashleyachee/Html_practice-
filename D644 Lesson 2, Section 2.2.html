@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Unity Foods' Global DEI Communication Strategy</title>
+  <style>
+    :root {
+      --uf-navy: #17324d;
+      --uf-blue: #2f6f9f;
+      --uf-light-blue: #eaf4fb;
+      --uf-green: #2f7d5a;
+      --uf-light-green: #edf7f2;
+      --uf-orange: #b85c1c;
+      --uf-cream: #fffaf1;
+      --uf-gray: #52616d;
+      --uf-border: #c8d7e2;
+      --uf-white: #ffffff;
+      --uf-focus: #f7c948;
+      --uf-correct: #0f6b45;
+      --uf-incorrect: #9f2d20;
+      --shadow: 0 10px 30px rgba(23, 50, 77, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+      color: #1f2933;
+      background: linear-gradient(135deg, #f6fbff 0%, #fffaf1 100%);
+    }
+
+    .uf-activity {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero {
+      background: var(--uf-navy);
+      color: var(--uf-white);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -70px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #bde0fe;
+      margin-bottom: 8px;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: clamp(1.65rem, 4vw, 2.35rem);
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .activity-card {
+      background: var(--uf-white);
+      border: 1px solid var(--uf-border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .topbar {
+      padding: 18px 22px;
+      background: var(--uf-light-blue);
+      border-bottom: 1px solid var(--uf-border);
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .progress-wrap {
+      flex: 1 1 260px;
+    }
+
+    .progress-label {
+      font-weight: 700;
+      color: var(--uf-navy);
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: #d7e8f4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 20%;
+      height: 100%;
+      background: var(--uf-blue);
+      transition: width 0.25s ease;
+    }
+
+    .score-pill {
+      background: var(--uf-white);
+      color: var(--uf-navy);
+      border: 1px solid var(--uf-border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 0;
+    }
+
+    .scenario {
+      padding: 24px;
+      background: var(--uf-cream);
+      border-right: 1px solid var(--uf-border);
+    }
+
+    .scenario h2 {
+      color: var(--uf-navy);
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    .scenario-box {
+      background: var(--uf-white);
+      border: 1px solid #ead7b5;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .scenario-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .decision {
+      padding: 24px;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    legend {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--uf-navy);
+      margin-bottom: 14px;
+    }
+
+    .instruction {
+      color: var(--uf-gray);
+      margin-top: -4px;
+      margin-bottom: 18px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      border: 2px solid var(--uf-border);
+      background: var(--uf-white);
+      color: #1f2933;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--uf-blue);
+      background: #f8fcff;
+      transform: translateY(-1px);
+    }
+
+    .choice-btn:focus-visible,
+    .nav-btn:focus-visible,
+    .restart-btn:focus-visible {
+      outline: 4px solid var(--uf-focus);
+      outline-offset: 3px;
+    }
+
+    .choice-btn[aria-pressed="true"] {
+      border-color: var(--uf-blue);
+      background: var(--uf-light-blue);
+    }
+
+    .choice-btn.correct {
+      border-color: var(--uf-correct);
+      background: var(--uf-light-green);
+    }
+
+    .choice-btn.incorrect {
+      border-color: var(--uf-incorrect);
+      background: #fff0ed;
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--uf-border);
+      background: #f8fafc;
+      min-height: 58px;
+    }
+
+    .feedback strong {
+      color: var(--uf-navy);
+    }
+
+    .feedback.correct-feedback {
+      border-color: #9bd1b8;
+      background: var(--uf-light-green);
+    }
+
+    .feedback.incorrect-feedback {
+      border-color: #e3a199;
+      background: #fff0ed;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn,
+    .restart-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      cursor: pointer;
+      background: var(--uf-navy);
+      color: var(--uf-white);
+    }
+
+    .nav-btn.secondary {
+      background: #e7eef5;
+      color: var(--uf-navy);
+    }
+
+    .nav-btn:disabled {
+      background: #cbd5df;
+      color: #5f6f7c;
+      cursor: not-allowed;
+    }
+
+    .summary-screen {
+      padding: 26px;
+      display: none;
+    }
+
+    .summary-screen.active {
+      display: block;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .summary-item {
+      background: var(--uf-light-blue);
+      border: 1px solid var(--uf-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .summary-item h3 {
+      color: var(--uf-navy);
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .summary-item p {
+      margin: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      .hero,
+      .activity-card {
+        border-radius: 16px;
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .scenario {
+        border-right: 0;
+        border-bottom: 1px solid var(--uf-border);
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="uf-activity">
+    <section class="hero" aria-labelledby="activity-title">
+      <span class="eyebrow">Interactive Case Study</span>
+      <h1 id="activity-title">Build Unity Foods' Global DEI Communication Strategy</h1>
+      <p>Help Unity Foods prepare a global campaign for its plant-based meat alternatives. Make strategic communication choices that support cultural sensitivity, localization, inclusive representation, and audience access.</p>
+    </section>
+
+    <section class="activity-card" aria-label="Unity Foods decision activity">
+      <div id="activityArea">
+        <div class="topbar">
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-label" id="progressLabel">Decision 1 of 5</div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+          <div class="score-pill" id="scorePill">Score: 0 / 5</div>
+        </div>
+
+        <div class="content">
+          <aside class="scenario" aria-labelledby="scenarioTitle">
+            <h2 id="scenarioTitle">Scenario Snapshot</h2>
+            <div class="scenario-box" id="scenarioText"></div>
+          </aside>
+
+          <section class="decision" aria-labelledby="questionText">
+            <fieldset>
+              <legend id="questionText"></legend>
+              <p class="instruction" id="instructionText">Choose the strongest response. Feedback will appear after you select an answer.</p>
+              <div class="choices" id="choicesContainer"></div>
+            </fieldset>
+
+            <div class="feedback" id="feedback" aria-live="polite">
+              Select an answer to see feedback.
+            </div>
+
+            <div class="nav-row">
+              <button class="nav-btn secondary" type="button" id="backBtn">Back</button>
+              <button class="nav-btn" type="button" id="nextBtn" disabled>Next Decision</button>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section class="summary-screen" id="summaryScreen" aria-labelledby="summaryTitle" tabindex="-1">
+        <h2 id="summaryTitle">Campaign Strategy Complete</h2>
+        <p id="summaryScore"></p>
+        <p>Unity Foods' strongest global communication strategy combines DEI principles with practical channel planning. The campaign should be culturally informed, locally adapted, authentically representative, and accessible through both digital and traditional media.</p>
+
+        <div class="summary-grid" aria-label="Key takeaways">
+          <div class="summary-item">
+            <h3>Cultural Sensitivity</h3>
+            <p>Teams should learn about cultural norms and communication preferences before launching global messaging.</p>
+          </div>
+          <div class="summary-item">
+            <h3>Localization</h3>
+            <p>Effective campaigns adapt meaning, visuals, and examples instead of simply translating words.</p>
+          </div>
+          <div class="summary-item">
+            <h3>Inclusive Representation</h3>
+            <p>Representation should feel authentic, varied, and connected to the story rather than symbolic or stereotyped.</p>
+          </div>
+          <div class="summary-item">
+            <h3>Channel Strategy</h3>
+            <p>Digital media, influencers, television, radio, and print can each help reach different audience groups.</p>
+          </div>
+        </div>
+
+        <button class="restart-btn" type="button" id="restartBtn">Restart Activity</button>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const decisions = [
+      {
+        title: "Prepare the Team",
+        scenario: "<p>Unity Foods is preparing to launch a global communication campaign. Emma Chang wants the marketing team to avoid cultural missteps before creating ads for different regions.</p>",
+        question: "What should the team do first?",
+        choices: [
+          {
+            text: "Launch one global message quickly so every region receives the same campaign at the same time.",
+            correct: false,
+            feedback: "A single global message may be efficient, but it risks overlooking cultural nuances and audience expectations."
+          },
+          {
+            text: "Complete cultural sensitivity training with multicultural communication experts before finalizing the campaign.",
+            correct: true,
+            feedback: "Correct. Training helps the team approach global communication with humility, awareness, and respect for cultural differences."
+          },
+          {
+            text: "Ask each regional manager to translate the New York campaign materials into local languages.",
+            correct: false,
+            feedback: "Translation alone is not enough. Strategic communication should adapt meaning, imagery, tone, and context."
+          }
+        ]
+      },
+      {
+        title: "Localize the Message",
+        scenario: "<p>Regional managers explain that audience priorities differ. Latin American audiences may connect with family and mealtime traditions, Asia-Pacific audiences may respond to health and environmental benefits, and European audiences may value sustainability and ethical consumption.</p>",
+        question: "Which approach best reflects localization?",
+        choices: [
+          {
+            text: "Use the same plant-based slogan everywhere to maintain brand consistency above all else.",
+            correct: false,
+            feedback: "Consistency matters, but localization requires adapting the message so it resonates with local values and expectations."
+          },
+          {
+            text: "Adjust campaign examples and visuals by region while keeping the core brand promise consistent.",
+            correct: true,
+            feedback: "Correct. This balances brand consistency with cultural relevance. The message stays aligned but feels meaningful in each region."
+          },
+          {
+            text: "Focus only on price because cost is the one message that works the same way in every market.",
+            correct: false,
+            feedback: "Price may matter, but the case emphasizes cultural values, dietary preferences, sustainability, and communication channels."
+          }
+        ]
+      },
+      {
+        title: "Review the Visuals",
+        scenario: "<p>Unity Foods wants its advertising materials to represent a diverse global customer base. The consultants warn the team to avoid stereotypes and tokenism.</p>",
+        question: "Which visual concept best supports inclusive representation?",
+        choices: [
+          {
+            text: "A single ad showing one person from each region standing separately with flags in the background.",
+            correct: false,
+            feedback: "This may appear diverse, but it risks feeling symbolic rather than authentic. Inclusion should be integrated into the story."
+          },
+          {
+            text: "Locally produced images showing people of varied ages and backgrounds sharing meals in culturally relevant settings.",
+            correct: true,
+            feedback: "Correct. Local collaboration and authentic storytelling help people see themselves represented in meaningful ways."
+          },
+          {
+            text: "A product-only campaign with no people, so the company avoids representation concerns altogether.",
+            correct: false,
+            feedback: "Avoiding people may reduce risk, but it misses the opportunity to build connection through authentic representation."
+          }
+        ]
+      },
+      {
+        title: "Choose Communication Channels",
+        scenario: "<p>Unity Foods wants to reach younger urban audiences as well as rural audiences in regions where internet access may be limited.</p>",
+        question: "Which channel strategy is strongest?",
+        choices: [
+          {
+            text: "Use only Instagram and Facebook because digital platforms are always the most effective global channels.",
+            correct: false,
+            feedback: "Digital platforms are useful, but not all audiences have equal access to them. A global strategy should consider access and context."
+          },
+          {
+            text: "Use local digital platforms and influencers where appropriate, while also using television, radio, and print in lower-access regions.",
+            correct: true,
+            feedback: "Correct. This strategy considers both engagement and access, making the campaign more inclusive and effective."
+          },
+          {
+            text: "Use traditional media only because it is safer and easier to control than social media.",
+            correct: false,
+            feedback: "Traditional media can help, but relying on it alone may miss younger and mobile-first audiences."
+          }
+        ]
+      },
+      {
+        title: "Final Strategy Check",
+        scenario: "<p>The campaign team must now choose a final plan that supports Unity Foods' goals: increase awareness, respect cultural sensitivities, foster inclusivity, and reach audiences through effective channels.</p>",
+        question: "Which final campaign plan best aligns with DEI and strategic communication principles?",
+        choices: [
+          {
+            text: "Create one efficient global campaign, translate it into several languages, and focus mostly on product benefits.",
+            correct: false,
+            feedback: "This plan is efficient, but it does not fully address cultural sensitivity, localization, representation, or audience access."
+          },
+          {
+            text: "Adapt messaging by region, use authentic local representation, and combine digital and traditional channels based on audience needs.",
+            correct: true,
+            feedback: "Correct. This plan connects DEI principles with strategic communication decisions that support global audience engagement."
+          },
+          {
+            text: "Let each region create a completely separate campaign with no shared brand message or common campaign goals.",
+            correct: false,
+            feedback: "Regional adaptation is important, but the campaign still needs a shared strategy and consistent brand purpose."
+          }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+    let selectedAnswers = Array(decisions.length).fill(null);
+    let earnedPoints = Array(decisions.length).fill(0);
+
+    const scenarioText = document.getElementById('scenarioText');
+    const questionText = document.getElementById('questionText');
+    const choicesContainer = document.getElementById('choicesContainer');
+    const feedback = document.getElementById('feedback');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressFill = document.getElementById('progressFill');
+    const scorePill = document.getElementById('scorePill');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const activityArea = document.getElementById('activityArea');
+    const summaryScreen = document.getElementById('summaryScreen');
+    const summaryScore = document.getElementById('summaryScore');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function totalScore() {
+      return earnedPoints.reduce((sum, point) => sum + point, 0);
+    }
+
+    function updateTopbar() {
+      progressLabel.textContent = `Decision ${currentIndex + 1} of ${decisions.length}`;
+      progressFill.style.width = `${((currentIndex + 1) / decisions.length) * 100}%`;
+      scorePill.textContent = `Score: ${totalScore()} / ${decisions.length}`;
+    }
+
+    function renderDecision() {
+      const decision = decisions[currentIndex];
+      document.getElementById('scenarioTitle').textContent = `Scenario Snapshot: ${decision.title}`;
+      scenarioText.innerHTML = decision.scenario;
+      questionText.textContent = decision.question;
+      choicesContainer.innerHTML = '';
+
+      decision.choices.forEach((choice, choiceIndex) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'choice-btn';
+        button.textContent = choice.text;
+        button.setAttribute('aria-pressed', selectedAnswers[currentIndex] === choiceIndex ? 'true' : 'false');
+        button.addEventListener('click', () => selectChoice(choiceIndex));
+
+        if (selectedAnswers[currentIndex] !== null) {
+          button.disabled = false;
+          if (choice.correct) {
+            button.classList.add('correct');
+          }
+          if (selectedAnswers[currentIndex] === choiceIndex && !choice.correct) {
+            button.classList.add('incorrect');
+          }
+        }
+
+        choicesContainer.appendChild(button);
+      });
+
+      if (selectedAnswers[currentIndex] === null) {
+        feedback.className = 'feedback';
+        feedback.textContent = 'Select an answer to see feedback.';
+        nextBtn.disabled = true;
+      } else {
+        const selected = decision.choices[selectedAnswers[currentIndex]];
+        feedback.className = selected.correct ? 'feedback correct-feedback' : 'feedback incorrect-feedback';
+        feedback.innerHTML = `<strong>${selected.correct ? 'Strong choice.' : 'Try this takeaway.'}</strong> ${selected.feedback}`;
+        nextBtn.disabled = false;
+      }
+
+      backBtn.disabled = currentIndex === 0;
+      nextBtn.textContent = currentIndex === decisions.length - 1 ? 'View Summary' : 'Next Decision';
+      updateTopbar();
+    }
+
+    function selectChoice(choiceIndex) {
+      const choice = decisions[currentIndex].choices[choiceIndex];
+      selectedAnswers[currentIndex] = choiceIndex;
+      earnedPoints[currentIndex] = choice.correct ? 1 : 0;
+      renderDecision();
+    }
+
+    function showSummary() {
+      activityArea.classList.add('hidden');
+      summaryScreen.classList.add('active');
+      summaryScore.innerHTML = `<strong>Your score: ${totalScore()} out of ${decisions.length}.</strong> Review the takeaways below to connect each decision to global DEI communication strategy.`;
+      summaryScreen.focus();
+    }
+
+    backBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderDecision();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < decisions.length - 1) {
+        currentIndex++;
+        renderDecision();
+      } else {
+        showSummary();
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      currentIndex = 0;
+      selectedAnswers = Array(decisions.length).fill(null);
+      earnedPoints = Array(decisions.length).fill(0);
+      summaryScreen.classList.remove('active');
+      activityArea.classList.remove('hidden');
+      renderDecision();
+      document.getElementById('activity-title').focus?.();
+    });
+
+    renderDecision();
+  </script>
+</body>
+</html>
