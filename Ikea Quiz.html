@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Which IKEA Item Are You?</title>
+  <style>
+    :root {
+      --ikea-blue: #0058a3;
+      --ikea-yellow: #ffda1a;
+      --ink: #1f2937;
+      --muted: #5f6b7a;
+      --panel: #ffffff;
+      --bg: #eef5fb;
+      --border: #c9d8e6;
+      --focus: #7c3aed;
+      --shadow: 0 18px 45px rgba(0, 62, 112, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 218, 26, .35), transparent 28%),
+        linear-gradient(180deg, #f8fbfe 0%, var(--bg) 100%);
+      color: var(--ink);
+    }
+
+    button, input { font: inherit; }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #000;
+      color: #fff;
+      padding: .75rem 1rem;
+      z-index: 10;
+    }
+
+    .skip-link:focus { left: .75rem; top: .75rem; }
+
+    .page-shell {
+      width: min(940px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .hero {
+      background: var(--ikea-blue);
+      color: white;
+      border-radius: 24px 24px 0 0;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "?";
+      position: absolute;
+      right: 1.5rem;
+      top: -.9rem;
+      font-size: 9rem;
+      font-weight: 900;
+      color: rgba(255,255,255,.09);
+      transform: rotate(9deg);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: var(--ikea-yellow);
+      color: #111827;
+      font-weight: 800;
+      padding: .4rem .7rem;
+      border-radius: 999px;
+      margin-bottom: .8rem;
+      letter-spacing: .02em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: 1;
+      max-width: 720px;
+    }
+
+    .hero p {
+      margin: 1rem 0 0;
+      max-width: 710px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #edf6ff;
+    }
+
+    .quiz-card {
+      background: var(--panel);
+      border-radius: 0 0 24px 24px;
+      box-shadow: var(--shadow);
+      padding: clamp(1.25rem, 4vw, 2.2rem);
+      border: 1px solid rgba(0, 88, 163, .12);
+      border-top: none;
+    }
+
+    .progress-wrap { margin-bottom: 1.5rem; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: .5rem;
+    }
+
+    .progress-track {
+      height: 12px;
+      background: #e7edf3;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--ikea-blue), #2f80c9);
+      transition: width .3s ease;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    legend {
+      width: 100%;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .answers {
+      display: grid;
+      gap: .85rem;
+    }
+
+    .answer-option {
+      position: relative;
+    }
+
+    .answer-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .answer-option label {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: 1rem 1.05rem;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      cursor: pointer;
+      line-height: 1.45;
+      background: #fff;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .answer-option label::before {
+      content: "";
+      width: 1.1rem;
+      height: 1.1rem;
+      border: 2px solid #7d8b99;
+      border-radius: 50%;
+      margin-top: .15rem;
+      flex: 0 0 auto;
+      background: #fff;
+    }
+
+    .answer-option label:hover {
+      transform: translateY(-2px);
+      border-color: var(--ikea-blue);
+      background: #f7fbff;
+    }
+
+    .answer-option input:checked + label {
+      border-color: var(--ikea-blue);
+      background: #edf7ff;
+      box-shadow: 0 0 0 3px rgba(0, 88, 163, .1);
+    }
+
+    .answer-option input:checked + label::before {
+      border-color: var(--ikea-blue);
+      box-shadow: inset 0 0 0 4px white;
+      background: var(--ikea-blue);
+    }
+
+    .answer-option input:focus-visible + label {
+      outline: 4px solid rgba(124, 58, 237, .35);
+      outline-offset: 2px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: .85rem 1.25rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn:focus-visible { outline: 4px solid rgba(124, 58, 237, .35); outline-offset: 3px; }
+
+    .btn-primary {
+      background: var(--ikea-yellow);
+      color: #111827;
+      box-shadow: 0 7px 0 #d8b900;
+    }
+
+    .btn-secondary {
+      background: #eef2f6;
+      color: var(--ink);
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: .92rem;
+      margin: .85rem 0 0;
+    }
+
+    .result {
+      text-align: center;
+      padding: .5rem 0 .25rem;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 90px;
+      min-height: 90px;
+      border-radius: 50%;
+      background: var(--ikea-yellow);
+      font-size: 2.7rem;
+      margin-bottom: 1rem;
+      border: 5px solid white;
+      box-shadow: 0 0 0 5px var(--ikea-blue), 0 12px 28px rgba(0,0,0,.14);
+    }
+
+    .result h2 {
+      margin: .2rem 0 .4rem;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: var(--ikea-blue);
+    }
+
+    .result .tagline {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin: 0 0 1rem;
+    }
+
+    .result-copy {
+      background: #f5f9fc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.2rem;
+      text-align: left;
+      line-height: 1.65;
+      max-width: 720px;
+      margin: 0 auto 1.2rem;
+    }
+
+    .fine-print {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 1.25rem;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 620px) {
+      .page-shell { width: min(100% - 1rem, 940px); padding-top: .5rem; }
+      .hero { border-radius: 18px 18px 0 0; padding: 1.4rem; }
+      .quiz-card { border-radius: 0 0 18px 18px; }
+      .controls { align-items: stretch; }
+      .controls .btn { width: 100%; }
+      .result-badge { min-width: 76px; min-height: 76px; font-size: 2.2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#quiz">Skip to quiz</a>
+
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <span class="eyebrow">Extremely Scientific Personality Assessment</span>
+      <h1 id="page-title">Which IKEA Item Are You?</h1>
+      <p>Answer eight deeply serious questions to discover whether you are a beloved meatball, an emotionally supportive shark, a complicated wardrobe, or another flat-packed icon.</p>
+    </section>
+
+    <section class="quiz-card" id="quiz" aria-labelledby="question-legend">
+      <div id="quiz-view">
+        <div class="progress-wrap" aria-label="Quiz progress">
+          <div class="progress-meta">
+            <span id="progress-text">Question 1 of 8</span>
+            <span id="progress-percent">13%</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+
+        <form id="quiz-form">
+          <fieldset>
+            <legend id="question-legend"></legend>
+            <div class="answers" id="answers"></div>
+          </fieldset>
+
+          <p class="helper" id="helper-text">Choose the answer that feels most suspiciously accurate.</p>
+
+          <div class="controls">
+            <button class="btn btn-secondary" type="button" id="back-btn">Back</button>
+            <button class="btn btn-primary" type="submit" id="next-btn" disabled>Next Question</button>
+          </div>
+        </form>
+      </div>
+
+      <section class="result" id="result-view" hidden aria-live="polite" tabindex="-1">
+        <div class="result-badge" id="result-icon" aria-hidden="true">🛋️</div>
+        <p class="eyebrow">Your flat-packed destiny is...</p>
+        <h2 id="result-name"></h2>
+        <p class="tagline" id="result-tagline"></p>
+        <div class="result-copy" id="result-description"></div>
+        <button class="btn btn-primary" type="button" id="restart-btn">Take It Again</button>
+        <p class="fine-print">This quiz is not affiliated with IKEA. It is, however, emotionally accurate.</p>
+      </section>
+
+      <div id="live-region" class="sr-only" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        text: "You arrive at a team meeting. What energy do you bring?",
+        answers: [
+          { text: "Warm, reassuring, and carrying snacks nobody asked for.", scores: { meatball: 3, grejsimojs: 2, blahaj: 1 } },
+          { text: "A commanding silence. Everyone suddenly sits up straighter.", scores: { djungleskog: 3, pax: 1 } },
+          { text: "I have the agenda, backup agenda, and a reusable bag full of chargers.", scores: { frakta: 3, kallax: 2, billy: 1 } },
+          { text: "I have arrived with a bold idea that may or may not inflate properly.", scores: { innerlig: 3, poang: 1 } }
+        ]
+      },
+      {
+        text: "Your desk is best described as...",
+        answers: [
+          { text: "Organized into labeled zones, at least from a safe distance.", scores: { kallax: 3, billy: 2 } },
+          { text: "A soft nest of comfort objects and emergency treats.", scores: { grejsimojs: 3, blahaj: 2, meatball: 1 } },
+          { text: "Mostly clear because I can carry everything I own at once.", scores: { frakta: 3, innerlig: 1 } },
+          { text: "A complex installation with one mystery screw left over.", scores: { pax: 3, djungleskog: 1 } },
+          { text: "The 'before' photo on a home organization show. Please do not zoom in.", scores: { innerlig: 3, pax: 2, frakta: 1, djungleskog: 1 } }
+        ]
+      },
+      {
+        text: "A project suddenly goes off the rails. You...",
+        answers: [
+          { text: "Stay flexible, absorb the impact, and gently bounce back.", scores: { poang: 3, blahaj: 2 } },
+          { text: "Take charge. The rails now belong to me.", scores: { djungleskog: 3, pax: 1 } },
+          { text: "Sort the chaos into several attractive compartments.", scores: { kallax: 3, billy: 1 } },
+          { text: "Suggest a portable experimental solution no one has emotionally prepared for.", scores: { innerlig: 3, frakta: 1 } }
+        ]
+      },
+      {
+        text: "Pick the compliment you would most like to receive.",
+        answers: [
+          { text: "You make every room feel safer and slightly more adorable.", scores: { grejsimojs: 3, blahaj: 2 } },
+          { text: "You are iconic, practical, and somehow carrying six times your body weight.", scores: { frakta: 3, kallax: 1 } },
+          { text: "Getting to know you was difficult, but wow, the storage capacity.", scores: { pax: 3, billy: 1 } },
+          { text: "Everyone is happy when you show up, especially near lunchtime.", scores: { meatball: 3, poang: 1 } }
+        ]
+      },
+      {
+        text: "How do you feel about attention?",
+        answers: [
+          { text: "I do not seek it. I simply become the room's largest presence.", scores: { djungleskog: 3, frakta: 1 } },
+          { text: "I prefer quiet appreciation from people who understand quality shelving.", scores: { billy: 3, kallax: 2 } },
+          { text: "I enjoy being beloved by everyone. This is normal and deserved.", scores: { meatball: 3, blahaj: 1 } },
+          { text: "Attention is temporary. Innovation is inflatable.", scores: { innerlig: 3, pax: 1 } }
+        ]
+      },
+      {
+        text: "Your approach to helping a coworker is...",
+        answers: [
+          { text: 'Say, \"I\'ve got this.\" You do not, in fact, got this—but morale improves immediately.', scores: { blahaj: 3, grejsimojs: 2 } },
+          { text: "Ask for the full backstory, including details that are absolutely not relevant.", scores: { frakta: 3, poang: 1 } },
+          { text: "Make a spreadsheet. Nobody asked for one, but everyone ends up using it.", scores: { kallax: 3, billy: 2 } },
+          { text: "Suggest panicking together for five minutes, then solving it with alarming efficiency.", scores: { pax: 3, djungleskog: 1 } }
+        ]
+      },
+      {
+        text: "Choose your ideal weekend plan.",
+        answers: [
+          { text: "A quiet afternoon, a book, and being properly anchored to the wall.", scores: { billy: 3, poang: 2 } },
+          { text: "A cozy gathering where everyone leaves happier and slightly overfed.", scores: { meatball: 3, grejsimojs: 1 } },
+          { text: "A spontaneous trip. I packed everything in one enormous blue bag.", scores: { frakta: 3, innerlig: 2 } },
+          { text: "Remaining perfectly still while others admire my powerful bear aura.", scores: { djungleskog: 3, blahaj: 1 } }
+        ]
+      },
+      {
+        text: "You discover a mysterious button. What do you do?",
+        answers: [
+          { text: "Press it immediately. Questions are for after the consequences.", scores: { innerlig: 3, djungleskog: 2, frakta: 1 } },
+          { text: "Read the plaque first, including the tiny print nobody else noticed.", scores: { billy: 3, pax: 2, kallax: 1 } },
+          { text: "Ask who installed it, why it is here, and whether there is documentation.", scores: { kallax: 3, poang: 2, grejsimojs: 1 } },
+          { text: "Convince someone else to press it while offering enthusiastic moral support.", scores: { meatball: 3, blahaj: 2, grejsimojs: 1 } }
+        ]
+      }
+    ];
+
+    const results = {
+      grejsimojs: {
+        name: "GREJSIMOJS",
+        icon: "🧸",
+        tagline: "The Approachable Softie",
+        description: "You are kind, comforting, and pleasantly compact. You bring all the emotional support of a giant bear without forcing everyone to rearrange the living room around you. People trust you because you are warm, low-drama, and unlikely to loom in a doorway at midnight."
+      },
+      djungleskog: {
+        name: "DJUNGLESKOG",
+        icon: "🐻",
+        tagline: "The Bear King",
+        description: "You are sweet, powerful, slightly ominous, and obviously essential. You do not enter a room so much as become its new focal point. People feel safer when you are around, although they are not entirely sure whether you are protecting them or quietly judging the furniture layout."
+      },
+      frakta: {
+        name: "FRAKTA",
+        icon: "👜",
+        tagline: "The Practical Icon",
+        description: "You are chic, durable, stunning, and capable of carrying an unreasonable amount. Groceries? Yes. Laundry? Of course. The emotional labor of an entire committee? Apparently. You are the person everyone calls when something needs to get done, moved, stored, or dramatically hauled across a parking lot."
+      },
+      meatball: {
+        name: "THE MEATBALL",
+        icon: "🍽️",
+        tagline: "The Beloved Staple",
+        description: "You are familiar, comforting, and universally welcome. People may have arrived for something else, but you are the reason they stay. Your presence improves morale, creates community, and occasionally causes someone to leave with a MALM dresser they did not plan to purchase."
+      },
+      pax: {
+        name: "PAX WARDROBE",
+        icon: "🚪",
+        tagline: "The Complicated Masterpiece",
+        description: "You contain multitudes—and probably more than 150 parts. Getting to know you requires patience, planning, and at least one moment of staring silently at the instructions. You are complex, ambitious, and occasionally overwhelming, but the final result is impressive, highly useful, and worth the effort."
+      },
+      innerlig: {
+        name: "INNERLIG",
+        icon: "🛋️",
+        tagline: "The Misunderstood Innovator",
+        description: "Perhaps the world was not ready for your vision. You are bold, experimental, extremely portable, and willing to try what conventional sofas fear. Not every idea works forever, but you would rather attempt something fascinating than spend your life being a perfectly ordinary chair."
+      },
+      blahaj: {
+        name: "BLÅHAJ",
+        icon: "🦈",
+        tagline: "The Emotionally Supportive Shark",
+        description: "You are calm, comforting, and quietly iconic. People trust you with their problems because you are approachable and nonjudgmental, yet you retain the mysterious confidence of someone who could disappear into the ocean without explanation. Your personal brand is soft power with fins."
+      },
+      kallax: {
+        name: "KALLAX",
+        icon: "🗄️",
+        tagline: "The Organized Chaos Cube",
+        description: "You appear structured, dependable, and beautifully compartmentalized. Inside those compartments are three unfinished hobbies, seventeen charging cables, and one document labeled FINAL_v8_REAL. You adapt to almost any situation and make chaos look intentional, as long as nobody opens the fabric bins."
+      },
+      poang: {
+        name: "POÄNG",
+        icon: "🪑",
+        tagline: "The Reliable Bouncer",
+        description: "You are relaxed, supportive, and quietly holding everything together. You bend under pressure without losing your shape, and people feel more comfortable the moment you arrive. You may look low-key, but your resilience has survived meetings, deadlines, family visits, and several decades of questionable décor."
+      },
+      billy: {
+        name: "BILLY",
+        icon: "📚",
+        tagline: "The Overachieving Bookcase",
+        description: "You are practical, dependable, and determined to prove that owning books is a personality. You thrive with clear instructions, thoughtful organization, and proper wall anchoring. You look composed, but one uneven floorboard can destabilize your entire worldview."
+      }
+    };
+
+    const form = document.getElementById('quiz-form');
+    const questionLegend = document.getElementById('question-legend');
+    const answersContainer = document.getElementById('answers');
+    const backBtn = document.getElementById('back-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressText = document.getElementById('progress-text');
+    const progressPercent = document.getElementById('progress-percent');
+    const progressBar = document.getElementById('progress-bar');
+    const quizView = document.getElementById('quiz-view');
+    const resultView = document.getElementById('result-view');
+    const resultName = document.getElementById('result-name');
+    const resultTagline = document.getElementById('result-tagline');
+    const resultDescription = document.getElementById('result-description');
+    const resultIcon = document.getElementById('result-icon');
+    const restartBtn = document.getElementById('restart-btn');
+    const liveRegion = document.getElementById('live-region');
+
+    let currentQuestion = 0;
+    let selections = new Array(questions.length).fill(null);
+
+    function renderQuestion() {
+      const question = questions[currentQuestion];
+      const percent = Math.round(((currentQuestion + 1) / questions.length) * 100);
+
+      progressText.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+      progressPercent.textContent = `${percent}%`;
+      progressBar.style.width = `${percent}%`;
+      questionLegend.textContent = question.text;
+      answersContainer.innerHTML = '';
+
+      question.answers.forEach((answer, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'answer-option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'answer';
+        input.id = `answer-${currentQuestion}-${index}`;
+        input.value = index;
+        input.checked = selections[currentQuestion] === index;
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = answer.text;
+
+        input.addEventListener('change', () => {
+          selections[currentQuestion] = index;
+          nextBtn.disabled = false;
+        });
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(label);
+        answersContainer.appendChild(wrapper);
+      });
+
+      backBtn.disabled = currentQuestion === 0;
+      nextBtn.disabled = selections[currentQuestion] === null;
+      nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Reveal My IKEA Destiny' : 'Next Question';
+
+      liveRegion.textContent = `Question ${currentQuestion + 1} of ${questions.length}: ${question.text}`;
+      questionLegend.focus?.();
+    }
+
+    function calculateResult() {
+      const totals = {};
+      Object.keys(results).forEach(key => totals[key] = 0);
+
+      selections.forEach((selectedIndex, questionIndex) => {
+        const scores = questions[questionIndex].answers[selectedIndex].scores;
+        Object.entries(scores).forEach(([key, value]) => {
+          totals[key] += value;
+        });
+      });
+
+      const maxScore = Math.max(...Object.values(totals));
+      const tied = Object.keys(totals).filter(key => totals[key] === maxScore);
+      return tied[Math.floor(Math.random() * tied.length)];
+    }
+
+    function showResult() {
+      const resultKey = calculateResult();
+      const result = results[resultKey];
+
+      resultName.textContent = result.name;
+      resultTagline.textContent = result.tagline;
+      resultDescription.textContent = result.description;
+      resultIcon.textContent = result.icon;
+
+      quizView.hidden = true;
+      resultView.hidden = false;
+      resultView.focus();
+      liveRegion.textContent = `Your result is ${result.name}: ${result.tagline}`;
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (selections[currentQuestion] === null) return;
+
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion += 1;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion -= 1;
+        renderQuestion();
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      currentQuestion = 0;
+      selections = new Array(questions.length).fill(null);
+      resultView.hidden = true;
+      quizView.hidden = false;
+      renderQuestion();
+      document.getElementById('quiz').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    renderQuestion();
+  </script>
+</body>
+</html>
