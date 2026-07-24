@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Consumer Decision-Making Model</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 30px 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #233042;
+  background: #f5f8fc;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 12px;
+  color: #0b5cab;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.intro {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Overview flow */
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.flow-stage {
+  min-width: 150px;
+  padding: 16px 22px;
+  color: #ffffff;
+  background: #0b5cab;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.arrow {
+  color: #0b5cab;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Expandable sections */
+
+details {
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 2px solid #d8e7f7;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+details[open] {
+  border-color: #0b5cab;
+}
+
+summary {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  margin-left: auto;
+  color: #0b5cab;
+  content: "+";
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+details[open] summary::after {
+  content: "−";
+}
+
+summary:hover {
+  background: #f1f7fd;
+}
+
+summary:focus-visible {
+  outline: 4px solid #f2c94c;
+  outline-offset: -4px;
+}
+
+.stage-label {
+  display: flex;
+  width: 84px;
+  min-width: 84px;
+  height: 84px;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #0b5cab;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.summary-title {
+  color: #233042;
+}
+
+.content {
+  padding: 0 28px 28px 130px;
+  line-height: 1.65;
+}
+
+.content h2 {
+  margin: 4px 0 12px;
+  color: #0b5cab;
+  font-size: 1.15rem;
+}
+
+.content p {
+  margin: 0 0 16px;
+}
+
+.content ul {
+  margin: 10px 0 18px;
+  padding-left: 24px;
+}
+
+.content li {
+  margin-bottom: 8px;
+}
+
+.example-box {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: #f5f8fc;
+  border-left: 5px solid #0b5cab;
+  border-radius: 6px;
+}
+
+.example-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* Key takeaway */
+
+.footer {
+  margin-top: 30px;
+  padding: 20px;
+  background: #eaf4ff;
+  border-left: 6px solid #0b5cab;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.footer h2 {
+  margin: 0 0 8px;
+  color: #0b5cab;
+  font-size: 1.15rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* Responsive layout */
+
+@media (max-width: 700px) {
+  body {
+    padding: 20px 12px;
+  }
+
+  .flow {
+    flex-direction: column;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+  }
+
+  summary {
+    gap: 14px;
+    padding: 18px;
+    font-size: 1.05rem;
+  }
+
+  .stage-label {
+    width: 68px;
+    min-width: 68px;
+    height: 68px;
+    font-size: 0.82rem;
+  }
+
+  .content {
+    padding: 0 20px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <h1>Consumer Decision-Making Model</h1>
+
+  <p class="intro">
+    Consumer decisions can happen quickly or involve careful consideration.
+    In either case, purchasing behavior is shaped by external influences,
+    internal factors, and the outcomes of previous decisions. Select each
+    stage below to explore the model.
+  </p>
+
+  <div
+    class="flow"
+    role="img"
+    aria-label="The consumer decision-making model moves from input to process to output."
+  >
+    <div class="flow-stage">Input</div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="flow-stage">Process</div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="flow-stage">Output</div>
+  </div>
+
+  <details>
+    <summary>
+      <span class="stage-label" aria-hidden="true">Input</span>
+      <span class="summary-title">External Influences</span>
+    </summary>
+
+    <div class="content">
+      <h2>What is input?</h2>
+
+      <p>
+        Input includes influences that come from outside the consumer. These
+        factors shape how consumers view products, services, and brands before
+        making a decision.
+      </p>
+
+      <p><strong>Examples include:</strong></p>
+
+      <ul>
+        <li>
+          Marketing activities, including product, price, promotion, and
+          distribution
+        </li>
+        <li>Family and reference groups</li>
+        <li>Culture, subculture, and social class</li>
+        <li>
+          Advertising, social media, and word-of-mouth recommendations
+        </li>
+      </ul>
+
+      <div class="example-box">
+        <p>
+          <strong>Example:</strong> A consumer may see an advertisement, read
+          online reviews, compare prices, and ask family members for advice
+          before considering a purchase.
+        </p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="stage-label" aria-hidden="true">Process</span>
+      <span class="summary-title">Internal Influences and Evaluation</span>
+    </summary>
+
+    <div class="content">
+      <h2>What happens during the process stage?</h2>
+
+      <p>
+        During the process stage, consumers interpret information and consider
+        whether a product or service will meet their needs. Both internal
+        influences and previous experiences affect this evaluation.
+      </p>
+
+      <p><strong>Internal influences include:</strong></p>
+
+      <ul>
+        <li>Needs and motivation</li>
+        <li>Personality traits</li>
+        <li>Perception</li>
+        <li>Attitudes</li>
+        <li>Learning, knowledge, and experience</li>
+        <li>Lifestyle</li>
+      </ul>
+
+      <p>
+        Consumers recognize a need, determine the type of decision involved,
+        search for information, and compare purchase alternatives.
+      </p>
+
+      <div class="example-box">
+        <p>
+          <strong>Example:</strong> A consumer shopping for a vehicle may
+          compare price, reliability, safety features, and past experiences
+          with different brands before choosing an option.
+        </p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span class="stage-label" aria-hidden="true">Output</span>
+      <span class="summary-title">Purchase and Postpurchase Outcomes</span>
+    </summary>
+
+    <div class="content">
+      <h2>What is output?</h2>
+
+      <p>
+        Output includes the consumer's final decision and the response that
+        follows. The experience can influence future purchases and the
+        consumer's relationship with the brand.
+      </p>
+
+      <p><strong>Possible outcomes include:</strong></p>
+
+      <ul>
+        <li>Purchase or decide not to purchase</li>
+        <li>Evaluate the experience after purchasing</li>
+        <li>Repurchase or choose a different option in the future</li>
+        <li>Develop trust and loyalty when expectations are met</li>
+      </ul>
+
+      <div class="example-box">
+        <p>
+          <strong>Example:</strong> After purchasing a vehicle, the consumer
+          evaluates its performance. A positive experience may lead to another
+          purchase from the same brand, while a negative experience may lead
+          the consumer to choose a competitor.
+        </p>
+      </div>
+    </div>
+  </details>
+
+  <section class="footer" aria-labelledby="key-takeaway-heading">
+    <h2 id="key-takeaway-heading">Key Takeaway</h2>
+
+    <p>
+      The three components work together. External influences
+      (<strong>input</strong>) shape the information consumers receive.
+      Internal influences guide the evaluation and decision-making
+      <strong>process</strong>. The resulting <strong>output</strong> can
+      affect satisfaction, repurchase decisions, trust, and loyalty.
+    </p>
+  </section>
+
+</main>
+
+</body>
+</html>
