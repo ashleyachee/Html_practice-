@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build a Consumer Persona</title>
+  <style>
+    :root {
+      --blue: #005eb8;
+      --blue-dark: #003b73;
+      --blue-light: #eaf4ff;
+      --border: #c8d4e3;
+      --text: #1f2937;
+      --muted: #5b6675;
+      --panel: #ffffff;
+      --success: #0f7b4d;
+      --success-bg: #e9f7f0;
+      --warning: #9a6700;
+      --warning-bg: #fff7df;
+      --focus: #ffbf47;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fa;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.25;
+      margin-top: 0;
+    }
+
+    h1 {
+      color: var(--blue-dark);
+      margin-bottom: 8px;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+    }
+
+    h2 {
+      color: var(--blue-dark);
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    .intro {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .callout {
+      border-left: 6px solid var(--blue);
+      background: var(--blue-light);
+    }
+
+    .research-grid,
+    .builder-grid,
+    .persona-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .research-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .research-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .research-card h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: var(--blue-dark);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      border: 1px solid #b9d7f2;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .section-heading-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .builder-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field-full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+    }
+
+    select {
+      width: 100%;
+      margin-top: 6px;
+      min-height: 46px;
+      padding: 10px 12px;
+      border: 1px solid #8da2b8;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+
+    select:focus,
+    button:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 2px solid var(--blue);
+      border-radius: 10px;
+      min-height: 44px;
+      padding: 10px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #fff;
+      color: var(--blue-dark);
+    }
+
+    .feedback {
+      margin-top: 16px;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .feedback.success {
+      background: var(--success-bg);
+      border: 1px solid #90d7b8;
+      color: #084f32;
+    }
+
+    .feedback.warning {
+      background: var(--warning-bg);
+      border: 1px solid #e2c46d;
+      color: #634200;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .persona-card {
+      border-top: 6px solid var(--blue);
+    }
+
+    .persona-grid {
+      grid-template-columns: 150px 1fr;
+      align-items: start;
+    }
+
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 16px;
+      background: var(--blue-light);
+      display: grid;
+      place-items: center;
+      color: #6b7e91;
+    }
+
+    .avatar svg {
+      width: 92px;
+      height: 92px;
+    }
+
+    .persona-details {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 20px;
+      margin-top: 14px;
+    }
+
+    .persona-details dt {
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 2px;
+    }
+
+    .persona-details dd {
+      margin: 0;
+    }
+
+    .persona-details .wide {
+      grid-column: 1 / -1;
+    }
+
+    .application {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 700px) {
+      .research-grid,
+      .builder-grid,
+      .persona-grid,
+      .persona-details {
+        grid-template-columns: 1fr;
+      }
+
+      .field-full,
+      .persona-details .wide {
+        grid-column: auto;
+      }
+
+      .avatar {
+        width: 110px;
+        height: 110px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Build a Consumer Persona</h1>
+      <p class="intro">
+        Review the customer research, select the details best supported by the evidence,
+        and assemble a completed consumer persona.
+      </p>
+    </header>
+
+    <section class="section callout" aria-labelledby="scenario-heading">
+      <h2 id="scenario-heading">Scenario</h2>
+      <p>
+        FreshPath delivers healthy meal kits. Its marketing team surveyed customers,
+        reviewed purchase data, and conducted interviews. Use the research below to
+        develop a consumer persona for one of its target customers.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="research-heading">
+      <div class="section-heading-row">
+        <h2 id="research-heading">1. Review the Customer Research</h2>
+        <span class="badge">Research-based evidence</span>
+      </div>
+
+      <div class="research-grid">
+        <article class="research-card">
+          <h3>Survey Data</h3>
+          <p>
+            Most customers are 28–40 years old, work full time, and live in urban or
+            suburban areas.
+          </p>
+        </article>
+
+        <article class="research-card">
+          <h3>Purchase Data</h3>
+          <p>
+            Customers frequently select quick-prep meals, family-size portions, and
+            lower-cost weekly plans.
+          </p>
+        </article>
+
+        <article class="research-card">
+          <h3>Customer Interviews</h3>
+          <p>
+            Customers want healthier meals but struggle to plan, shop, and cook after work.
+          </p>
+        </article>
+
+        <article class="research-card">
+          <h3>Communication Data</h3>
+          <p>
+            Customers respond most often to mobile notifications, email reminders,
+            and short social media videos.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="builder-heading">
+      <h2 id="builder-heading">2. Build the Persona</h2>
+      <p class="helper">Select the option best supported by the customer research.</p>
+
+      <div class="builder-grid">
+        <label for="demographic">
+          Demographic Profile
+          <select id="demographic">
+            <option value="">Choose an option</option>
+            <option value="correct">Age 34, full-time professional, suburban resident</option>
+            <option value="wrong">Age 19, full-time student, rural resident</option>
+            <option value="wrong">Age 67, retired traveler, coastal resident</option>
+          </select>
+        </label>
+
+        <label for="lifestyle">
+          Lifestyle
+          <select id="lifestyle">
+            <option value="">Choose an option</option>
+            <option value="wrong">Has abundant time for daily shopping and cooking</option>
+            <option value="correct">Busy schedule and interested in healthier eating</option>
+            <option value="wrong">Primarily interested in luxury dining experiences</option>
+          </select>
+        </label>
+
+        <label for="motivation">
+          Primary Motivation
+          <select id="motivation">
+            <option value="">Choose an option</option>
+            <option value="wrong">Prepare the most complex meals possible</option>
+            <option value="wrong">Purchase premium kitchen equipment</option>
+            <option value="correct">Save time while serving healthier meals</option>
+          </select>
+        </label>
+
+        <label for="pain">
+          Pain Point
+          <select id="pain">
+            <option value="">Choose an option</option>
+            <option value="correct">Limited time to plan, shop for, and prepare meals</option>
+            <option value="wrong">Difficulty finding international luxury resorts</option>
+            <option value="wrong">Lack of access to professional sports equipment</option>
+          </select>
+        </label>
+
+        <label for="channels" class="field-full">
+          Preferred Communication Channels
+          <select id="channels">
+            <option value="">Choose an option</option>
+            <option value="wrong">Printed catalogs and radio advertisements only</option>
+            <option value="correct">Mobile notifications, email, and short social videos</option>
+            <option value="wrong">Trade journals and technical industry reports</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="primary" id="checkButton">Check My Persona</button>
+        <button type="button" class="secondary" id="resetButton">Reset</button>
+      </div>
+
+      <div id="feedback" aria-live="polite"></div>
+    </section>
+
+    <section id="personaOutput" class="section persona-card hidden" aria-labelledby="persona-heading">
+      <div class="section-heading-row">
+        <h2 id="persona-heading">3. Completed Consumer Persona</h2>
+        <span class="badge">Target customer</span>
+      </div>
+
+      <div class="persona-grid">
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 100 100" fill="currentColor">
+            <circle cx="50" cy="32" r="18"></circle>
+            <path d="M20 88c2-24 14-36 30-36s28 12 30 36z"></path>
+          </svg>
+        </div>
+
+        <div>
+          <h3>Meet Taylor</h3>
+          <p class="helper">
+            A research-based representation of a FreshPath target customer
+          </p>
+
+          <dl class="persona-details">
+            <div>
+              <dt>Demographics</dt>
+              <dd>Age 34, full-time professional, suburban resident</dd>
+            </div>
+
+            <div>
+              <dt>Lifestyle</dt>
+              <dd>Busy and interested in healthier eating</dd>
+            </div>
+
+            <div>
+              <dt>Motivation</dt>
+              <dd>Save time while serving healthier meals</dd>
+            </div>
+
+            <div>
+              <dt>Pain Point</dt>
+              <dd>Limited time for meal planning, shopping, and preparation</dd>
+            </div>
+
+            <div class="wide">
+              <dt>Communication Preferences</dt>
+              <dd>Mobile notifications, email reminders, and short social media videos</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <p class="application">
+        <strong>Marketing Application:</strong> FreshPath could emphasize quick preparation,
+        healthy choices, affordable weekly plans, and mobile ordering when communicating
+        with customers like Taylor.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const fields = ["demographic", "lifestyle", "motivation", "pain", "channels"];
+    const feedback = document.getElementById("feedback");
+    const output = document.getElementById("personaOutput");
+
+    document.getElementById("checkButton").addEventListener("click", () => {
+      const values = fields.map((id) => document.getElementById(id).value);
+      const unanswered = values.filter((value) => value === "").length;
+      const correct = values.filter((value) => value === "correct").length;
+
+      if (unanswered > 0) {
+        feedback.className = "feedback warning";
+        feedback.innerHTML =
+          "<strong>Complete each part of the persona.</strong><br>" +
+          "You still have " + unanswered + " selection" +
+          (unanswered === 1 ? "" : "s") + " to make.";
+        output.classList.add("hidden");
+        return;
+      }
+
+      if (correct === fields.length) {
+        feedback.className = "feedback success";
+        feedback.innerHTML =
+          "<strong>Persona complete!</strong><br>" +
+          "Each selection is supported by the customer research. Notice how the persona " +
+          "combines demographic, behavioral, and motivational information.";
+        output.classList.remove("hidden");
+        output.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        feedback.className = "feedback warning";
+        feedback.innerHTML =
+          "<strong>Review the research and try again.</strong><br>" +
+          "You selected " + correct + " of " + fields.length +
+          " research-supported characteristics. Choose details that appear in, or can " +
+          "reasonably be concluded from, the evidence provided.";
+        output.classList.add("hidden");
+      }
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+      fields.forEach((id) => {
+        document.getElementById(id).value = "";
+      });
+
+      feedback.className = "";
+      feedback.innerHTML = "";
+      output.classList.add("hidden");
+      document.getElementById("demographic").focus();
+    });
+  </script>
+</body>
+</html>
