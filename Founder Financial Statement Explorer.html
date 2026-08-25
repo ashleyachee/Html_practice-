@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Founder Financial Statement Explorer</title>
+  <style>
+    #ffse {
+      --ffse-bg: #f4f7fb;
+      --ffse-panel: #ffffff;
+      --ffse-panel-alt: #eef4ff;
+      --ffse-ink: #16233a;
+      --ffse-muted: #48566e;
+      --ffse-line: #c7d2e1;
+      --ffse-line-soft: #e2e8f2;
+      --ffse-accent: #1d4ed8;
+      --ffse-accent-dark: #14379b;
+      --ffse-ok-bg: #e9f7ef;
+      --ffse-ok-ink: #14532d;
+      --ffse-ok-line: #7cc89a;
+      --ffse-no-bg: #fff1f2;
+      --ffse-no-ink: #9f1239;
+      --ffse-no-line: #f2a4b0;
+      --ffse-warn-bg: #fff8e6;
+      --ffse-warn-ink: #7a4b00;
+      --ffse-warn-line: #e2bf72;
+      --ffse-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+      --ffse-radius: 16px;
+      --ffse-focus: 3px solid #111827;
+
+      box-sizing: border-box;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px;
+      background: var(--ffse-bg);
+      color: var(--ffse-ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    #ffse *,
+    #ffse *::before,
+    #ffse *::after { box-sizing: border-box; }
+
+    #ffse button,
+    #ffse input,
+    #ffse select { font: inherit; color: inherit; }
+
+    #ffse :focus-visible {
+      outline: var(--ffse-focus);
+      outline-offset: 2px;
+    }
+
+    #ffse .ffse-sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #ffse .ffse-skip {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #ffffff;
+      color: var(--ffse-accent-dark);
+      border: 2px solid var(--ffse-accent-dark);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      z-index: 20;
+    }
+
+    #ffse .ffse-skip:focus {
+      left: 8px;
+      top: 8px;
+    }
+
+    #ffse [hidden] { display: none !important; }
+
+    /* ---------- Header ---------- */
+
+    #ffse .ffse-hero {
+      background: linear-gradient(135deg, #ffffff 0%, #e8f0ff 100%);
+      border: 1px solid var(--ffse-line);
+      border-radius: 22px;
+      box-shadow: var(--ffse-shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    #ffse .ffse-eyebrow {
+      margin: 0 0 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ffse-accent-dark);
+    }
+
+    #ffse h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+      line-height: 1.2;
+    }
+
+    #ffse .ffse-lede {
+      margin: 0;
+      max-width: 72ch;
+      color: var(--ffse-muted);
+    }
+
+    #ffse .ffse-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    #ffse .ffse-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--ffse-line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+    }
+
+    #ffse .ffse-progress-wrap {
+      flex: 1 1 220px;
+      min-width: 200px;
+    }
+
+    #ffse .ffse-progress-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    #ffse .ffse-progress-track {
+      height: 14px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--ffse-line);
+      overflow: hidden;
+    }
+
+    #ffse .ffse-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--ffse-accent);
+      transition: width 0.3s ease;
+    }
+
+    #ffse details.ffse-help {
+      margin-top: 16px;
+      background: #ffffff;
+      border: 1px solid var(--ffse-line);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    #ffse details.ffse-help summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--ffse-accent-dark);
+    }
+
+    #ffse details.ffse-help ul { margin: 10px 0 4px; padding-left: 22px; }
+    #ffse details.ffse-help li { margin-bottom: 6px; }
+
+    /* ---------- Layout ---------- */
+
+    #ffse .ffse-layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.85fr) minmax(320px, 1.6fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    #ffse .ffse-panel {
+      background: var(--ffse-panel);
+      border: 1px solid var(--ffse-line);
+      border-radius: var(--ffse-radius);
+      box-shadow: var(--ffse-shadow);
+      padding: 18px;
+    }
+
+    #ffse h2 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+    }
+
+    #ffse h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    #ffse .ffse-panel-intro {
+      margin: 0 0 14px;
+      color: var(--ffse-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Transaction list ---------- */
+
+    #ffse .ffse-ledger {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: ffse-tx;
+    }
+
+    #ffse .ffse-ledger li { margin-bottom: 8px; }
+
+    #ffse .ffse-tx-button {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid var(--ffse-line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    #ffse .ffse-tx-button:hover { border-color: var(--ffse-accent); }
+
+    #ffse .ffse-tx-button[aria-current="step"] {
+      border-color: var(--ffse-accent);
+      border-width: 2px;
+      background: var(--ffse-panel-alt);
+      font-weight: 700;
+    }
+
+    #ffse .ffse-tx-button[data-state="done"] {
+      background: var(--ffse-ok-bg);
+      border-color: var(--ffse-ok-line);
+    }
+
+    #ffse .ffse-tx-button[aria-disabled="true"] {
+      color: #52607a;
+      background: #f6f8fc;
+      cursor: not-allowed;
+    }
+
+    #ffse .ffse-tx-marker {
+      flex: 0 0 auto;
+      min-width: 1.9rem;
+      font-weight: 700;
+      color: var(--ffse-accent-dark);
+    }
+
+    #ffse .ffse-tx-button[data-state="done"] .ffse-tx-marker { color: var(--ffse-ok-ink); }
+    #ffse .ffse-tx-button[aria-disabled="true"] .ffse-tx-marker { color: #52607a; }
+
+    #ffse .ffse-tx-text { flex: 1 1 auto; font-size: 0.95rem; }
+
+    /* ---------- Question form ---------- */
+
+    #ffse .ffse-step-eyebrow {
+      margin: 0 0 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ffse-accent-dark);
+    }
+
+    #ffse .ffse-scenario {
+      background: var(--ffse-panel-alt);
+      border: 1px solid var(--ffse-line-soft);
+      border-left: 5px solid var(--ffse-accent);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 0 0 16px;
+    }
+
+    #ffse fieldset {
+      border: 1px solid var(--ffse-line-soft);
+      border-radius: 12px;
+      padding: 12px 14px 14px;
+      margin: 0 0 14px;
+    }
+
+    #ffse legend {
+      font-weight: 700;
+      padding: 0 6px;
+    }
+
+    #ffse .ffse-q-help {
+      margin: 0 0 10px;
+      font-size: 0.92rem;
+      color: var(--ffse-muted);
+    }
+
+    #ffse .ffse-opt {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid var(--ffse-line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    #ffse .ffse-opt:hover { border-color: var(--ffse-accent); }
+    #ffse .ffse-opt:focus-within { outline: var(--ffse-focus); outline-offset: 2px; }
+
+    #ffse .ffse-opt input[type="radio"] {
+      margin: 0.35rem 0 0;
+      flex: 0 0 auto;
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: #14379b;
+    }
+
+    #ffse .ffse-opt.is-correct {
+      background: var(--ffse-ok-bg);
+      border-color: var(--ffse-ok-line);
+      border-width: 2px;
+    }
+
+    #ffse .ffse-opt.is-wrong {
+      background: var(--ffse-no-bg);
+      border-color: var(--ffse-no-line);
+      border-width: 2px;
+    }
+
+    #ffse .ffse-opt-tag {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    #ffse .ffse-opt.is-correct .ffse-opt-tag { color: var(--ffse-ok-ink); }
+    #ffse .ffse-opt.is-wrong .ffse-opt-tag { color: var(--ffse-no-ink); }
+
+    #ffse .ffse-note {
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 8px 0 0;
+      font-size: 0.95rem;
+      border: 1px solid transparent;
+    }
+
+    #ffse .ffse-note.ok { background: var(--ffse-ok-bg); color: var(--ffse-ok-ink); border-color: var(--ffse-ok-line); }
+    #ffse .ffse-note.no { background: var(--ffse-no-bg); color: var(--ffse-no-ink); border-color: var(--ffse-no-line); }
+    #ffse .ffse-note.warn { background: var(--ffse-warn-bg); color: var(--ffse-warn-ink); border-color: var(--ffse-warn-line); }
+
+    /* ---------- Buttons ---------- */
+
+    #ffse .ffse-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    #ffse .ffse-btn {
+      border: 1px solid var(--ffse-line);
+      border-radius: 12px;
+      background: #ffffff;
+      padding: 11px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    #ffse .ffse-btn:hover { border-color: var(--ffse-accent); }
+
+    #ffse .ffse-btn.primary {
+      background: var(--ffse-accent);
+      border-color: var(--ffse-accent);
+      color: #ffffff;
+    }
+
+    #ffse .ffse-btn.primary:hover {
+      background: var(--ffse-accent-dark);
+      border-color: var(--ffse-accent-dark);
+    }
+
+    /* ---------- Feedback / posted ---------- */
+
+    #ffse .ffse-feedback {
+      margin-top: 16px;
+      border: 1px solid var(--ffse-line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfcfe;
+    }
+
+    #ffse .ffse-feedback h3:focus-visible { outline: var(--ffse-focus); outline-offset: 3px; }
+
+    #ffse .ffse-posted-list {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+    }
+
+    #ffse .ffse-posted-list li {
+      border-top: 1px solid var(--ffse-line-soft);
+      padding: 9px 0;
+    }
+
+    #ffse .ffse-posted-list li:first-child { border-top: 0; }
+
+    #ffse .ffse-posted-list strong { display: block; }
+
+    /* ---------- Statements ---------- */
+
+    #ffse .ffse-statements {
+      margin-top: 18px;
+    }
+
+    #ffse .ffse-statement-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    #ffse .ffse-stmt {
+      background: #ffffff;
+      border: 1px solid var(--ffse-line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    #ffse table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    #ffse caption {
+      text-align: left;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    #ffse caption .ffse-caption-note {
+      display: block;
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--ffse-muted);
+      margin-top: 2px;
+    }
+
+    #ffse th,
+    #ffse td {
+      text-align: left;
+      padding: 6px 4px;
+      border-bottom: 1px solid var(--ffse-line-soft);
+      vertical-align: top;
+    }
+
+    #ffse td.ffse-num,
+    #ffse th.ffse-num {
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #ffse tr.ffse-section th {
+      background: var(--ffse-panel-alt);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    #ffse tr.ffse-total th,
+    #ffse tr.ffse-total td {
+      border-top: 2px solid var(--ffse-ink);
+      border-bottom: 0;
+      font-weight: 700;
+    }
+
+    #ffse tr.ffse-indent th { padding-left: 14px; font-weight: 400; }
+
+    #ffse .ffse-tie {
+      margin-top: 14px;
+      background: var(--ffse-warn-bg);
+      border: 1px solid var(--ffse-warn-line);
+      color: var(--ffse-warn-ink);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    #ffse .ffse-tie h3 { margin-top: 0; }
+    #ffse .ffse-tie ul { margin: 8px 0 0; padding-left: 22px; }
+    #ffse .ffse-tie li { margin-bottom: 6px; }
+
+    #ffse .ffse-empty {
+      color: var(--ffse-muted);
+      font-style: normal;
+      font-size: 0.92rem;
+    }
+
+    /* ---------- Summary ---------- */
+
+    #ffse .ffse-score {
+      background: linear-gradient(135deg, #eff6ff, #ffffff);
+      border: 1px solid var(--ffse-line);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    #ffse .ffse-score strong {
+      display: block;
+      font-size: 1.6rem;
+      color: var(--ffse-accent-dark);
+    }
+
+    #ffse .ffse-takeaways { margin: 10px 0 0; padding-left: 22px; }
+    #ffse .ffse-takeaways li { margin-bottom: 8px; }
+
+    #ffse .ffse-teaching-note {
+      margin-top: 18px;
+      border: 1px dashed var(--ffse-line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #ffffff;
+      color: var(--ffse-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ---------- Responsive ---------- */
+
+    @media (max-width: 980px) {
+      #ffse .ffse-layout { grid-template-columns: 1fr; }
+      #ffse .ffse-statement-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      #ffse { padding: 12px; }
+      #ffse .ffse-hero,
+      #ffse .ffse-panel { padding: 14px; }
+      #ffse .ffse-btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #ffse *,
+      #ffse *::before,
+      #ffse *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      #ffse { background: #ffffff; }
+      #ffse .ffse-panel,
+      #ffse .ffse-hero { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="ffse">
+    <a class="ffse-skip" href="#ffse-trace-title">Skip to the current transaction</a>
+    <a class="ffse-skip" href="#ffse-statements">Skip to the three financial statements</a>
+
+    <header class="ffse-hero">
+      <p class="ffse-eyebrow">Interactive Accounting Activity</p>
+      <h1>Founder Financial Statement Explorer</h1>
+      <p class="ffse-lede">
+        You have just co-founded <strong>Rivet Labs</strong>, a small software studio. Ten everyday
+        startup transactions are waiting in the ledger. For each one, decide how it lands on the
+        income statement, the balance sheet, and the statement of cash flows &mdash; then post it and
+        watch all three statements update together.
+      </p>
+
+      <div class="ffse-hero-meta">
+        <div class="ffse-progress-wrap">
+          <span class="ffse-progress-label" id="ffse-progress-label">
+            Transactions posted: <span id="ffse-progress-text">0 of 10</span>
+          </span>
+          <div
+            class="ffse-progress-track"
+            id="ffse-progress"
+            role="progressbar"
+            aria-labelledby="ffse-progress-label"
+            aria-valuemin="0"
+            aria-valuemax="10"
+            aria-valuenow="0"
+            aria-valuetext="0 of 10 transactions posted"
+          >
+            <div class="ffse-progress-fill" id="ffse-progress-fill"></div>
+          </div>
+        </div>
+
+        <p class="ffse-chip" id="ffse-score-chip">
+          <span aria-hidden="true">&#9989;</span>
+          <span id="ffse-score-text">First-try answers: 0 of 30</span>
+        </p>
+
+        <button type="button" class="ffse-btn" id="ffse-reset">Start over</button>
+      </div>
+
+      <details class="ffse-help">
+        <summary>How this activity works</summary>
+        <ul>
+          <li>Work through the transactions in order. Each one asks three questions: one for each statement.</li>
+          <li>Choose an answer for all three questions, then select <strong>Check my answers</strong>. You can change an answer and check again as many times as you like; the score counts first attempts only.</li>
+          <li>If you get stuck, <strong>Show me the answers</strong> reveals the correct choices with an explanation so you can keep moving.</li>
+          <li>Posting a transaction updates the three statements below the questions. You can revisit any posted transaction from the ledger list.</li>
+          <li>Everything works with a keyboard: <kbd>Tab</kbd> moves between controls, arrow keys move within a set of answer choices, and <kbd>Enter</kbd> or <kbd>Space</kbd> activates a button.</li>
+        </ul>
+      </details>
+    </header>
+
+    <div class="ffse-layout">
+      <section class="ffse-panel" aria-labelledby="ffse-ledger-title">
+        <h2 id="ffse-ledger-title">Transaction ledger</h2>
+        <p class="ffse-panel-intro">Rivet Labs, first month of operations. Select a transaction to work on it or to review it.</p>
+        <ol class="ffse-ledger" id="ffse-ledger"></ol>
+      </section>
+
+      <section class="ffse-panel" aria-labelledby="ffse-trace-title" id="ffse-trace-panel">
+        <p class="ffse-step-eyebrow" id="ffse-trace-step">Transaction 1 of 10</p>
+        <h2 id="ffse-trace-title" tabindex="-1">Loading&hellip;</h2>
+        <p class="ffse-scenario" id="ffse-trace-prompt"></p>
+
+        <form id="ffse-form" novalidate>
+          <div id="ffse-questions"></div>
+          <div class="ffse-row">
+            <button type="submit" class="ffse-btn primary" id="ffse-check">Check my answers</button>
+            <button type="button" class="ffse-btn" id="ffse-reveal">Show me the answers</button>
+          </div>
+        </form>
+
+        <div class="ffse-feedback" id="ffse-feedback" hidden></div>
+
+        <div id="ffse-summary" hidden></div>
+      </section>
+    </div>
+
+    <section class="ffse-panel ffse-statements" id="ffse-statements" aria-labelledby="ffse-statements-title" tabindex="-1">
+      <h2 id="ffse-statements-title">Rivet Labs &mdash; the three statements so far</h2>
+      <p class="ffse-panel-intro" id="ffse-statements-intro">
+        These statements rebuild every time you post a transaction. All figures are in U.S. dollars,
+        cover the first month of operations, and start from zero. A figure shown with a minus sign is a
+        decrease or an outflow.
+      </p>
+
+      <div class="ffse-statement-grid">
+        <div class="ffse-stmt">
+          <table id="ffse-is">
+            <caption>
+              Income statement
+              <span class="ffse-caption-note">Did we earn a profit this month?</span>
+            </caption>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="ffse-stmt">
+          <table id="ffse-bs">
+            <caption>
+              Balance sheet
+              <span class="ffse-caption-note">What do we own and owe at the end of the month?</span>
+            </caption>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="ffse-stmt">
+          <table id="ffse-cf">
+            <caption>
+              Statement of cash flows
+              <span class="ffse-caption-note">Where did the cash actually move? (direct method)</span>
+            </caption>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="ffse-tie">
+        <h3>How the three statements connect</h3>
+        <ul id="ffse-ties"></ul>
+      </div>
+    </section>
+
+    <p class="ffse-teaching-note">
+      <strong>Teaching note.</strong> This activity uses simplified U.S. GAAP&ndash;style treatments so the
+      links between the statements stay visible. Real-world details vary: capitalization thresholds,
+      depreciation methods and useful lives, revenue-recognition timing, and whether cash flows are
+      presented using the direct or indirect method are all set by company policy, by the reporting
+      framework in use (for example U.S. GAAP or IFRS), and in some cases by tax rules in a particular
+      jurisdiction. Interest, income taxes, payroll taxes, and inventory are left out on purpose. This
+      is a learning model, not accounting or tax advice.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ------------------------------------------------------------------ *
+       * Transaction data. Each transaction carries three questions (one per
+       * statement), the account deltas it posts, and the display lines it
+       * adds to the income statement and the statement of cash flows.
+       * ------------------------------------------------------------------ */
+
+      var TRANSACTIONS = [
+        {
+          short: 'Founders invest $60,000 for shares',
+          title: 'The founders fund the company',
+          prompt: 'Day 1. You and your co-founder move $60,000 of your own savings into the company bank account in exchange for shares in Rivet Labs.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'What, if anything, does this transaction do to revenue or expenses this month?',
+              options: [
+                'Record $60,000 of revenue.',
+                'Record $60,000 of expense.',
+                'No effect on the income statement.'
+              ],
+              correct: 2,
+              hint: 'Ask yourself who the money came from. Did Rivet Labs deliver anything to a customer to get it?',
+              why: 'Revenue comes from delivering goods or services to customers. Money contributed by owners is not earned, so it never touches the income statement — it goes straight to equity.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'Which two accounts change, and does the balance sheet still balance?',
+              options: [
+                'Cash +$60,000 and paid-in capital +$60,000.',
+                'Cash +$60,000 and revenue +$60,000.',
+                'Cash +$60,000 and notes payable +$60,000.'
+              ],
+              correct: 0,
+              hint: 'Two of these choices would make the company owe the $60,000 back, or would put an income statement account on the balance sheet.',
+              why: 'An asset (cash) rises by $60,000 and equity (paid-in capital) rises by $60,000, so assets = liabilities + equity still holds. The founders own a claim on the company, but the company owes them nothing.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Does cash move? If so, which section reports it?',
+              options: [
+                'Operating inflow of $60,000.',
+                'Investing inflow of $60,000.',
+                'Financing inflow of $60,000.',
+                'No cash movement.'
+              ],
+              correct: 2,
+              hint: 'Financing covers cash raised from, or returned to, the people who fund the business — owners and lenders.',
+              why: 'Cash raised from owners is a financing activity. Operating covers the day-to-day business with customers and suppliers; investing covers buying and selling long-lived assets.'
+            }
+          ],
+          insight: 'A funded bank account is not a profitable business. Cash went up $60,000 and profit is still zero — the first sign that cash and profit answer different questions.',
+          deltas: { cash: 60000, paidIn: 60000 },
+          cfLine: { section: 'financing', label: "Cash from founders' investment", amount: 60000 },
+          effects: {
+            is: 'No effect. Owner investment is not revenue.',
+            bs: 'Cash +$60,000; paid-in capital +$60,000.',
+            cf: 'Financing inflow of $60,000.'
+          }
+        },
+        {
+          short: 'Buy $12,000 of equipment for cash',
+          title: 'Buy laptops and a test rig',
+          prompt: 'You spend $12,000 in cash on six laptops and a hardware test rig. You expect to use them for about two years.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'The cash is gone this month. Is the cost an expense this month?',
+              options: [
+                'Record a $12,000 expense this month.',
+                'No effect this month. The cost becomes an asset and reaches the income statement as depreciation over the useful life.',
+                'Record $12,000 as negative revenue.'
+              ],
+              correct: 1,
+              hint: 'The equipment will help earn revenue for about 24 months, not just this one.',
+              why: 'Equipment with a useful life beyond one period is capitalized as an asset. Its cost is spread across the periods it helps earn revenue, arriving on the income statement as depreciation expense.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'Which accounts change?',
+              options: [
+                'Cash −$12,000 and equipment +$12,000.',
+                'Cash −$12,000 and retained earnings −$12,000.',
+                'Equipment +$12,000 and accounts payable +$12,000.'
+              ],
+              correct: 0,
+              hint: 'You paid cash today, and you now own something worth roughly what you paid.',
+              why: 'One asset turns into another. Total assets do not change at the moment of purchase, so equity does not move either — nothing was earned or lost.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Cash left the account. Which section?',
+              options: [
+                'Operating outflow of $12,000.',
+                'Investing outflow of $12,000.',
+                'Financing outflow of $12,000.',
+                'No cash movement.'
+              ],
+              correct: 1,
+              hint: 'This section is named for what the company is doing: putting cash into long-lived assets.',
+              why: 'Buying long-lived assets is an investing activity. This is why a company can show a healthy operating cash flow and still drain its bank account — the spending shows up one section lower.'
+            }
+          ],
+          insight: 'Profit is untouched but $12,000 of cash is gone. Capital spending hits the bank account long before it hits the income statement.',
+          deltas: { cash: -12000, equipGross: 12000 },
+          cfLine: { section: 'investing', label: 'Purchase of equipment', amount: -12000 },
+          effects: {
+            is: 'No effect yet. The cost is capitalized.',
+            bs: 'Cash −$12,000; equipment +$12,000.',
+            cf: 'Investing outflow of $12,000.'
+          }
+        },
+        {
+          short: 'Invoice a client $20,000 (due in 30 days)',
+          title: 'Deliver a build and send the invoice',
+          prompt: 'You finish a $20,000 software build, hand it over to the client, and send the invoice. Payment terms are net 30, so no cash has arrived yet.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'The work is done but the cash has not arrived. What happens to revenue?',
+              options: [
+                'Record $20,000 of revenue now.',
+                'No effect until the client pays.',
+                'Record $10,000 now and $10,000 when the client pays.'
+              ],
+              correct: 0,
+              hint: 'Under accrual accounting, the trigger for revenue is delivering the promised work — not the arrival of cash.',
+              why: 'Revenue is recorded when the performance obligation is satisfied, which happened when you delivered the build. Waiting for cash would be cash-basis accounting, which is not how these statements are prepared.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'You are owed $20,000. Where does that promise sit?',
+              options: [
+                'Cash +$20,000 and retained earnings +$20,000.',
+                'Accounts receivable +$20,000 and retained earnings +$20,000.',
+                'Accounts receivable +$20,000 and deferred revenue +$20,000.'
+              ],
+              correct: 1,
+              hint: 'A customer’s promise to pay you is an asset. Earned profit lands in one specific equity account.',
+              why: 'Accounts receivable — an asset — records the client’s promise to pay. The $20,000 of revenue raises net income, and net income flows into retained earnings, so both sides of the balance sheet rise by $20,000.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Did any cash move today?',
+              options: [
+                'Operating inflow of $20,000.',
+                'Investing inflow of $20,000.',
+                'Financing inflow of $20,000.',
+                'No cash movement.'
+              ],
+              correct: 3,
+              hint: 'Look at the bank balance, not the invoice.',
+              why: 'Nothing reaches the cash flow statement until cash actually moves. The company just recorded its most profitable event of the month with zero cash to show for it.'
+            }
+          ],
+          insight: 'This is the classic startup trap. Net income jumps $20,000 and the bank account does not move at all. Revenue you have not collected is an asset, not spending money.',
+          deltas: { ar: 20000, revenue: 20000 },
+          cfLine: { section: 'operating', label: '', amount: 0 },
+          effects: {
+            is: 'Revenue +$20,000.',
+            bs: 'Accounts receivable +$20,000; retained earnings +$20,000.',
+            cf: 'No cash movement yet.'
+          }
+        },
+        {
+          short: 'Collect $15,000 of the invoice',
+          title: 'The client pays part of the invoice',
+          prompt: 'Three weeks later the client pays $15,000 of the $20,000 invoice. The remaining $5,000 is still outstanding.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'Revenue was already recorded when the work was delivered. What now?',
+              options: [
+                'Record $15,000 of revenue.',
+                'No effect. The revenue was already recorded when the work was delivered.',
+                'Record $15,000 of revenue and reverse $15,000 of receivables revenue.'
+              ],
+              correct: 1,
+              hint: 'Recording revenue again would count the same sale twice.',
+              why: 'Collecting cash on an existing receivable never touches the income statement. Recording revenue a second time would double-count the same $20,000 sale.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'Two asset accounts move. Do total assets change?',
+              options: [
+                'Cash +$15,000 and accounts receivable −$15,000.',
+                'Cash +$15,000 and retained earnings +$15,000.',
+                'Cash +$15,000 and deferred revenue +$15,000.'
+              ],
+              correct: 0,
+              hint: 'The promise to pay is being replaced by the payment itself.',
+              why: 'One asset converts into another: the receivable shrinks and cash grows by the same amount. Total assets, total liabilities, and equity are all unchanged.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Cash arrived from a customer. Which section?',
+              options: [
+                'Operating inflow of $15,000.',
+                'Investing inflow of $15,000.',
+                'Financing inflow of $15,000.',
+                'No cash movement.'
+              ],
+              correct: 0,
+              hint: 'Collecting from customers is the core, everyday business of the company.',
+              why: 'Cash collected from customers is an operating activity. Notice the mirror image of the last transaction: profit then, cash now.'
+            }
+          ],
+          insight: 'Profit did not move, cash rose $15,000. Collections — not sales — are what actually fund payroll.',
+          deltas: { cash: 15000, ar: -15000 },
+          cfLine: { section: 'operating', label: 'Cash collected from customers', amount: 15000 },
+          effects: {
+            is: 'No effect. Revenue was recorded earlier.',
+            bs: 'Cash +$15,000; accounts receivable −$15,000.',
+            cf: 'Operating inflow of $15,000.'
+          }
+        },
+        {
+          short: 'Pay $9,000 of salaries in cash',
+          title: 'Run payroll for the month',
+          prompt: 'You run payroll for your small team: $9,000 of salaries, paid in cash this month for work done this month.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'The team worked this month and was paid this month.',
+              options: [
+                'Record a $9,000 expense.',
+                'No effect. Salaries are a use of cash, not an expense.',
+                'Record $9,000 as an asset because employees create future value.'
+              ],
+              correct: 0,
+              hint: 'The benefit of this month’s work was consumed this month.',
+              why: 'Salaries for work already performed are an operating expense of the period. There is no future asset to capitalize, because the benefit has already been used up.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'An asset falls. What falls with it to keep the balance sheet balanced?',
+              options: [
+                'Cash −$9,000 and accounts payable −$9,000.',
+                'Cash −$9,000 and retained earnings −$9,000.',
+                'Cash −$9,000 and paid-in capital −$9,000.'
+              ],
+              correct: 1,
+              hint: 'Expenses reduce net income, and net income lands in one particular equity account.',
+              why: 'The expense reduces net income, which reduces retained earnings. Assets fall $9,000 and equity falls $9,000, so the balance sheet still balances. Paid-in capital only changes when owners put money in or take it out.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Which section reports cash paid to employees?',
+              options: [
+                'Operating outflow of $9,000.',
+                'Investing outflow of $9,000.',
+                'Financing outflow of $9,000.',
+                'No cash movement.'
+              ],
+              correct: 0,
+              hint: 'Paying the people who do the work is as day-to-day as it gets.',
+              why: 'Cash paid to employees is an operating activity — part of the ordinary cycle of earning revenue and paying the costs of earning it.'
+            }
+          ],
+          insight: 'Here profit and cash agree: both fall by $9,000. When an expense is paid in the same period it is incurred, the two views line up.',
+          deltas: { cash: -9000, expSalaries: 9000 },
+          cfLine: { section: 'operating', label: 'Salaries paid', amount: -9000 },
+          effects: {
+            is: 'Salaries expense $9,000.',
+            bs: 'Cash −$9,000; retained earnings −$9,000.',
+            cf: 'Operating outflow of $9,000.'
+          }
+        },
+        {
+          short: 'Receive a $2,000 hosting bill, unpaid',
+          title: 'The cloud hosting bill arrives',
+          prompt: 'Your cloud provider bills you $2,000 for this month’s hosting. The invoice is due next month, so you have not paid it yet.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'You used the service this month but pay next month.',
+              options: [
+                'Record a $2,000 expense this month.',
+                'No effect until you pay the bill next month.',
+                'Record a $2,000 asset because the invoice is unpaid.'
+              ],
+              correct: 0,
+              hint: 'Match the cost to the period whose revenue it helped produce.',
+              why: 'The hosting was consumed this month, so the expense belongs to this month. Under accrual accounting, expenses follow the use of the resource, not the payment date.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'No cash moved. What changed instead?',
+              options: [
+                'Cash −$2,000 and retained earnings −$2,000.',
+                'Accounts payable +$2,000 and retained earnings −$2,000.',
+                'Accounts payable +$2,000 and equipment +$2,000.'
+              ],
+              correct: 1,
+              hint: 'You now owe someone money, and the expense has already reduced profit.',
+              why: 'A liability (accounts payable) rises $2,000 and retained earnings falls $2,000. Liabilities up and equity down by the same amount keeps the balance sheet in balance with no change in assets.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Has any cash left the bank account?',
+              options: [
+                'Operating outflow of $2,000.',
+                'Investing outflow of $2,000.',
+                'Financing outflow of $2,000.',
+                'No cash movement this month.'
+              ],
+              correct: 3,
+              hint: 'Check the bank balance, not the invoice.',
+              why: 'Nothing has been paid, so the cash flow statement shows nothing. The $2,000 will appear as an operating outflow in the month you actually pay it.'
+            }
+          ],
+          insight: 'The mirror image of the unpaid invoice: profit falls $2,000 before cash does. Unpaid bills flatter the bank account and understate what the month really cost.',
+          deltas: { ap: 2000, expHosting: 2000 },
+          cfLine: { section: 'operating', label: '', amount: 0 },
+          effects: {
+            is: 'Hosting expense $2,000.',
+            bs: 'Accounts payable +$2,000; retained earnings −$2,000.',
+            cf: 'No cash movement this month.'
+          }
+        },
+        {
+          short: 'Record $500 of depreciation',
+          title: 'Record one month of depreciation',
+          prompt: 'Time to age the equipment. The $12,000 of laptops and test gear is being written off evenly over 24 months, which is $500 for this month.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'This is the point where the equipment purchase finally reaches the income statement.',
+              options: [
+                'Record a $500 expense.',
+                'No effect. Depreciation only affects the balance sheet.',
+                'Record $500 of negative revenue.'
+              ],
+              correct: 0,
+              hint: 'Depreciation is how the cost of a long-lived asset is charged to the periods that use it.',
+              why: 'Depreciation expense of $500 reduces net income. This is the delayed arrival of the equipment purchase you made earlier — the cash left in one month, the expense shows up across twenty-four.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'How does the balance sheet show that the equipment is a month older?',
+              options: [
+                'Cash −$500 and equipment −$500.',
+                'Accumulated depreciation +$500, so equipment net falls $500, and retained earnings −$500.',
+                'Accounts payable +$500 and retained earnings −$500.'
+              ],
+              correct: 1,
+              hint: 'No cash moved and nobody is owed anything new. Something you already own is simply worth less on the books.',
+              why: 'Accumulated depreciation is a contra-asset that reduces the carrying amount of the equipment. Assets fall $500 and retained earnings falls $500, so the balance sheet still balances.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Did the company write a cheque for depreciation?',
+              options: [
+                'Operating outflow of $500.',
+                'Investing outflow of $500.',
+                'Financing outflow of $500.',
+                'No cash movement. Depreciation is a non-cash expense.'
+              ],
+              correct: 3,
+              hint: 'Nobody receives the $500. The cash left earlier, when the equipment was bought.',
+              why: 'Depreciation never moves cash — it is a bookkeeping allocation of a payment already made. On an indirect-method cash flow statement, this is exactly why depreciation is added back to net income.'
+            }
+          ],
+          insight: 'Profit falls $500 and the bank account does not flinch. Non-cash expenses are the main reason a profitable-looking month and a cash-rich month are not the same thing.',
+          deltas: { accumDep: 500, expDep: 500 },
+          cfLine: { section: 'operating', label: '', amount: 0 },
+          effects: {
+            is: 'Depreciation expense $500.',
+            bs: 'Accumulated depreciation +$500 (equipment net −$500); retained earnings −$500.',
+            cf: 'No cash movement. Depreciation is non-cash.'
+          }
+        },
+        {
+          short: 'Borrow $25,000 from the bank',
+          title: 'Draw down a bank loan',
+          prompt: 'You sign a two-year $25,000 loan to extend the runway. The bank deposits the full $25,000 today. Interest and principal are due starting next month.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'A large deposit just landed. Is any of it revenue?',
+              options: [
+                'Record $25,000 of revenue.',
+                'No effect. Loan proceeds are not revenue, and no interest has accrued yet.',
+                'Record $25,000 of expense.'
+              ],
+              correct: 1,
+              hint: 'Rivet Labs delivered nothing to the bank, and it has to give the money back.',
+              why: 'Borrowed money is not earned, so it is never revenue. Only the interest cost will reach the income statement, and only as it accrues over time.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'Cash is up $25,000. What rises with it?',
+              options: [
+                'Cash +$25,000 and notes payable +$25,000.',
+                'Cash +$25,000 and paid-in capital +$25,000.',
+                'Cash +$25,000 and retained earnings +$25,000.'
+              ],
+              correct: 0,
+              hint: 'Lenders are not owners. The company has an obligation to repay.',
+              why: 'An asset rises and a liability rises by the same amount. Paid-in capital would mean the bank bought shares, and retained earnings would mean the company earned the money — neither happened.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Which section reports cash raised from a lender?',
+              options: [
+                'Operating inflow of $25,000.',
+                'Investing inflow of $25,000.',
+                'Financing inflow of $25,000.',
+                'No cash movement.'
+              ],
+              correct: 2,
+              hint: 'Same section as the founders’ investment: cash from the people funding the business.',
+              why: 'Loan proceeds are a financing inflow, sitting alongside the founders’ investment. A reader who only looked at the bottom of the cash flow statement might think the company was thriving.'
+            }
+          ],
+          insight: 'Cash up $25,000, profit unchanged, and the company is now $25,000 poorer in net worth terms than the bank balance suggests. Borrowed cash is the easiest cash to mistake for success.',
+          deltas: { cash: 25000, notes: 25000 },
+          cfLine: { section: 'financing', label: 'Loan proceeds', amount: 25000 },
+          effects: {
+            is: 'No effect. Loan proceeds are not revenue.',
+            bs: 'Cash +$25,000; notes payable +$25,000.',
+            cf: 'Financing inflow of $25,000.'
+          }
+        },
+        {
+          short: 'Collect $6,000 prepaid for future support',
+          title: 'A customer prepays for support',
+          prompt: 'A customer pays $6,000 up front for a year of support that does not start until next month. You have delivered nothing yet.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'The cash is in the bank. Has anything been earned?',
+              options: [
+                'Record $6,000 of revenue.',
+                'No revenue yet. Nothing has been delivered, so nothing has been earned.',
+                'Record $500 of revenue, which is one month of the annual amount.'
+              ],
+              correct: 1,
+              hint: 'The support period has not started. What has the customer received so far?',
+              why: 'Cash received before delivery is not revenue. Revenue will be recognized as the support is provided over the coming year — roughly $500 a month once the period begins.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'Cash rose $6,000. What is the matching entry?',
+              options: [
+                'Cash +$6,000 and retained earnings +$6,000.',
+                'Cash +$6,000 and accounts receivable −$6,000.',
+                'Cash +$6,000 and deferred revenue (a liability) +$6,000.'
+              ],
+              correct: 2,
+              hint: 'The company owes the customer something: a year of support.',
+              why: 'Deferred revenue is a liability — an obligation to deliver a service you have already been paid for. It moves to revenue only as the service is delivered.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Real cash arrived from a customer. Which section?',
+              options: [
+                'Operating inflow of $6,000.',
+                'Investing inflow of $6,000.',
+                'Financing inflow of $6,000.',
+                'No cash movement.'
+              ],
+              correct: 0,
+              hint: 'It came from a customer as part of normal business, even though it is not revenue yet.',
+              why: 'Customer prepayments are operating inflows. The cash flow statement reports the movement of cash regardless of whether the income statement has recognized any revenue.'
+            }
+          ],
+          insight: 'The exact opposite of the unpaid invoice: $6,000 of cash with zero profit, and a liability to work off. Prepayments make a cash-flush month look better than the profit picture warrants.',
+          deltas: { cash: 6000, deferred: 6000 },
+          cfLine: { section: 'operating', label: 'Cash collected from customers', amount: 6000 },
+          effects: {
+            is: 'No revenue yet. Nothing has been delivered.',
+            bs: 'Cash +$6,000; deferred revenue +$6,000.',
+            cf: 'Operating inflow of $6,000.'
+          }
+        },
+        {
+          short: 'Repay $5,000 of loan principal',
+          title: 'Make the first loan repayment',
+          prompt: 'You repay $5,000 of the loan principal in cash. To keep this activity simple, assume no interest is charged in the first month.',
+          questions: [
+            {
+              key: 'is',
+              legend: 'Income statement',
+              help: 'Cash left the company. Is repaying principal an expense?',
+              options: [
+                'Record a $5,000 expense.',
+                'No effect. Repaying principal settles a liability; only interest would be an expense.',
+                'Record $5,000 as negative revenue.'
+              ],
+              correct: 1,
+              hint: 'You are giving back money you already recorded as a debt, not paying for something you consumed.',
+              why: 'Principal repayment reduces a liability that was never revenue in the first place, so it never reaches the income statement. Interest — the cost of using the money — is the part that would be an expense.'
+            },
+            {
+              key: 'bs',
+              legend: 'Balance sheet',
+              help: 'An asset falls. What falls with it?',
+              options: [
+                'Cash −$5,000 and notes payable −$5,000.',
+                'Cash −$5,000 and retained earnings −$5,000.',
+                'Cash −$5,000 and paid-in capital −$5,000.'
+              ],
+              correct: 0,
+              hint: 'Paying down debt should make the company owe less.',
+              why: 'Assets fall $5,000 and liabilities fall $5,000, so the balance sheet stays in balance and equity is untouched. The company is no poorer for having repaid a debt — it swapped cash for a smaller obligation.'
+            },
+            {
+              key: 'cf',
+              legend: 'Statement of cash flows',
+              help: 'Which section reports cash returned to a lender?',
+              options: [
+                'Operating outflow of $5,000.',
+                'Investing outflow of $5,000.',
+                'Financing outflow of $5,000.',
+                'No cash movement.'
+              ],
+              correct: 2,
+              hint: 'Cash going back to the people who funded the business belongs in the same section the loan arrived in.',
+              why: 'Repayments of principal are financing outflows, reported in the same section as the original loan proceeds.'
+            }
+          ],
+          insight: 'Cash down $5,000, profit unchanged. Debt service is invisible on the income statement but very visible in the bank account — one reason profitable companies still run out of money.',
+          deltas: { cash: -5000, notes: -5000 },
+          cfLine: { section: 'financing', label: 'Loan principal repaid', amount: -5000 },
+          effects: {
+            is: 'No effect. Principal repayment is not an expense.',
+            bs: 'Cash −$5,000; notes payable −$5,000.',
+            cf: 'Financing outflow of $5,000.'
+          }
+        }
+      ];
+
+      var TOTAL_QUESTIONS = TRANSACTIONS.length * 3;
+
+      /* ------------------------------------------------------------------ *
+       * State
+       * ------------------------------------------------------------------ */
+
+      var state = null;
+
+      function freshState() {
+        return {
+          current: 0,
+          viewing: 0,
+          firstTryCorrect: 0,
+          records: TRANSACTIONS.map(function () {
+            return {
+              posted: false,
+              revealed: false,
+              checked: false,
+              attempted: [false, false, false],
+              correct: [false, false, false],
+              firstTry: [null, null, null]
+            };
+          })
+        };
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Elements
+       * ------------------------------------------------------------------ */
+
+      var el = {
+        ledger: document.getElementById('ffse-ledger'),
+        step: document.getElementById('ffse-trace-step'),
+        title: document.getElementById('ffse-trace-title'),
+        prompt: document.getElementById('ffse-trace-prompt'),
+        form: document.getElementById('ffse-form'),
+        questions: document.getElementById('ffse-questions'),
+        check: document.getElementById('ffse-check'),
+        reveal: document.getElementById('ffse-reveal'),
+        feedback: document.getElementById('ffse-feedback'),
+        summary: document.getElementById('ffse-summary'),
+        reset: document.getElementById('ffse-reset'),
+        progress: document.getElementById('ffse-progress'),
+        progressFill: document.getElementById('ffse-progress-fill'),
+        progressText: document.getElementById('ffse-progress-text'),
+        scoreText: document.getElementById('ffse-score-text'),
+        isTable: document.querySelector('#ffse-is tbody'),
+        bsTable: document.querySelector('#ffse-bs tbody'),
+        cfTable: document.querySelector('#ffse-cf tbody'),
+        ties: document.getElementById('ffse-ties'),
+        statements: document.getElementById('ffse-statements')
+      };
+
+      /* ------------------------------------------------------------------ *
+       * Helpers
+       * ------------------------------------------------------------------ */
+
+      function money(n) {
+        var rounded = Math.round(n);
+        var sign = rounded < 0 ? '-' : '';
+        return sign + '$' + Math.abs(rounded).toLocaleString('en-US');
+      }
+
+      function postedIndexes() {
+        var out = [];
+        state.records.forEach(function (rec, i) {
+          if (rec.posted) { out.push(i); }
+        });
+        return out;
+      }
+
+      function buildBooks() {
+        var acc = {
+          cash: 0, ar: 0, equipGross: 0, accumDep: 0,
+          ap: 0, deferred: 0, notes: 0, paidIn: 0,
+          revenue: 0, expSalaries: 0, expHosting: 0, expDep: 0
+        };
+        var cash = { operating: [], investing: [], financing: [] };
+
+        postedIndexes().forEach(function (i) {
+          var tx = TRANSACTIONS[i];
+          Object.keys(tx.deltas).forEach(function (key) {
+            acc[key] += tx.deltas[key];
+          });
+
+          var line = tx.cfLine;
+          if (line && line.label && line.amount !== 0) {
+            var bucket = cash[line.section];
+            var existing = null;
+            bucket.forEach(function (row) {
+              if (row.label === line.label) { existing = row; }
+            });
+            if (existing) {
+              existing.amount += line.amount;
+            } else {
+              bucket.push({ label: line.label, amount: line.amount });
+            }
+          }
+        });
+
+        var expenses = acc.expSalaries + acc.expHosting + acc.expDep;
+        var netIncome = acc.revenue - expenses;
+        var equipNet = acc.equipGross - acc.accumDep;
+        var totalAssets = acc.cash + acc.ar + equipNet;
+        var totalLiabilities = acc.ap + acc.deferred + acc.notes;
+        var totalEquity = acc.paidIn + netIncome;
+
+        function sum(rows) {
+          return rows.reduce(function (t, row) { return t + row.amount; }, 0);
+        }
+
+        var op = sum(cash.operating);
+        var inv = sum(cash.investing);
+        var fin = sum(cash.financing);
+
+        return {
+          acc: acc,
+          cash: cash,
+          expenses: expenses,
+          netIncome: netIncome,
+          equipNet: equipNet,
+          totalAssets: totalAssets,
+          totalLiabilities: totalLiabilities,
+          totalEquity: totalEquity,
+          retainedEarnings: netIncome,
+          operating: op,
+          investing: inv,
+          financing: fin,
+          netCashChange: op + inv + fin
+        };
+      }
+
+      function row(tbody, opts) {
+        var tr = document.createElement('tr');
+        if (opts.rowClass) { tr.className = opts.rowClass; }
+
+        var th = document.createElement('th');
+        th.setAttribute('scope', 'row');
+        th.textContent = opts.label;
+
+        var td = document.createElement('td');
+        td.className = 'ffse-num';
+        td.textContent = opts.value;
+
+        tr.appendChild(th);
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return tr;
+      }
+
+      function sectionRow(tbody, label) {
+        var tr = document.createElement('tr');
+        tr.className = 'ffse-section';
+        var th = document.createElement('th');
+        th.setAttribute('scope', 'colgroup');
+        th.setAttribute('colspan', '2');
+        th.textContent = label;
+        tr.appendChild(th);
+        tbody.appendChild(tr);
+      }
+
+      function emptyRow(tbody, text) {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.setAttribute('colspan', '2');
+        td.className = 'ffse-empty';
+        td.textContent = text;
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Rendering: statements
+       * ------------------------------------------------------------------ */
+
+      function renderStatements() {
+        var b = buildBooks();
+
+        /* Income statement */
+        el.isTable.innerHTML = '';
+        sectionRow(el.isTable, 'Revenue');
+        if (b.acc.revenue === 0) {
+          emptyRow(el.isTable, 'No revenue recorded yet.');
+        } else {
+          row(el.isTable, { label: 'Consulting revenue', value: money(b.acc.revenue), rowClass: 'ffse-indent' });
+        }
+        sectionRow(el.isTable, 'Expenses');
+        if (b.expenses === 0) {
+          emptyRow(el.isTable, 'No expenses recorded yet.');
+        } else {
+          if (b.acc.expSalaries) { row(el.isTable, { label: 'Salaries', value: money(-b.acc.expSalaries), rowClass: 'ffse-indent' }); }
+          if (b.acc.expHosting) { row(el.isTable, { label: 'Cloud hosting', value: money(-b.acc.expHosting), rowClass: 'ffse-indent' }); }
+          if (b.acc.expDep) { row(el.isTable, { label: 'Depreciation (non-cash)', value: money(-b.acc.expDep), rowClass: 'ffse-indent' }); }
+        }
+        row(el.isTable, { label: 'Net income', value: money(b.netIncome), rowClass: 'ffse-total' });
+
+        /* Balance sheet */
+        el.bsTable.innerHTML = '';
+        sectionRow(el.bsTable, 'Assets');
+        row(el.bsTable, { label: 'Cash', value: money(b.acc.cash), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Accounts receivable', value: money(b.acc.ar), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Equipment, net of depreciation', value: money(b.equipNet), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Total assets', value: money(b.totalAssets), rowClass: 'ffse-total' });
+
+        sectionRow(el.bsTable, 'Liabilities');
+        row(el.bsTable, { label: 'Accounts payable', value: money(b.acc.ap), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Deferred revenue', value: money(b.acc.deferred), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Notes payable', value: money(b.acc.notes), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Total liabilities', value: money(b.totalLiabilities) });
+
+        sectionRow(el.bsTable, 'Equity');
+        row(el.bsTable, { label: 'Paid-in capital', value: money(b.acc.paidIn), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Retained earnings', value: money(b.retainedEarnings), rowClass: 'ffse-indent' });
+        row(el.bsTable, { label: 'Total equity', value: money(b.totalEquity) });
+        row(el.bsTable, { label: 'Total liabilities and equity', value: money(b.totalLiabilities + b.totalEquity), rowClass: 'ffse-total' });
+
+        /* Cash flow statement */
+        el.cfTable.innerHTML = '';
+        var sections = [
+          { key: 'operating', label: 'Operating activities', total: b.operating },
+          { key: 'investing', label: 'Investing activities', total: b.investing },
+          { key: 'financing', label: 'Financing activities', total: b.financing }
+        ];
+
+        sections.forEach(function (section) {
+          sectionRow(el.cfTable, section.label);
+          var rows = b.cash[section.key];
+          if (!rows.length) {
+            emptyRow(el.cfTable, 'No cash movement yet.');
+          } else {
+            rows.forEach(function (r) {
+              row(el.cfTable, { label: r.label, value: money(r.amount), rowClass: 'ffse-indent' });
+            });
+          }
+          row(el.cfTable, { label: 'Net cash from ' + section.label.toLowerCase(), value: money(section.total) });
+        });
+
+        row(el.cfTable, { label: 'Net change in cash', value: money(b.netCashChange), rowClass: 'ffse-total' });
+        row(el.cfTable, { label: 'Cash at end of month', value: money(b.acc.cash) });
+
+        renderTies(b);
+      }
+
+      function renderTies(b) {
+        el.ties.innerHTML = '';
+        var ties = [
+          'Net income of ' + money(b.netIncome) + ' on the income statement is carried into retained earnings on the balance sheet, which also shows ' + money(b.retainedEarnings) + '.',
+          'The cash flow statement ends at ' + money(b.acc.cash) + ', which is exactly the cash line at the top of the balance sheet.',
+          'Total assets of ' + money(b.totalAssets) + ' equal total liabilities and equity of ' + money(b.totalLiabilities + b.totalEquity) + ', so the balance sheet is in balance.'
+        ];
+
+        if (b.netIncome !== b.netCashChange) {
+          ties.push('Profit and cash disagree: net income is ' + money(b.netIncome) + ' but cash changed by ' + money(b.netCashChange) + '. Receivables, payables, prepayments, non-cash depreciation, equipment purchases, and financing are what separate the two.');
+        }
+
+        ties.forEach(function (text) {
+          var li = document.createElement('li');
+          li.textContent = text;
+          el.ties.appendChild(li);
+        });
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Rendering: ledger list
+       * ------------------------------------------------------------------ */
+
+      function renderLedger() {
+        el.ledger.innerHTML = '';
+
+        TRANSACTIONS.forEach(function (tx, i) {
+          var rec = state.records[i];
+          var li = document.createElement('li');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'ffse-tx-button';
+          btn.setAttribute('data-index', String(i));
+
+          var locked = !rec.posted && i !== state.current;
+          var stateName = rec.posted ? 'done' : (i === state.current ? 'current' : 'locked');
+          btn.setAttribute('data-state', stateName);
+
+          if (locked) {
+            btn.setAttribute('aria-disabled', 'true');
+          }
+          if (i === state.viewing) {
+            btn.setAttribute('aria-current', 'step');
+          }
+
+          var marker = document.createElement('span');
+          marker.className = 'ffse-tx-marker';
+          marker.setAttribute('aria-hidden', 'true');
+          marker.textContent = rec.posted ? '✓' : String(i + 1) + '.';
+
+          var text = document.createElement('span');
+          text.className = 'ffse-tx-text';
+
+          var statusWord;
+          if (rec.posted) {
+            statusWord = rec.revealed ? 'Posted, answers revealed.' : 'Posted.';
+          } else if (i === state.current) {
+            statusWord = 'Current transaction, not yet posted.';
+          } else {
+            statusWord = 'Locked until the earlier transactions are posted.';
+          }
+
+          text.appendChild(document.createTextNode('Transaction ' + (i + 1) + ': ' + tx.short + '. '));
+          var sr = document.createElement('span');
+          sr.className = 'ffse-sr';
+          sr.textContent = statusWord;
+          text.appendChild(sr);
+
+          btn.appendChild(marker);
+          btn.appendChild(text);
+          btn.addEventListener('click', function () {
+            onLedgerClick(i, locked);
+          });
+
+          li.appendChild(btn);
+          el.ledger.appendChild(li);
+        });
+      }
+
+      function onLedgerClick(index, locked) {
+        if (locked) {
+          showLockedNote(index);
+          return;
+        }
+        state.viewing = index;
+        renderLedger();
+        renderTrace(true);
+      }
+
+      function showLockedNote(index) {
+        el.feedback.hidden = false;
+        el.feedback.innerHTML = '';
+        var h = document.createElement('h3');
+        h.tabIndex = -1;
+        h.textContent = 'Transaction ' + (index + 1) + ' is not open yet';
+        var p = document.createElement('p');
+        p.className = 'ffse-note warn';
+        p.textContent = 'Transactions post in order so the statements build up correctly. Finish and post transaction ' + (state.current + 1) + ' first.';
+        el.feedback.appendChild(h);
+        el.feedback.appendChild(p);
+        h.focus();
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Rendering: the question panel
+       * ------------------------------------------------------------------ */
+
+      function renderTrace(moveFocus) {
+        var index = state.viewing;
+        var tx = TRANSACTIONS[index];
+        var rec = state.records[index];
+        var reviewing = rec.posted;
+
+        el.summary.hidden = true;
+        el.summary.innerHTML = '';
+        el.form.hidden = false;
+        el.feedback.hidden = true;
+        el.feedback.innerHTML = '';
+
+        el.step.textContent = reviewing
+          ? 'Reviewing transaction ' + (index + 1) + ' of ' + TRANSACTIONS.length
+          : 'Transaction ' + (index + 1) + ' of ' + TRANSACTIONS.length;
+        el.title.textContent = tx.title;
+        el.prompt.textContent = tx.prompt;
+
+        el.questions.innerHTML = '';
+        tx.questions.forEach(function (q, qi) {
+          el.questions.appendChild(buildQuestion(tx, q, qi, index, reviewing));
+        });
+
+        el.check.hidden = reviewing;
+        el.reveal.hidden = reviewing || rec.revealed;
+
+        if (reviewing) {
+          renderPosted(index, false);
+        }
+
+        if (moveFocus) {
+          el.title.focus();
+        }
+      }
+
+      function buildQuestion(tx, q, qi, index, reviewing) {
+        var rec = state.records[index];
+        var fs = document.createElement('fieldset');
+        fs.setAttribute('data-q', String(qi));
+
+        var legend = document.createElement('legend');
+        legend.textContent = 'Question ' + (qi + 1) + ' of 3 — ' + q.legend;
+        fs.appendChild(legend);
+
+        var help = document.createElement('p');
+        help.className = 'ffse-q-help';
+        help.id = 'ffse-help-' + index + '-' + qi;
+        help.textContent = q.help;
+        fs.appendChild(help);
+
+        q.options.forEach(function (optionText, oi) {
+          var label = document.createElement('label');
+          label.className = 'ffse-opt';
+
+          var input = document.createElement('input');
+          input.type = 'radio';
+          input.name = 'ffse-q-' + index + '-' + qi;
+          input.value = String(oi);
+          input.setAttribute('aria-describedby', help.id);
+          if (reviewing) { input.disabled = true; }
+          if (reviewing && oi === q.correct) { input.checked = true; }
+
+          var span = document.createElement('span');
+          span.textContent = optionText;
+
+          if (reviewing && oi === q.correct) {
+            label.classList.add('is-correct');
+            var tag = document.createElement('span');
+            tag.className = 'ffse-opt-tag';
+            tag.textContent = 'Correct answer';
+            span.appendChild(tag);
+          }
+
+          label.appendChild(input);
+          label.appendChild(span);
+          fs.appendChild(label);
+        });
+
+        if (reviewing || (rec.checked && rec.correct[qi]) || rec.revealed) {
+          var why = document.createElement('p');
+          why.className = 'ffse-note ok';
+          why.textContent = q.why;
+          fs.appendChild(why);
+        }
+
+        return fs;
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Checking answers
+       * ------------------------------------------------------------------ */
+
+      function selectedAnswer(index, qi) {
+        var picked = el.questions.querySelector('input[name="ffse-q-' + index + '-' + qi + '"]:checked');
+        return picked ? Number(picked.value) : null;
+      }
+
+      function checkAnswers(event) {
+        event.preventDefault();
+
+        var index = state.viewing;
+        var tx = TRANSACTIONS[index];
+        var rec = state.records[index];
+
+        if (rec.posted) { return; }
+
+        var answers = [0, 1, 2].map(function (qi) { return selectedAnswer(index, qi); });
+        var missing = answers.some(function (a) { return a === null; });
+
+        if (missing) {
+          showFeedback({
+            heading: 'Answer all three questions first',
+            tone: 'warn',
+            message: 'Each transaction needs one answer for the income statement, one for the balance sheet, and one for the statement of cash flows.'
+          });
+          return;
+        }
+
+        var correctCount = 0;
+        answers.forEach(function (answer, qi) {
+          var isCorrect = answer === tx.questions[qi].correct;
+          if (isCorrect) { correctCount += 1; }
+
+          if (rec.firstTry[qi] === null && !rec.revealed) {
+            rec.firstTry[qi] = isCorrect;
+            if (isCorrect) { state.firstTryCorrect += 1; }
+          }
+          rec.attempted[qi] = true;
+          rec.correct[qi] = isCorrect;
+        });
+
+        rec.checked = true;
+        markOptions(index, answers);
+        updateScore();
+
+        if (correctCount === 3) {
+          showFeedback({
+            heading: 'All three correct',
+            tone: 'ok',
+            message: 'You traced this transaction through every statement. Post it to update the books.',
+            showPost: true
+          });
+        } else {
+          var labels = ['income statement', 'balance sheet', 'cash flow'];
+          var wrongLabels = [];
+          answers.forEach(function (answer, qi) {
+            if (answer !== tx.questions[qi].correct) { wrongLabels.push(labels[qi]); }
+          });
+
+          showFeedback({
+            heading: correctCount + ' of 3 correct — take another look at the ' + wrongLabels.join(' and ') + ' answer' + (wrongLabels.length > 1 ? 's' : ''),
+            tone: 'no',
+            message: 'The choices you got right are marked and explained above. Change the ones marked "Not this one" and check again.',
+            hints: wrongLabels.map(function (label, i) {
+              var qi = labels.indexOf(label);
+              return { label: tx.questions[qi].legend, text: tx.questions[qi].hint };
+            })
+          });
+        }
+      }
+
+      function markOptions(index, answers) {
+        var tx = TRANSACTIONS[index];
+        var rec = state.records[index];
+
+        el.questions.querySelectorAll('fieldset').forEach(function (fs) {
+          var qi = Number(fs.getAttribute('data-q'));
+          var q = tx.questions[qi];
+          var chosen = answers[qi];
+
+          fs.querySelectorAll('.ffse-opt').forEach(function (label, oi) {
+            label.classList.remove('is-correct', 'is-wrong');
+            var oldTag = label.querySelector('.ffse-opt-tag');
+            if (oldTag) { oldTag.remove(); }
+
+            var isChosen = oi === chosen;
+            var isRight = oi === q.correct;
+
+            if (isChosen && isRight) {
+              label.classList.add('is-correct');
+              addTag(label, 'Correct');
+            } else if (isChosen && !isRight) {
+              label.classList.add('is-wrong');
+              addTag(label, 'Not this one');
+            } else if (rec.revealed && isRight) {
+              label.classList.add('is-correct');
+              addTag(label, 'Correct answer');
+            }
+          });
+
+          var existingWhy = fs.querySelector('.ffse-note');
+          if (existingWhy) { existingWhy.remove(); }
+
+          if (chosen === q.correct || rec.revealed) {
+            var why = document.createElement('p');
+            why.className = 'ffse-note ok';
+            why.textContent = q.why;
+            fs.appendChild(why);
+          }
+        });
+      }
+
+      function addTag(label, text) {
+        var span = label.querySelector('span:last-of-type');
+        var tag = document.createElement('span');
+        tag.className = 'ffse-opt-tag';
+        tag.textContent = text;
+        span.appendChild(tag);
+      }
+
+      function revealAnswers() {
+        var index = state.viewing;
+        var tx = TRANSACTIONS[index];
+        var rec = state.records[index];
+
+        if (rec.posted) { return; }
+
+        rec.revealed = true;
+        rec.checked = true;
+        [0, 1, 2].forEach(function (qi) {
+          if (rec.firstTry[qi] === null) { rec.firstTry[qi] = false; }
+          rec.correct[qi] = true;
+        });
+
+        el.questions.querySelectorAll('fieldset').forEach(function (fs) {
+          var qi = Number(fs.getAttribute('data-q'));
+          var q = tx.questions[qi];
+          var inputs = fs.querySelectorAll('input[type="radio"]');
+          if (inputs[q.correct]) { inputs[q.correct].checked = true; }
+        });
+
+        markOptions(index, tx.questions.map(function (q) { return q.correct; }));
+        el.reveal.hidden = true;
+        updateScore();
+
+        showFeedback({
+          heading: 'Answers revealed',
+          tone: 'warn',
+          message: 'The correct choice for each statement is marked above with the reasoning behind it. These three questions no longer count toward your first-try score. Post the transaction when you are ready.',
+          showPost: true
+        });
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Feedback + posting
+       * ------------------------------------------------------------------ */
+
+      function showFeedback(opts) {
+        el.feedback.hidden = false;
+        el.feedback.innerHTML = '';
+
+        var h = document.createElement('h3');
+        h.tabIndex = -1;
+        h.textContent = opts.heading;
+        el.feedback.appendChild(h);
+
+        var p = document.createElement('p');
+        p.className = 'ffse-note ' + opts.tone;
+        p.textContent = opts.message;
+        el.feedback.appendChild(p);
+
+        if (opts.hints && opts.hints.length) {
+          var hintList = document.createElement('ul');
+          opts.hints.forEach(function (hint) {
+            var li = document.createElement('li');
+            var strong = document.createElement('strong');
+            strong.textContent = hint.label + ': ';
+            li.appendChild(strong);
+            li.appendChild(document.createTextNode(hint.text));
+            hintList.appendChild(li);
+          });
+          el.feedback.appendChild(hintList);
+        }
+
+        if (opts.showPost) {
+          var rowEl = document.createElement('div');
+          rowEl.className = 'ffse-row';
+          var postBtn = document.createElement('button');
+          postBtn.type = 'button';
+          postBtn.className = 'ffse-btn primary';
+          postBtn.textContent = 'Post this transaction to the statements';
+          postBtn.addEventListener('click', postTransaction);
+          rowEl.appendChild(postBtn);
+          el.feedback.appendChild(rowEl);
+        }
+
+        h.focus();
+      }
+
+      function postTransaction() {
+        var index = state.viewing;
+        var rec = state.records[index];
+        if (rec.posted) { return; }
+
+        rec.posted = true;
+        if (index === state.current && state.current < TRANSACTIONS.length - 1) {
+          state.current = index + 1;
+        } else if (index === state.current) {
+          state.current = TRANSACTIONS.length;
+        }
+
+        renderStatements();
+        updateProgress();
+        renderLedger();
+        renderTrace(false);
+        renderPosted(index, true);
+      }
+
+      function renderPosted(index, moveFocus) {
+        var tx = TRANSACTIONS[index];
+        var b = buildBooks();
+
+        el.form.hidden = false;
+        el.check.hidden = true;
+        el.reveal.hidden = true;
+
+        el.feedback.hidden = false;
+        el.feedback.innerHTML = '';
+
+        var h = document.createElement('h3');
+        h.tabIndex = -1;
+        h.textContent = 'Posted: ' + tx.title;
+        el.feedback.appendChild(h);
+
+        var list = document.createElement('ul');
+        list.className = 'ffse-posted-list';
+        [
+          ['Income statement', tx.effects.is],
+          ['Balance sheet', tx.effects.bs],
+          ['Statement of cash flows', tx.effects.cf]
+        ].forEach(function (pair) {
+          var li = document.createElement('li');
+          var strong = document.createElement('strong');
+          strong.textContent = pair[0];
+          li.appendChild(strong);
+          li.appendChild(document.createTextNode(pair[1]));
+          list.appendChild(li);
+        });
+        el.feedback.appendChild(list);
+
+        var insight = document.createElement('p');
+        insight.className = 'ffse-note warn';
+        insight.textContent = 'What this shows: ' + tx.insight;
+        el.feedback.appendChild(insight);
+
+        var running = document.createElement('p');
+        running.textContent = 'Running totals: net income ' + money(b.netIncome) +
+          ', cash ' + money(b.acc.cash) +
+          ', total assets ' + money(b.totalAssets) +
+          '. The statements below have been updated.';
+        el.feedback.appendChild(running);
+
+        var rowEl = document.createElement('div');
+        rowEl.className = 'ffse-row';
+
+        var allPosted = postedIndexes().length === TRANSACTIONS.length;
+
+        if (allPosted) {
+          var summaryBtn = document.createElement('button');
+          summaryBtn.type = 'button';
+          summaryBtn.className = 'ffse-btn primary';
+          summaryBtn.textContent = 'See the wrap-up';
+          summaryBtn.addEventListener('click', function () { renderSummary(true); });
+          rowEl.appendChild(summaryBtn);
+        } else {
+          /* index === state.current - 1 means this transaction was just posted;
+             anything earlier means the learner is revisiting a posted item. */
+          var justPosted = index === state.current - 1;
+          var goBtn = document.createElement('button');
+          goBtn.type = 'button';
+          goBtn.className = 'ffse-btn primary';
+          goBtn.textContent = justPosted
+            ? 'Next transaction (' + (state.current + 1) + ' of ' + TRANSACTIONS.length + ')'
+            : 'Back to transaction ' + (state.current + 1);
+          goBtn.addEventListener('click', function () {
+            state.viewing = state.current;
+            renderLedger();
+            renderTrace(true);
+          });
+          rowEl.appendChild(goBtn);
+        }
+
+        var jumpBtn = document.createElement('button');
+        jumpBtn.type = 'button';
+        jumpBtn.className = 'ffse-btn';
+        jumpBtn.textContent = 'Go to the statements';
+        jumpBtn.addEventListener('click', function () {
+          el.statements.focus();
+          el.statements.scrollIntoView({ block: 'start' });
+        });
+        rowEl.appendChild(jumpBtn);
+
+        el.feedback.appendChild(rowEl);
+
+        if (moveFocus) { h.focus(); }
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Wrap-up
+       * ------------------------------------------------------------------ */
+
+      function renderSummary(moveFocus) {
+        var b = buildBooks();
+
+        el.form.hidden = true;
+        el.feedback.hidden = true;
+        el.feedback.innerHTML = '';
+        el.summary.hidden = false;
+        el.summary.innerHTML = '';
+
+        el.step.textContent = 'Wrap-up';
+        el.title.textContent = 'All ten transactions are posted';
+        el.prompt.textContent = 'Rivet Labs closed its first month with ' + money(b.netIncome) +
+          ' of net income and ' + money(b.acc.cash) + ' in the bank. Those two numbers are far apart, and the reason is the whole point of having three statements.';
+
+        var score = document.createElement('div');
+        score.className = 'ffse-score';
+        var strong = document.createElement('strong');
+        strong.textContent = state.firstTryCorrect + ' of ' + TOTAL_QUESTIONS;
+        var p = document.createElement('p');
+        p.style.margin = '0';
+        p.textContent = 'questions answered correctly on the first attempt.';
+        score.appendChild(strong);
+        score.appendChild(p);
+        el.summary.appendChild(score);
+
+        var bridgeHeading = document.createElement('h3');
+        bridgeHeading.textContent = 'From net income to the change in cash';
+        el.summary.appendChild(bridgeHeading);
+
+        var bridgeIntro = document.createElement('p');
+        bridgeIntro.textContent = 'This bridge is the indirect-method view of the same month. It starts at net income and works back to the change in cash, which is where the statement of cash flows ended.';
+        el.summary.appendChild(bridgeIntro);
+
+        var table = document.createElement('table');
+        var caption = document.createElement('caption');
+        caption.textContent = 'Reconciliation of net income to the change in cash';
+        table.appendChild(caption);
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        row(tbody, { label: 'Net income', value: money(b.netIncome) });
+        row(tbody, { label: 'Add back depreciation (non-cash)', value: money(b.acc.expDep) });
+        row(tbody, { label: 'Less increase in accounts receivable (billed, not collected)', value: money(-b.acc.ar) });
+        row(tbody, { label: 'Add increase in accounts payable (expensed, not paid)', value: money(b.acc.ap) });
+        row(tbody, { label: 'Add increase in deferred revenue (collected, not earned)', value: money(b.acc.deferred) });
+        row(tbody, { label: 'Cash from operating activities', value: money(b.operating), rowClass: 'ffse-total' });
+        row(tbody, { label: 'Cash used in investing activities', value: money(b.investing) });
+        row(tbody, { label: 'Cash from financing activities', value: money(b.financing) });
+        row(tbody, { label: 'Net change in cash', value: money(b.netCashChange), rowClass: 'ffse-total' });
+
+        el.summary.appendChild(table);
+
+        var takeHeading = document.createElement('h3');
+        takeHeading.style.marginTop = '18px';
+        takeHeading.textContent = 'What a founder should take away';
+        el.summary.appendChild(takeHeading);
+
+        var takeaways = document.createElement('ul');
+        takeaways.className = 'ffse-takeaways';
+        [
+          'Profit is an opinion about timing; cash is a fact. Revenue is recorded when work is delivered and expenses when resources are used, so both can sit far away from the bank statement.',
+          'Every transaction touches the balance sheet. Some skip the income statement, some skip the cash flow statement, but assets always equal liabilities plus equity afterward.',
+          'The statements are wired together: net income feeds retained earnings, and the ending cash on the cash flow statement is the cash line on the balance sheet. If those do not agree, something is wrong.',
+          'Most of this month’s cash — ' + money(b.financing) + ' of it — came from financing, not from operations. Cash raised from owners and lenders can hide a business that is not yet paying for itself.',
+          'Watch receivables and deferred revenue. Money you have billed but not collected cannot make payroll, and money you have collected but not earned is still owed as work.'
+        ].forEach(function (text) {
+          var li = document.createElement('li');
+          li.textContent = text;
+          takeaways.appendChild(li);
+        });
+        el.summary.appendChild(takeaways);
+
+        var rowEl = document.createElement('div');
+        rowEl.className = 'ffse-row';
+
+        var reviewBtn = document.createElement('button');
+        reviewBtn.type = 'button';
+        reviewBtn.className = 'ffse-btn';
+        reviewBtn.textContent = 'Review transaction 1';
+        reviewBtn.addEventListener('click', function () {
+          state.viewing = 0;
+          renderLedger();
+          renderTrace(true);
+        });
+        rowEl.appendChild(reviewBtn);
+
+        var againBtn = document.createElement('button');
+        againBtn.type = 'button';
+        againBtn.className = 'ffse-btn primary';
+        againBtn.textContent = 'Start over';
+        againBtn.addEventListener('click', resetActivity);
+        rowEl.appendChild(againBtn);
+
+        el.summary.appendChild(rowEl);
+
+        if (moveFocus) { el.title.focus(); }
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Progress + score
+       * ------------------------------------------------------------------ */
+
+      function updateProgress() {
+        var posted = postedIndexes().length;
+        var pct = Math.round((posted / TRANSACTIONS.length) * 100);
+        var text = posted + ' of ' + TRANSACTIONS.length + ' transactions posted';
+
+        el.progressFill.style.width = pct + '%';
+        el.progress.setAttribute('aria-valuenow', String(posted));
+        el.progress.setAttribute('aria-valuetext', text);
+        el.progressText.textContent = posted + ' of ' + TRANSACTIONS.length;
+      }
+
+      function updateScore() {
+        el.scoreText.textContent = 'First-try answers: ' + state.firstTryCorrect + ' of ' + TOTAL_QUESTIONS;
+      }
+
+      /* ------------------------------------------------------------------ *
+       * Reset + wiring
+       * ------------------------------------------------------------------ */
+
+      function resetActivity() {
+        state = freshState();
+        renderLedger();
+        renderTrace(true);
+        renderStatements();
+        updateProgress();
+        updateScore();
+      }
+
+      el.form.addEventListener('submit', checkAnswers);
+      el.reveal.addEventListener('click', revealAnswers);
+      el.reset.addEventListener('click', resetActivity);
+
+      state = freshState();
+      renderLedger();
+      renderTrace(false);
+      renderStatements();
+      updateProgress();
+      updateScore();
+    })();
+  </script>
+</body>
+</html>
