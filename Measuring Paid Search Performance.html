@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measuring Paid Search Performance</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #1f2937;
+  }
+
+  .infographic {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #17324d;
+  }
+
+  .instructions {
+    margin: 0 0 22px;
+    text-align: center;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  .carousel {
+    position: relative;
+  }
+
+  .card {
+    display: none;
+    min-height: 330px;
+    padding: 28px;
+    border: 2px solid #d4dce6;
+    border-radius: 18px;
+    background: #f8fafc;
+    text-align: center;
+  }
+
+  .card.active {
+    display: block;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #e8f1fb;
+    font-size: 2.7rem;
+  }
+
+  .card h3 {
+    margin: 0 0 14px;
+    font-size: 1.7rem;
+    color: #1d4f91;
+  }
+
+  .definition {
+    max-width: 520px;
+    margin: 0 auto 24px;
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+
+  .tells-you {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: #eaf3fb;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .tells-you strong {
+    color: #17324d;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .nav-button {
+    min-width: 110px;
+    padding: 11px 18px;
+    border: 2px solid #1d4f91;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1d4f91;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .nav-button:hover {
+    background: #eef5fb;
+  }
+
+  .nav-button:focus-visible,
+  .dot:focus-visible {
+    outline: 4px solid #f5b700;
+    outline-offset: 3px;
+  }
+
+  .nav-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 2px solid #1d4f91;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: #1d4f91;
+  }
+
+  .counter {
+    margin-top: 12px;
+    text-align: center;
+    color: #5b6470;
+    font-size: 0.95rem;
+  }
+
+  .takeaway {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-left: 5px solid #1d4f91;
+    border-radius: 10px;
+    background: #f1f5f9;
+    line-height: 1.6;
+  }
+
+  .takeaway strong {
+    color: #17324d;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    font-weight: 700;
+    color: #17324d;
+  }
+
+  .flow-step {
+    padding: 9px 13px;
+    border-radius: 8px;
+    background: #eaf3fb;
+  }
+
+  .arrow {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 14px;
+    }
+
+    .card {
+      min-height: 360px;
+      padding: 22px 18px;
+    }
+
+    .controls {
+      flex-wrap: wrap;
+    }
+
+    .nav-button {
+      min-width: 95px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<main class="infographic">
+
+  <h2>Measuring Paid Search Performance</h2>
+
+  <p class="instructions">
+    Use the buttons to explore three common paid search metrics.
+  </p>
+
+  <div class="carousel" aria-live="polite">
+
+    <!-- CARD 1 -->
+    <section class="card active" id="card-1" aria-labelledby="title-1">
+      <div class="icon" aria-hidden="true">👁️</div>
+      <h3 id="title-1">Impressions</h3>
+
+      <p class="definition">
+        How many times an ad is shown.
+      </p>
+
+      <div class="tells-you">
+        <strong>Tells you:</strong><br>
+        Are people seeing the ad?
+      </div>
+    </section>
+
+    <!-- CARD 2 -->
+    <section class="card" id="card-2" aria-labelledby="title-2">
+      <div class="icon" aria-hidden="true">🖱️</div>
+      <h3 id="title-2">CPC</h3>
+
+      <p class="definition">
+        How much an advertiser pays for each click.
+      </p>
+
+      <div class="tells-you">
+        <strong>Tells you:</strong><br>
+        What does each click cost?
+      </div>
+    </section>
+
+    <!-- CARD 3 -->
+    <section class="card" id="card-3" aria-labelledby="title-3">
+      <div class="icon" aria-hidden="true">📣</div>
+      <h3 id="title-3">CPM</h3>
+
+      <p class="definition">
+        Cost associated with generating ad impressions.
+      </p>
+
+      <div class="tells-you">
+        <strong>Tells you:</strong><br>
+        What does visibility cost?
+      </div>
+    </section>
+
+  </div>
+
+  <div class="controls">
+    <button
+      type="button"
+      class="nav-button"
+      id="previousButton"
+      onclick="changeCard(-1)"
+      disabled>
+      ← Previous
+    </button>
+
+    <div class="dots" aria-label="Choose a metric">
+      <button
+        type="button"
+        class="dot active"
+        aria-label="Show Impressions"
+        aria-current="true"
+        onclick="showCard(0)">
+      </button>
+
+      <button
+        type="button"
+        class="dot"
+        aria-label="Show CPC"
+        onclick="showCard(1)">
+      </button>
+
+      <button
+        type="button"
+        class="dot"
+        aria-label="Show CPM"
+        onclick="showCard(2)">
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="nav-button"
+      id="nextButton"
+      onclick="changeCard(1)">
+      Next →
+    </button>
+  </div>
+
+  <div class="counter" id="counter">
+    1 of 3
+  </div>
+
+  <aside class="takeaway">
+    <strong>Key takeaway:</strong>
+    Marketers look at these metrics together to understand whether ads are
+    gaining visibility and attracting potential customers efficiently.
+  </aside>
+
+  <div class="flow" aria-label="Paid search performance flow">
+    <span class="flow-step">See the ad</span>
+    <span class="arrow" aria-hidden="true">→</span>
+    <span class="flow-step">Get the click</span>
+    <span class="arrow" aria-hidden="true">→</span>
+    <span class="flow-step">Evaluate efficiency</span>
+  </div>
+
+</main>
+
+<script>
+  var currentCard = 0;
+
+  var cards = document.querySelectorAll(".card");
+  var dots = document.querySelectorAll(".dot");
+  var previousButton = document.getElementById("previousButton");
+  var nextButton = document.getElementById("nextButton");
+  var counter = document.getElementById("counter");
+
+  function showCard(index) {
+    currentCard = index;
+
+    cards.forEach(function(card, i) {
+      card.classList.toggle("active", i === currentCard);
+    });
+
+    dots.forEach(function(dot, i) {
+      var isActive = i === currentCard;
+
+      dot.classList.toggle("active", isActive);
+
+      if (isActive) {
+        dot.setAttribute("aria-current", "true");
+      } else {
+        dot.removeAttribute("aria-current");
+      }
+    });
+
+    previousButton.disabled = currentCard === 0;
+    nextButton.disabled = currentCard === cards.length - 1;
+
+    counter.textContent = (currentCard + 1) + " of " + cards.length;
+  }
+
+  function changeCard(direction) {
+    var newCard = currentCard + direction;
+
+    if (newCard >= 0 && newCard < cards.length) {
+      showCard(newCard);
+    }
+  }
+
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowRight" && currentCard < cards.length - 1) {
+      showCard(currentCard + 1);
+    }
+
+    if (event.key === "ArrowLeft" && currentCard > 0) {
+      showCard(currentCard - 1);
+    }
+  });
+</script>
+
+</body>
+</html>
