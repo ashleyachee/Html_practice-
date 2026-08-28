@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimize This Campaign</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #1f2937;
+  }
+
+  .activity {
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 1.7rem;
+    color: #17324d;
+  }
+
+  .intro {
+    max-width: 720px;
+    margin: 0 auto 20px;
+    text-align: center;
+    line-height: 1.55;
+    color: #4b5563;
+  }
+
+  .progress-wrap {
+    margin-bottom: 20px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  .progress-track {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e5e7eb;
+  }
+
+  .progress-bar {
+    width: 20%;
+    height: 100%;
+    background: #1d4f91;
+    transition: width 0.25s ease;
+  }
+
+  .campaign {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .panel {
+    padding: 18px;
+    border: 1px solid #d7e0ea;
+    border-radius: 12px;
+    background: #f8fafc;
+  }
+
+  .panel h3 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: #17324d;
+  }
+
+  .search-box {
+    padding: 11px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+  }
+
+  .ad-box {
+    padding: 16px;
+    border-radius: 9px;
+    background: #ffffff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+
+  .sponsored {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4b5563;
+  }
+
+  .url {
+    margin: 6px 0;
+    color: #166534;
+    font-size: 0.9rem;
+  }
+
+  .ad-title {
+    margin: 4px 0 7px;
+    color: #1a0dab;
+    font-size: 1.15rem;
+  }
+
+  .ad-copy {
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .landing {
+    padding: 16px;
+    border-radius: 9px;
+    background: #ffffff;
+    text-align: center;
+  }
+
+  .landing h4 {
+    margin: 4px 0 9px;
+    color: #17324d;
+  }
+
+  .landing p {
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .metric {
+    padding: 12px 8px;
+    border-radius: 8px;
+    background: #ffffff;
+    text-align: center;
+  }
+
+  .metric strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.1rem;
+    color: #17324d;
+  }
+
+  .decision-card {
+    padding: 22px;
+    border: 2px solid #d7e0ea;
+    border-radius: 16px;
+    background: #ffffff;
+  }
+
+  .decision-card h3 {
+    margin: 0 0 8px;
+    color: #17324d;
+  }
+
+  .decision-card > p {
+    margin: 0 0 18px;
+    line-height: 1.55;
+  }
+
+  .choices {
+    display: grid;
+    gap: 10px;
+  }
+
+  .choice {
+    width: 100%;
+    padding: 13px 15px;
+    border: 2px solid #1d4f91;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #17324d;
+    font: inherit;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .choice:hover {
+    background: #eef5fb;
+  }
+
+  .choice:focus-visible,
+  .next-button:focus-visible,
+  .restart-button:focus-visible {
+    outline: 4px solid #f5b700;
+    outline-offset: 3px;
+  }
+
+  .choice.correct {
+    border-color: #2f855a;
+    background: #edf7f1;
+  }
+
+  .choice.incorrect {
+    border-color: #b45309;
+    background: #fff7ed;
+  }
+
+  .choice:disabled {
+    cursor: default;
+  }
+
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 15px 17px;
+    border-left: 5px solid #1d4f91;
+    border-radius: 8px;
+    background: #eef5fb;
+    line-height: 1.5;
+  }
+
+  .feedback.show {
+    display: block;
+  }
+
+  .next-wrap {
+    display: none;
+    margin-top: 16px;
+    text-align: right;
+  }
+
+  .next-wrap.show {
+    display: block;
+  }
+
+  .next-button,
+  .restart-button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #1d4f91;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .summary {
+    display: none;
+    padding: 24px;
+    border: 2px solid #d7e0ea;
+    border-radius: 16px;
+    background: #f8fafc;
+  }
+
+  .summary.show {
+    display: block;
+  }
+
+  .summary h3 {
+    margin-top: 0;
+    color: #17324d;
+  }
+
+  .summary-list {
+    padding-left: 20px;
+    line-height: 1.7;
+  }
+
+  .score {
+    margin: 18px 0;
+    padding: 14px;
+    border-radius: 9px;
+    background: #eaf3fb;
+    font-weight: 700;
+  }
+
+  @media (max-width: 700px) {
+    body {
+      padding: 14px;
+    }
+
+    .campaign {
+      grid-template-columns: 1fr;
+    }
+
+    .metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-bar {
+      transition: none;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<main class="activity">
+
+  <h2>Optimize This Campaign</h2>
+
+  <p class="intro">
+    Review the paid search campaign and make a series of optimization decisions.
+    Use the search term, ad, landing page, and performance data to determine what
+    should be improved.
+  </p>
+
+  <div class="progress-wrap" aria-label="Activity progress">
+    <div class="progress-label">
+      <span id="stepLabel">Decision 1 of 5</span>
+      <span id="scoreLabel">0 optimizations</span>
+    </div>
+
+    <div class="progress-track">
+      <div
+        class="progress-bar"
+        id="progressBar"
+        role="progressbar"
+        aria-valuemin="1"
+        aria-valuemax="5"
+        aria-valuenow="1">
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CAMPAIGN SNAPSHOT -->
+
+  <section class="campaign" aria-label="Campaign information">
+
+    <div class="panel">
+      <h3>Search Term</h3>
+      <div class="search-box">
+        🔍 affordable CRM software
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Current Performance</h3>
+
+      <div class="metrics">
+        <div class="metric">
+          CTR
+          <strong>1.2%</strong>
+        </div>
+
+        <div class="metric">
+          Avg. CPC
+          <strong>$4.10</strong>
+        </div>
+
+        <div class="metric">
+          Page Load
+          <strong>6.8 sec</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Current Ad</h3>
+
+      <div class="ad-box">
+        <div class="sponsored">Sponsored</div>
+
+        <div class="url">
+          www.clearcrm.com/business-tools
+        </div>
+
+        <div class="ad-title">
+          Manage Your Business More Easily
+        </div>
+
+        <p class="ad-copy">
+          Powerful tools for growing teams. Save 30% when you sign up today.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Landing Page</h3>
+
+      <div class="landing">
+        <h4>ClearCRM for Growing Businesses</h4>
+
+        <p>
+          Organize contacts, manage sales leads, and help your team stay
+          connected.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- DECISION AREA -->
+
+  <section class="decision-card" id="decisionArea" aria-live="polite">
+
+    <h3 id="decisionTitle"></h3>
+
+    <p id="decisionPrompt"></p>
+
+    <div class="choices" id="choices"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="next-wrap" id="nextWrap">
+      <button
+        class="next-button"
+        type="button"
+        onclick="nextDecision()">
+        Next Decision →
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- SUMMARY -->
+
+  <section class="summary" id="summary" aria-live="polite">
+
+    <h3>Campaign Optimization Summary</h3>
+
+    <p>
+      You reviewed several parts of the campaign rather than relying on a
+      single metric. Strong paid search optimization considers how the search
+      term, ad, landing page, and user experience work together.
+    </p>
+
+    <div class="score" id="finalScore"></div>
+
+    <ul class="summary-list">
+      <li>Reflect important keywords in the ad when they match search intent.</li>
+      <li>Use CTR signals to test stronger headlines, benefits, or offers.</li>
+      <li>Make sure the landing page delivers what the ad promises.</li>
+      <li>Keep the call to action consistent throughout the experience.</li>
+      <li>Improve slow landing pages that may create friction for visitors.</li>
+    </ul>
+
+    <button
+      class="restart-button"
+      type="button"
+      onclick="restartActivity()">
+      Restart Activity
+    </button>
+
+  </section>
+
+</main>
+
+
+<script>
+
+  var decisions = [
+
+    {
+      title: "Decision 1: Keyword Consistency",
+      prompt:
+        "The searcher used “affordable CRM software,” but the ad never mentions CRM software. What is the best first improvement?",
+
+      choices: [
+        "Add “CRM software” naturally to the headline or description.",
+        "Increase the campaign budget.",
+        "Remove the search term from the campaign."
+      ],
+
+      correct: 0,
+
+      success:
+        "Good choice. Reflecting the searcher's language in the ad can make the message feel more relevant and clearly connect the ad to the search.",
+
+      retry:
+        "That change does not directly address the relevance problem. The search term and ad message should align when the keyword accurately reflects the offer."
+    },
+
+
+    {
+      title: "Decision 2: Low Click-Through Rate",
+      prompt:
+        "The campaign's CTR is only 1.2%. The ad is appearing, but relatively few searchers click it. What should the marketer test?",
+
+      choices: [
+        "A stronger headline or more compelling offer.",
+        "A longer landing-page footer.",
+        "More keywords in the website navigation."
+      ],
+
+      correct: 0,
+
+      success:
+        "Correct. A low CTR can signal that the ad is not attracting enough attention or giving searchers a strong reason to click. Testing the headline, benefit, or offer can help.",
+
+      retry:
+        "That change is unlikely to directly improve the ad's click-through rate. Focus first on what searchers see before they click."
+    },
+
+
+    {
+      title: "Decision 3: Ad-to-Page Relevance",
+      prompt:
+        "The ad promises “Save 30% when you sign up today,” but the landing page never mentions the discount. What should the marketer do?",
+
+      choices: [
+        "Make the 30% offer clear on the landing page.",
+        "Add more unrelated products to the landing page.",
+        "Remove CRM information from the page."
+      ],
+
+      correct: 0,
+
+      success:
+        "Exactly. If the ad makes a promise, the landing page should clearly deliver that same message. This creates a more consistent experience for the searcher.",
+
+      retry:
+        "That would not resolve the mismatch. The landing page should support the promise that motivated the searcher to click."
+    },
+
+
+    {
+      title: "Decision 4: Call to Action",
+      prompt:
+        "The updated ad now says “Start Your Free Trial,” but the landing page's main button says “Learn More.” What is the strongest optimization?",
+
+      choices: [
+        "Use a landing-page call to action that matches the ad.",
+        "Hide the call-to-action button.",
+        "Add several different competing calls to action."
+      ],
+
+      correct: 0,
+
+      success:
+        "Correct. Keeping the call to action consistent reduces confusion and makes the searcher's next step clearer.",
+
+      retry:
+        "That could create more friction. The ad and landing page should guide the searcher toward the same next step."
+    },
+
+
+    {
+      title: "Decision 5: Landing-Page Experience",
+      prompt:
+        "The landing page takes 6.8 seconds to load. What should the marketer prioritize?",
+
+      choices: [
+        "Improve the page's loading speed.",
+        "Add a large autoplay video.",
+        "Increase the number of page elements."
+      ],
+
+      correct: 0,
+
+      success:
+        "Correct. A slow page can create friction after the click. Improving load speed supports a better landing-page experience and makes it easier for visitors to continue.",
+
+      retry:
+        "That change could make the page even slower. Reducing friction and improving page speed should be the priority."
+    }
+
+  ];
+
+
+  var currentDecision = 0;
+  var score = 0;
+
+
+  function loadDecision() {
+
+    var decision = decisions[currentDecision];
+
+    document.getElementById("decisionTitle").textContent =
+      decision.title;
+
+    document.getElementById("decisionPrompt").textContent =
+      decision.prompt;
+
+
+    var choicesContainer =
+      document.getElementById("choices");
+
+    choicesContainer.innerHTML = "";
+
+
+    decision.choices.forEach(function(choiceText, index) {
+
+      var button =
+        document.createElement("button");
+
+      button.type = "button";
+      button.className = "choice";
+      button.textContent = choiceText;
+
+      button.onclick = function() {
+        selectChoice(index, button);
+      };
+
+      choicesContainer.appendChild(button);
+
+    });
+
+
+    document.getElementById("feedback").className =
+      "feedback";
+
+    document.getElementById("feedback").textContent =
+      "";
+
+    document.getElementById("nextWrap").className =
+      "next-wrap";
+
+
+    updateProgress();
+
+  }
+
+
+
+  function selectChoice(index, selectedButton) {
+
+    var decision =
+      decisions[currentDecision];
+
+    var buttons =
+      document.querySelectorAll(".choice");
+
+    buttons.forEach(function(button) {
+      button.disabled = true;
+    });
+
+
+    var feedback =
+      document.getElementById("feedback");
+
+
+    if (index === decision.correct) {
+
+      selectedButton.classList.add("correct");
+
+      feedback.innerHTML =
+        "<strong>Strong optimization.</strong> " +
+        decision.success;
+
+      score++;
+
+    }
+
+    else {
+
+      selectedButton.classList.add("incorrect");
+
+      buttons[decision.correct].classList.add("correct");
+
+      feedback.innerHTML =
+        "<strong>Consider another approach.</strong> " +
+        decision.retry;
+
+    }
+
+
+    feedback.classList.add("show");
+
+    document.getElementById("nextWrap")
+      .classList.add("show");
+
+    document.getElementById("scoreLabel")
+      .textContent =
+      score + (score === 1 ? " optimization" : " optimizations");
+
+  }
+
+
+
+  function nextDecision() {
+
+    currentDecision++;
+
+    if (currentDecision < decisions.length) {
+
+      loadDecision();
+
+      document.getElementById("decisionArea")
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+    }
+
+    else {
+
+      showSummary();
+
+    }
+
+  }
+
+
+
+  function updateProgress() {
+
+    var step =
+      currentDecision + 1;
+
+    var percent =
+      (step / decisions.length) * 100;
+
+    document.getElementById("stepLabel")
+      .textContent =
+      "Decision " + step + " of " + decisions.length;
+
+    document.getElementById("progressBar")
+      .style.width =
+      percent + "%";
+
+    document.getElementById("progressBar")
+      .setAttribute(
+        "aria-valuenow",
+        step
+      );
+
+  }
+
+
+
+  function showSummary() {
+
+    document.getElementById("decisionArea")
+      .style.display = "none";
+
+    document.getElementById("summary")
+      .classList.add("show");
+
+    document.getElementById("progressBar")
+      .style.width = "100%";
+
+    document.getElementById("stepLabel")
+      .textContent =
+      "Campaign complete";
+
+
+    var message = "";
+
+    if (score === 5) {
+
+      message =
+        "You selected the strongest optimization for all 5 campaign decisions.";
+
+    }
+
+    else if (score >= 3) {
+
+      message =
+        "You selected the strongest optimization for " +
+        score +
+        " of 5 decisions. Review the campaign principles below.";
+
+    }
+
+    else {
+
+      message =
+        "You selected the strongest optimization for " +
+        score +
+        " of 5 decisions. Review how each part of the search experience should work together.";
+
+    }
+
+
+    document.getElementById("finalScore")
+      .textContent = message;
+
+  }
+
+
+
+  function restartActivity() {
+
+    currentDecision = 0;
+    score = 0;
+
+    document.getElementById("decisionArea")
+      .style.display = "block";
+
+    document.getElementById("summary")
+      .classList.remove("show");
+
+    document.getElementById("scoreLabel")
+      .textContent =
+      "0 optimizations";
+
+    loadDecision();
+
+  }
+
+
+  loadDecision();
+
+</script>
+
+</body>
+</html>
