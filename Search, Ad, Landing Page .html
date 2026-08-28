@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search to Landing Page</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #1f2937;
+  }
+
+  .interactive {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    text-align: center;
+    color: #17324d;
+    font-size: 1.6rem;
+  }
+
+  .intro {
+    margin: 0 auto 24px;
+    max-width: 680px;
+    text-align: center;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  .journey-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .step-button {
+    border: 2px solid #1d4f91;
+    border-radius: 10px;
+    padding: 12px 18px;
+    background: #ffffff;
+    color: #1d4f91;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .step-button:hover {
+    background: #eef5fb;
+  }
+
+  .step-button.active {
+    background: #1d4f91;
+    color: #ffffff;
+  }
+
+  .step-button:focus-visible {
+    outline: 4px solid #f5b700;
+    outline-offset: 3px;
+  }
+
+  .arrow {
+    font-size: 1.5rem;
+    color: #6b7280;
+    font-weight: bold;
+  }
+
+  .stage {
+    display: none;
+    min-height: 330px;
+    padding: 28px;
+    border: 2px solid #d7e0ea;
+    border-radius: 18px;
+    background: #f8fafc;
+  }
+
+  .stage.active {
+    display: block;
+  }
+
+  .stage-label {
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5b6470;
+  }
+
+  .mock-search {
+    max-width: 650px;
+    margin: 30px auto 0;
+    padding: 16px 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .search-term {
+    font-weight: 700;
+    color: #17324d;
+  }
+
+  .mock-ad {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 22px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .sponsored {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #4b5563;
+  }
+
+  .url {
+    margin-bottom: 7px;
+    color: #166534;
+    font-size: 0.95rem;
+  }
+
+  .ad-title {
+    margin: 0 0 8px;
+    color: #1a0dab;
+    font-size: 1.35rem;
+  }
+
+  .ad-copy {
+    margin: 0 0 16px;
+    line-height: 1.55;
+  }
+
+  .cta {
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 7px;
+    background: #1d4f91;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .highlight {
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: #fff3bf;
+    color: #3f3f20;
+    font-weight: 700;
+  }
+
+  .landing-page {
+    max-width: 680px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .browser-bar {
+    padding: 10px 14px;
+    background: #e5e7eb;
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  .landing-content {
+    padding: 28px;
+    text-align: center;
+  }
+
+  .landing-content h3 {
+    margin: 0 0 12px;
+    color: #17324d;
+    font-size: 1.65rem;
+  }
+
+  .landing-content p {
+    max-width: 520px;
+    margin: 0 auto 18px;
+    line-height: 1.6;
+  }
+
+  .landing-cta {
+    display: inline-block;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #1d4f91;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .explanation {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-left: 5px solid #1d4f91;
+    border-radius: 8px;
+    background: #eef5fb;
+    line-height: 1.55;
+  }
+
+  .key-idea {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    line-height: 1.6;
+  }
+
+  .key-idea strong {
+    color: #17324d;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 14px;
+    }
+
+    .journey-nav {
+      gap: 7px;
+    }
+
+    .step-button {
+      padding: 10px 12px;
+      font-size: 0.95rem;
+    }
+
+    .arrow {
+      font-size: 1.1rem;
+    }
+
+    .stage {
+      padding: 20px 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step-button {
+      transition: none;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<main class="interactive">
+
+  <h2>Search → Ad → Landing Page</h2>
+
+  <p class="intro">
+    Follow the searcher's journey to see how a consistent message connects
+    the keyword, ad, call to action, and landing page.
+  </p>
+
+  <div class="journey-nav" role="group" aria-label="Search journey steps">
+
+    <button
+      class="step-button active"
+      type="button"
+      aria-pressed="true"
+      onclick="showStage(0)">
+      1. Search
+    </button>
+
+    <span class="arrow" aria-hidden="true">→</span>
+
+    <button
+      class="step-button"
+      type="button"
+      aria-pressed="false"
+      onclick="showStage(1)">
+      2. Ad
+    </button>
+
+    <span class="arrow" aria-hidden="true">→</span>
+
+    <button
+      class="step-button"
+      type="button"
+      aria-pressed="false"
+      onclick="showStage(2)">
+      3. Landing Page
+    </button>
+
+  </div>
+
+  <!-- SEARCH -->
+  <section class="stage active" aria-live="polite">
+
+    <div class="stage-label">Step 1: Search</div>
+
+    <div class="mock-search">
+      🔍 <span class="search-term">CRM software</span>
+    </div>
+
+    <div class="explanation">
+      The search term reveals what the user is looking for. A relevant ad
+      should reflect this language and intent.
+    </div>
+
+  </section>
+
+  <!-- AD -->
+  <section class="stage" aria-live="polite">
+
+    <div class="stage-label">Step 2: Ad</div>
+
+    <div class="mock-ad">
+
+      <div class="sponsored">Sponsored</div>
+
+      <div class="url">
+        www.clearcrm.com/<span class="highlight">crm-software</span>
+      </div>
+
+      <h3 class="ad-title">
+        Simple <span class="highlight">CRM Software</span> for Growing Teams
+      </h3>
+
+      <p class="ad-copy">
+        Organize leads, manage customer relationships, and keep your team
+        connected with easy-to-use <span class="highlight">CRM software</span>.
+      </p>
+
+      <span class="cta">Start Your Free Trial</span>
+
+    </div>
+
+    <div class="explanation">
+      Notice how the search term appears naturally in the headline, URL,
+      and description. The call to action also tells the searcher what to do next.
+    </div>
+
+  </section>
+
+  <!-- LANDING PAGE -->
+  <section class="stage" aria-live="polite">
+
+    <div class="stage-label">Step 3: Landing Page</div>
+
+    <div class="landing-page">
+
+      <div class="browser-bar">
+        clearcrm.com/crm-software
+      </div>
+
+      <div class="landing-content">
+
+        <h3>
+          Simple <span class="highlight">CRM Software</span> for Growing Teams
+        </h3>
+
+        <p>
+          Organize leads, manage customer relationships, and keep your team
+          connected—all in one easy-to-use CRM platform.
+        </p>
+
+        <span class="landing-cta">
+          Start Your Free Trial
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="explanation">
+      The landing page continues the same promise and repeats the same
+      call to action, creating a smoother experience for the searcher.
+    </div>
+
+  </section>
+
+  <aside class="key-idea">
+    <strong>Key idea:</strong>
+    The keyword, ad message, call to action, and landing page should work
+    together to create a consistent experience for the searcher.
+  </aside>
+
+</main>
+
+<script>
+  function showStage(index) {
+    var stages = document.querySelectorAll(".stage");
+    var buttons = document.querySelectorAll(".step-button");
+
+    stages.forEach(function(stage, i) {
+      stage.classList.toggle("active", i === index);
+    });
+
+    buttons.forEach(function(button, i) {
+      var active = i === index;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+</script>
+
+</body>
+</html>
