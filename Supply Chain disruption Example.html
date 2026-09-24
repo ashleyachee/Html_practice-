@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supply Chain Disruption: Choose a Response</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18334b;
+      --muted: #45596b;
+      --blue: #155b8e;
+      --deep: #0c426a;
+      --pale: #eaf4fb;
+      --surface: #f6f9fc;
+      --line: #b9cdda;
+      --focus: #ad4b00;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--surface); }
+    body {
+      margin: 0;
+      padding: clamp(12px, 3vw, 28px);
+      color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .activity {
+      max-width: 890px;
+      margin: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(16, 54, 83, .08);
+    }
+    header { padding: clamp(18px, 4vw, 32px); background: var(--pale); border-bottom: 1px solid var(--line); }
+    .eyebrow { margin: 0 0 6px; color: var(--deep); font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    h1 { margin: 0 0 9px; font-size: clamp(1.45rem, 3.6vw, 2.16rem); line-height: 1.2; }
+    h2 { margin: 0 0 10px; font-size: 1.27rem; line-height: 1.3; }
+    h3 { margin: 0 0 5px; font-size: 1.04rem; }
+    p { margin: 0 0 12px; }
+    p:last-child { margin-bottom: 0; }
+    header p:last-child { max-width: 70ch; color: var(--muted); }
+    main { padding: clamp(17px, 4vw, 34px); }
+    .instructions { max-width: 73ch; margin-bottom: 20px; }
+    .situation { padding: 17px 19px; border-left: 5px solid var(--blue); border-radius: 0 10px 10px 0; background: var(--surface); }
+    .situation h2 { margin-bottom: 6px; }
+    .facts {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      padding: 0;
+      margin: 17px 0 0;
+    }
+    .facts li { padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .facts strong { display: block; color: var(--deep); font-size: .84rem; text-transform: uppercase; letter-spacing: .03em; }
+    fieldset { min-width: 0; margin: 25px 0 0; padding: 0; border: 0; }
+    legend { padding: 0; margin-bottom: 11px; font-size: 1.18rem; font-weight: 800; line-height: 1.3; }
+    .options { display: grid; gap: 9px; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 12px 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .option:has(input:checked) { padding: 11px 12px; border: 2px solid var(--blue); background: var(--pale); }
+    .option:focus-within, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    input[type="radio"] { flex: 0 0 auto; width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--deep); }
+    .option strong { display: block; color: var(--deep); }
+    .option small { display: block; margin-top: 3px; color: var(--muted); font-size: .92rem; line-height: 1.4; }
+    button {
+      margin-top: 17px;
+      padding: 10px 17px;
+      border: 2px solid var(--deep);
+      border-radius: 8px;
+      background: var(--deep);
+      color: #fff;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    button:hover { background: #073351; }
+    button.secondary { background: #fff; color: var(--deep); }
+    button.secondary:hover { background: var(--pale); }
+    .error { margin: 9px 0 0; color: #8b251b; font-weight: 700; }
+    .feedback { margin-top: 26px; padding: clamp(16px, 3vw, 23px); border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+    .feedback h2:focus { outline: none; }
+    .feedback > p { color: var(--muted); }
+    .tradeoffs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 15px 0; }
+    .tradeoffs > div { padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .tradeoffs p { margin: 0; }
+    .next { padding-top: 14px; border-top: 1px solid var(--line); }
+    .next strong { color: var(--deep); }
+    .note { margin-top: 20px; color: var(--muted); font-size: .91rem; }
+    [hidden] { display: none !important; }
+    @media (max-width: 640px) {
+      .facts, .tradeoffs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="activity">
+    <header>
+      <p class="eyebrow">E162 Managing Operations · Section 3 example</p>
+      <h1>Supply chain disruption: choose a response</h1>
+      <p>Jaunty Coffee’s cafés are waiting for their next delivery. A supplier problem has put the roasting schedule at risk.</p>
+    </header>
+    <main>
+      <p class="instructions"><strong>Try it:</strong> Choose how you would respond. You will see what your plan may protect, what it may cost, and what you should verify. Then you can compare another response. There is no single perfect choice.</p>
+      <section class="situation" aria-labelledby="situation-title">
+        <h2 id="situation-title">The situation</h2>
+        <p>Jaunty Coffee’s main supplier cannot deliver green coffee beans for five days. The roasting team has enough beans for two days. Several café orders are due in three days.</p>
+        <ul class="facts" aria-label="Important facts">
+          <li><strong>Supplier</strong>Main shipment delayed five days</li>
+          <li><strong>Inventory</strong>Two days of beans on hand</li>
+          <li><strong>Customers</strong>Orders due in three days</li>
+        </ul>
+      </section>
+
+      <form id="response-form" novalidate>
+        <fieldset>
+          <legend>What should the operations team do first?</legend>
+          <div class="options">
+            <label class="option">
+              <input type="radio" name="response" value="expedite">
+              <span><strong>Order enough emergency beans for every café order.</strong><small>An approved backup supplier offers next-day delivery at a 30% higher bean price.</small></span>
+            </label>
+            <label class="option">
+              <input type="radio" name="response" value="allocate">
+              <span><strong>Use current inventory for the earliest orders and reschedule the rest.</strong><small>Contact affected cafés immediately with revised delivery dates.</small></span>
+            </label>
+            <label class="option">
+              <input type="radio" name="response" value="balance">
+              <span><strong>Buy a limited emergency supply and prioritize confirmed orders.</strong><small>Use the remaining inventory carefully and tell cafés what to expect.</small></span>
+            </label>
+          </div>
+        </fieldset>
+        <p id="error" class="error" role="alert" hidden>Please select a response before continuing.</p>
+        <button type="submit">See the tradeoffs</button>
+      </form>
+
+      <section id="feedback" class="feedback" aria-labelledby="feedback-title" hidden>
+        <h2 id="feedback-title" tabindex="-1"></h2>
+        <p id="feedback-summary"></p>
+        <div class="tradeoffs">
+          <div><h3>What this could protect</h3><p id="benefit"></p></div>
+          <div><h3>What it could cost</h3><p id="cost"></p></div>
+        </div>
+        <p class="next"><strong>Check before committing:</strong> <span id="verify"></span></p>
+        <button id="compare" class="secondary" type="button">Compare another response</button>
+      </section>
+      <p class="note">In practice, managers may combine actions as new information arrives. Inventory, supplier terms, café priorities, and customer communication all affect the decision.</p>
+    </main>
+  </div>
+  <script>
+    (function () {
+      'use strict';
+      const outcomes = {
+        expedite: {
+          title: 'Emergency purchase for all orders',
+          summary: 'This option puts delivery speed first. It may keep more cafés on schedule if the backup supplier can deliver the right beans in time.',
+          benefit: 'Most orders could stay on schedule, and cafés may avoid running short.',
+          cost: 'The beans cost 30% more. Transport, quality checks, and roasting capacity may add further cost or delay.',
+          verify: 'Confirm the backup supplier’s available quantity, bean specifications, delivery time, and the margin on affected orders.'
+        },
+        allocate: {
+          title: 'Allocate what is on hand',
+          summary: 'This option controls emergency spending and makes the shortage visible to cafés early.',
+          benefit: 'The team can fulfill some near-term commitments using beans it already has and give other cafés time to plan.',
+          cost: 'Some deliveries will be late. How the team prioritizes cafés may affect relationships and perceptions of fairness.',
+          verify: 'Check confirmed order dates, each café’s inventory position, and which commitments can be changed.'
+        },
+        balance: {
+          title: 'Use a limited backup supply',
+          summary: 'This option combines a smaller emergency purchase with deliberate allocation and customer updates.',
+          benefit: 'It may protect the most time-sensitive orders while limiting the extra purchase cost.',
+          cost: 'The team still pays a premium and must coordinate stock, production, and communications. Some cafés may still wait.',
+          verify: 'Confirm the backup quantity and specifications, calculate the cost, and use clear criteria for order priority.'
+        }
+      };
+      const form = document.getElementById('response-form');
+      const feedback = document.getElementById('feedback');
+      const error = document.getElementById('error');
+      const heading = document.getElementById('feedback-title');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const checked = form.querySelector('input[name="response"]:checked');
+        if (!checked) {
+          error.hidden = false;
+          form.querySelector('input[name="response"]').focus();
+          return;
+        }
+        error.hidden = true;
+        const choice = outcomes[checked.value];
+        heading.textContent = choice.title;
+        document.getElementById('feedback-summary').textContent = choice.summary;
+        document.getElementById('benefit').textContent = choice.benefit;
+        document.getElementById('cost').textContent = choice.cost;
+        document.getElementById('verify').textContent = choice.verify;
+        feedback.hidden = false;
+        heading.focus();
+      });
+      document.getElementById('compare').addEventListener('click', function () {
+        form.querySelectorAll('input[name="response"]').forEach(function (input) { input.checked = false; });
+        feedback.hidden = true;
+        form.querySelector('input[name="response"]').focus();
+      });
+    }());
+  </script>
+</body>
+</html>
