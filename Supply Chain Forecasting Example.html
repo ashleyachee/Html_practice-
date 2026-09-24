@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forecast Decision: What Changes Your Mind?</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18334b;
+      --muted: #45596b;
+      --blue: #155b8e;
+      --deep: #0c426a;
+      --pale: #eaf4fb;
+      --surface: #f6f9fc;
+      --line: #b9cdda;
+      --focus: #ad4b00;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--surface); }
+    body {
+      margin: 0;
+      padding: clamp(12px, 3vw, 28px);
+      color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .activity {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(16, 54, 83, .08);
+    }
+    header { padding: clamp(18px, 4vw, 32px); background: var(--pale); border-bottom: 1px solid var(--line); }
+    .eyebrow { margin: 0 0 6px; color: var(--deep); font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    h1 { margin: 0 0 9px; font-size: clamp(1.45rem, 3.6vw, 2.16rem); line-height: 1.2; }
+    h2 { margin: 0 0 11px; font-size: 1.25rem; line-height: 1.3; }
+    h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    p { margin: 0 0 12px; }
+    p:last-child { margin-bottom: 0; }
+    header p:last-child { max-width: 68ch; color: var(--muted); }
+    main { padding: clamp(17px, 4vw, 34px); }
+    .instruction { margin-bottom: 20px; }
+    .forecast { padding: 17px 19px; border-left: 5px solid var(--blue); border-radius: 0 10px 10px 0; background: var(--surface); }
+    .forecast .label { margin: 0 0 6px; color: var(--deep); font-size: .82rem; text-transform: uppercase; font-weight: 800; letter-spacing: .04em; }
+    .forecast strong { font-size: 1.08rem; }
+    .section { margin-top: 25px; }
+    .progress { margin-bottom: 9px; color: var(--deep); font-size: .85rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .evidence { padding: 18px 20px; border: 1px solid var(--line); border-radius: 11px; background: var(--pale); }
+    .evidence h2:focus { outline: none; }
+    fieldset { margin: 20px 0 0; padding: 0; border: 0; min-width: 0; }
+    legend { padding: 0; margin-bottom: 8px; font-weight: 800; }
+    .hint { margin: 0 0 12px; color: var(--muted); font-size: .92rem; }
+    .choices { display: grid; gap: 9px; }
+    .choice {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .choice:has(input:checked) { border: 2px solid var(--blue); padding: 10px 12px; background: var(--pale); }
+    input[type="radio"] { flex: 0 0 auto; width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--deep); }
+    .choice:focus-within, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 17px; }
+    button {
+      padding: 10px 17px;
+      border: 2px solid var(--deep);
+      border-radius: 8px;
+      background: var(--deep);
+      color: #fff;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    button:hover { background: #073351; }
+    button.secondary { background: #fff; color: var(--deep); }
+    button.secondary:hover { background: var(--pale); }
+    .error { margin-top: 9px; color: #8b251b; font-weight: 700; }
+    .status { min-height: 1.4em; margin-top: 14px; color: var(--deep); font-weight: 650; }
+    .reflection { margin-top: 24px; padding: 19px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 15px 0; }
+    .comparison > div { padding: 13px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .comparison .mini-label { display: block; margin-bottom: 5px; color: var(--deep); font-size: .82rem; font-weight: 800; text-transform: uppercase; }
+    .trail { padding-left: 20px; margin: 8px 0 15px; }
+    .trail li { padding-left: 3px; margin-bottom: 5px; }
+    .model { padding-top: 15px; border-top: 1px solid var(--line); }
+    .model strong { color: var(--deep); }
+    .footer-note { margin-top: 22px; color: var(--muted); font-size: .9rem; }
+    [hidden] { display: none !important; }
+    @media (max-width: 540px) { .comparison { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="activity">
+    <header>
+      <p class="eyebrow">E162 Managing Operations · Section 2 example</p>
+      <h1>Forecast decision: what changes your mind?</h1>
+      <p>At Jaunty Coffee, you help plan how much seasonal blend to roast. A forecast offers a recommendation, but new information arrives throughout the week.</p>
+    </header>
+    <main>
+      <p class="instruction"><strong>Instructions:</strong> Make an initial decision. Then examine three pieces of evidence, one at a time. After each one, keep your selected plan or choose a different plan. Your early choices are for practice, not a score.</p>
+      <div class="forecast">
+        <p class="label">The forecast</p>
+        <p><strong>An AI-supported forecast predicts 15% lower demand for the seasonal blend and recommends reducing production by 15%.</strong></p>
+        <p>What would you do before the next production schedule is set?</p>
+      </div>
+
+      <form id="decision-form" novalidate>
+        <section id="evidence-section" class="section" aria-labelledby="evidence-title" hidden>
+          <p id="progress" class="progress"></p>
+          <div class="evidence">
+            <h2 id="evidence-title" tabindex="-1"></h2>
+            <p id="evidence-text"></p>
+          </div>
+        </section>
+        <fieldset>
+          <legend id="decision-legend">Your first decision</legend>
+          <p id="choice-hint" class="hint">Choose the plan you would use with the information available now.</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="decision" value="reduce"><span>Reduce production by 15% now.</span></label>
+            <label class="choice"><input type="radio" name="decision" value="check"><span>Check current demand signals and the forecast’s assumptions before setting production.</span></label>
+            <label class="choice"><input type="radio" name="decision" value="increase"><span>Increase production now.</span></label>
+          </div>
+        </fieldset>
+        <p id="error" class="error" role="alert" hidden>Please select a plan before continuing.</p>
+        <div class="button-row">
+          <button id="continue" type="submit">Save my first decision</button>
+        </div>
+      </form>
+
+      <section id="reflection" class="reflection" aria-labelledby="reflection-title" hidden>
+        <h2 id="reflection-title" tabindex="-1">Compare your decisions</h2>
+        <p id="change-summary"></p>
+        <div class="comparison">
+          <div><span class="mini-label">First decision</span><span id="first-choice"></span></div>
+          <div><span class="mini-label">Final decision</span><span id="last-choice"></span></div>
+        </div>
+        <h3>How your plan changed</h3>
+        <ol id="decision-trail" class="trail"></ol>
+        <p class="model"><strong>A sound next step:</strong> Do not lock in the 15% cut or an increase based on one signal alone. The older sales pattern supports the forecast, but the competitor closure and new customer inquiries suggest conditions may have changed. Verify the current orders, check the forecast’s assumptions, and then adjust production with the team.</p>
+        <div class="button-row"><button id="restart" class="secondary" type="button">Try again</button></div>
+      </section>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="footer-note">The goal is to practice revising an operational decision when better evidence arrives. You do not need to use an AI tool or enter any business data to complete this activity.</p>
+    </main>
+  </div>
+  <script>
+    (function () {
+      'use strict';
+      const clues = [
+        {
+          title: 'Evidence 1: last season’s sales',
+          text: 'Sales of this blend fell by 12% last season. That history lends some support to the lower-demand forecast.'
+        },
+        {
+          title: 'Evidence 2: a competitor closes nearby cafés',
+          text: 'A regional competitor unexpectedly closes several cafés. Some of its customers may now buy from cafés supplied by Jaunty Coffee.'
+        },
+        {
+          title: 'Evidence 3: customers are calling',
+          text: 'Jaunty Coffee’s sales team reports a sharp rise in inquiries from cafés near those closures. The inquiries are promising, but they are not yet confirmed orders.'
+        }
+      ];
+      const label = {
+        reduce: 'Reduce production by 15% now.',
+        check: 'Check current demand signals and forecast assumptions first.',
+        increase: 'Increase production now.'
+      };
+      const form = document.getElementById('decision-form');
+      const evidenceSection = document.getElementById('evidence-section');
+      const evidenceTitle = document.getElementById('evidence-title');
+      const evidenceText = document.getElementById('evidence-text');
+      const progress = document.getElementById('progress');
+      const legend = document.getElementById('decision-legend');
+      const hint = document.getElementById('choice-hint');
+      const error = document.getElementById('error');
+      const continueButton = document.getElementById('continue');
+      const reflection = document.getElementById('reflection');
+      const reflectionTitle = document.getElementById('reflection-title');
+      const status = document.getElementById('status');
+      const radios = Array.from(form.querySelectorAll('input[name="decision"]'));
+      let step = -1;
+      let history = [];
+
+      function checkedValue() {
+        const checked = radios.find(function (radio) { return radio.checked; });
+        return checked ? checked.value : null;
+      }
+      function selectValue(value) {
+        radios.forEach(function (radio) { radio.checked = radio.value === value; });
+      }
+      function showClue(index) {
+        const clue = clues[index];
+        evidenceSection.hidden = false;
+        progress.textContent = 'Evidence ' + (index + 1) + ' of ' + clues.length;
+        evidenceTitle.textContent = clue.title;
+        evidenceText.textContent = clue.text;
+        legend.textContent = 'Your decision after this evidence';
+        hint.textContent = 'Your last plan is selected. Leave it selected to keep it, or choose another plan to revise it.';
+        continueButton.textContent = index === clues.length - 1 ? 'Save final decision and compare' : 'Save decision and reveal next evidence';
+        evidenceTitle.focus();
+      }
+      function showComparison() {
+        form.hidden = true;
+        reflection.hidden = false;
+        document.getElementById('first-choice').textContent = label[history[0]];
+        document.getElementById('last-choice').textContent = label[history[history.length - 1]];
+        document.getElementById('change-summary').textContent = history[0] === history[history.length - 1]
+          ? 'You ended with the same plan you chose at the start. Look at how each clue affected your reasoning.'
+          : 'You revised your initial plan as new information arrived. Look at which clue prompted your change.';
+        const trail = document.getElementById('decision-trail');
+        trail.replaceChildren();
+        history.forEach(function (choice, index) {
+          const item = document.createElement('li');
+          item.textContent = (index === 0 ? 'Initial forecast' : 'After evidence ' + index) + ': ' + label[choice];
+          trail.append(item);
+        });
+        status.textContent = 'All evidence reviewed. Your first and final decisions are shown below.';
+        reflectionTitle.focus();
+      }
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const choice = checkedValue();
+        if (!choice) {
+          error.hidden = false;
+          radios[0].focus();
+          return;
+        }
+        error.hidden = true;
+        const previous = history[history.length - 1];
+        history.push(choice);
+        if (step === clues.length - 1) {
+          showComparison();
+          return;
+        }
+        status.textContent = step === -1
+          ? 'First decision saved. Evidence 1 is available.'
+          : (choice === previous ? 'You kept your plan.' : 'You revised your plan.') + ' The next evidence is available.';
+        step += 1;
+        showClue(step);
+      });
+      document.getElementById('restart').addEventListener('click', function () {
+        step = -1;
+        history = [];
+        form.hidden = false;
+        reflection.hidden = true;
+        evidenceSection.hidden = true;
+        legend.textContent = 'Your first decision';
+        hint.textContent = 'Choose the plan you would use with the information available now.';
+        continueButton.textContent = 'Save my first decision';
+        error.hidden = true;
+        status.textContent = 'Activity reset. Make a new first decision.';
+        selectValue(null);
+        radios[0].focus();
+      });
+    }());
+  </script>
+</body>
+</html>
