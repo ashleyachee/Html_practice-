@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responsible AI Decision Check</title>
+  <style>
+    :root {
+      color-scheme: light;
+      /* Replace these tokens after the Jaunty Coffee branding guide is approved. */
+      --ink: #18334b;
+      --muted: #45596b;
+      --accent: #155b8e;
+      --accent-dark: #0c426a;
+      --accent-pale: #eaf4fb;
+      --surface: #f6f9fc;
+      --line: #b9cdda;
+      --focus: #ad4b00;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--surface); }
+    body {
+      margin: 0;
+      padding: clamp(12px, 3vw, 28px);
+      color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .activity {
+      max-width: 940px;
+      margin: auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(16, 54, 83, .08);
+    }
+    header { padding: clamp(18px, 4vw, 33px); background: var(--accent-pale); border-bottom: 1px solid var(--line); }
+    .eyebrow { margin: 0 0 7px; color: var(--accent-dark); font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    h1 { margin: 0 0 9px; font-size: clamp(1.45rem, 3.5vw, 2.15rem); line-height: 1.2; }
+    h2 { margin: 0 0 10px; font-size: 1.25rem; line-height: 1.28; }
+    h3 { margin: 0 0 5px; font-size: 1.04rem; }
+    p { margin: 0 0 12px; }
+    p:last-child { margin-bottom: 0; }
+    header p:last-child { color: var(--muted); max-width: 73ch; }
+    main { padding: clamp(16px, 4vw, 32px); }
+    .directions { margin-bottom: 20px; max-width: 72ch; }
+    .case-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 19px; }
+    .case-button, .check-button {
+      font: inherit;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .case-button {
+      padding: 8px 13px;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      font-weight: 700;
+    }
+    .case-button[aria-pressed="true"] { border-color: var(--accent-dark); background: var(--accent-dark); color: #fff; }
+    .case-button:hover:not([aria-pressed="true"]) { border-color: var(--accent); background: var(--accent-pale); }
+    button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .case-context { padding: 15px 17px; border-left: 5px solid var(--accent); border-radius: 0 9px 9px 0; background: var(--surface); }
+    .brand-marker { display: inline-block; margin: 0 0 8px; padding: 3px 9px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent-dark); font-size: .78rem; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; }
+    .case-context h2 { margin-bottom: 5px; }
+    .flow-title { margin: 25px 0 13px; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .check-button {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 7px;
+      min-width: 0;
+      min-height: 174px;
+      width: 100%;
+      padding: 14px;
+      border: 2px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      text-align: left;
+    }
+    .check-button:hover { border-color: var(--accent); }
+    .check-button[aria-pressed="true"] { border-color: var(--accent-dark); background: var(--accent-pale); }
+    .check-button .number { color: var(--accent-dark); font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .check-button .question { font-weight: 800; line-height: 1.28; }
+    .check-button .status { margin-top: auto; color: var(--muted); font-size: .83rem; font-weight: 700; }
+    .check-button[aria-pressed="true"] .status { color: var(--accent-dark); }
+    .detail { margin-top: 16px; padding: clamp(16px, 3vw, 23px); border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+    .detail h2:focus { outline: none; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 13px; }
+    .detail-grid > div { padding: 13px 15px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .detail-grid p { margin: 0; }
+    .progress { margin: 15px 0 0; color: var(--accent-dark); font-weight: 700; }
+    .takeaway { margin-top: 23px; padding-top: 17px; border-top: 1px solid var(--line); }
+    .takeaway strong { color: var(--accent-dark); }
+    .footer-note { margin-top: 12px; color: var(--muted); font-size: .91rem; }
+    [hidden] { display: none !important; }
+    @media (max-width: 760px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 510px) { .cards, .detail-grid { grid-template-columns: 1fr; } .check-button { min-height: 0; } }
+  </style>
+</head>
+<body>
+  <div class="activity">
+    <header>
+      <p class="eyebrow">E162 Managing Operations · reusable visual</p>
+      <h1>Check before you act on an AI recommendation</h1>
+      <p>Use the same four questions whether AI supports a forecast or helps screen suppliers. The details change; the manager’s responsibility to check the recommendation does not.</p>
+    </header>
+    <main>
+      <p class="directions"><strong>Try it:</strong> Choose a case, then select each question to see what an operations manager should examine. Select another case to apply the same check again.</p>
+      <div class="case-switch" role="group" aria-label="Choose an example">
+        <button class="case-button" type="button" data-case="northfield" aria-pressed="true">Northfield forecast</button>
+        <button class="case-button" type="button" data-case="jaunty" aria-pressed="false">Jaunty Coffee vendor decision</button>
+      </div>
+      <section class="case-context" aria-labelledby="case-title">
+        <!-- Replace this text marker with an approved Jaunty Coffee logo after the branding guide is supplied. -->
+        <p id="jaunty-marker" class="brand-marker" hidden>Jaunty Coffee case</p>
+        <h2 id="case-title">Northfield forecast</h2>
+        <p id="case-description">An AI tool recommends reducing seasonal inventory, but market conditions may have shifted. Priya must decide whether the forecast is dependable enough to use.</p>
+      </section>
+
+      <h2 class="flow-title">Four questions to ask</h2>
+      <div class="cards" role="group" aria-label="Decision check questions">
+        <button class="check-button" type="button" data-check="data" aria-pressed="false" aria-controls="detail">
+          <span class="number">01 · Data</span>
+          <span class="question">What data was used?</span>
+          <span class="status">Select to explore</span>
+        </button>
+        <button class="check-button" type="button" data-check="change" aria-pressed="false" aria-controls="detail">
+          <span class="number">02 · Context</span>
+          <span class="question">What changed?</span>
+          <span class="status">Select to explore</span>
+        </button>
+        <button class="check-button" type="button" data-check="owner" aria-pressed="false" aria-controls="detail">
+          <span class="number">03 · Ownership</span>
+          <span class="question">Who checks the result?</span>
+          <span class="status">Select to explore</span>
+        </button>
+        <button class="check-button" type="button" data-check="sharing" aria-pressed="false" aria-controls="detail">
+          <span class="number">04 · Safe sharing</span>
+          <span class="question">What information is safe to share?</span>
+          <span class="status">Select to explore</span>
+        </button>
+      </div>
+
+      <section id="detail" class="detail" aria-labelledby="detail-title">
+        <h2 id="detail-title" tabindex="-1">Select a question</h2>
+        <p id="detail-intro">Each question helps you test a different part of an AI-supported decision.</p>
+        <div id="detail-grid" class="detail-grid" hidden>
+          <div><h3>Look for</h3><p id="look-for"></p></div>
+          <div><h3>Before acting</h3><p id="before-acting"></p></div>
+        </div>
+      </section>
+      <p id="progress" class="progress" role="status" aria-live="polite">Questions explored: 0 of 4.</p>
+      <p class="takeaway"><strong>Keep the decision with people:</strong> AI can provide a useful signal. A manager still needs to check its evidence, the current context, who is accountable, and whether the data may be shared with the tool.</p>
+      <p class="footer-note">This activity uses fictional practice cases. It does not ask students to enter confidential business information or use a live AI tool.</p>
+    </main>
+  </div>
+  <script>
+    (function () {
+      'use strict';
+      const cases = {
+        northfield: {
+          title: 'Northfield forecast',
+          description: 'An AI tool recommends reducing seasonal inventory, but market conditions may have shifted. Priya must decide whether the forecast is dependable enough to use.',
+          checks: {
+            data: {
+              intro: 'A precise forecast can still rely on incomplete or unrepresentative inputs.',
+              look: 'Which demand periods, product lines, and sales channels informed the forecast? Is anything missing or outdated?',
+              act: 'Check the inputs and assumptions before treating the recommendation as a production decision.'
+            },
+            change: {
+              intro: 'A regional competitor has closed several stores, and current customer inquiries are rising.',
+              look: 'Are these new signals represented in the historical pattern used by the model?',
+              act: 'Compare the forecast with current orders and market information; investigate the difference.'
+            },
+            owner: {
+              intro: 'A tool may suggest an action, but someone must own the final inventory decision.',
+              look: 'Who reviews unusual forecasts, and who can question or escalate a large inventory change?',
+              act: 'Assign a reviewer and document why the recommendation is accepted or changed.'
+            },
+            sharing: {
+              intro: 'The team may use customer demand, production schedules, and other internal information.',
+              look: 'Is this an approved tool, and which customer or operational details may be entered under company policy?',
+              act: 'Confirm the approved tool and data-handling rules before sharing sensitive information.'
+            }
+          }
+        },
+        jaunty: {
+          title: 'Jaunty Coffee vendor decision',
+          description: 'After favoritism affected a transportation contract, Jaunty Coffee considers an AI vendor-screening tool. Mei must decide how to use its risk scores fairly and responsibly.',
+          checks: {
+            data: {
+              intro: 'The tool was trained mostly on large suppliers with long digital histories.',
+              look: 'Does a high score reflect actual performance, or does the system have less data about a smaller or newer supplier?',
+              act: 'Review the source evidence and test for systematic differences before relying on a score.'
+            },
+            change: {
+              intro: 'Jaunty Coffee is changing how it evaluates vendors after a favoritism problem.',
+              look: 'Could the new screening process unintentionally exclude suppliers the company wants to consider fairly?',
+              act: 'Compare the proposed process with current supplier circumstances and Jaunty Coffee’s CSR commitments.'
+            },
+            owner: {
+              intro: 'Removing one manager’s discretion does not make an automated score the final authority.',
+              look: 'Who reviews flagged suppliers, records the reasons for decisions, and monitors outcomes over time?',
+              act: 'Require accountable human review before a consequential supplier decision.'
+            },
+            sharing: {
+              intro: 'Vendor evaluation may use contracts, prices, and supplier performance records.',
+              look: 'Which records may be entered into this tool, and what do company policy and vendor terms allow?',
+              act: 'Verify the approved system and data-handling rules before uploading proprietary or sensitive information.'
+            }
+          }
+        }
+      };
+      const labels = {
+        data: 'What data was used?',
+        change: 'What changed?',
+        owner: 'Who checks the result?',
+        sharing: 'What information is safe to share?'
+      };
+      const caseButtons = Array.from(document.querySelectorAll('.case-button'));
+      const checkButtons = Array.from(document.querySelectorAll('.check-button'));
+      const progress = document.getElementById('progress');
+      const title = document.getElementById('detail-title');
+      let currentCase = 'northfield';
+      let explored = new Set();
+
+      function setCase(key) {
+        currentCase = key;
+        explored = new Set();
+        caseButtons.forEach(function (button) {
+          button.setAttribute('aria-pressed', String(button.dataset.case === key));
+        });
+        checkButtons.forEach(function (button) {
+          button.setAttribute('aria-pressed', 'false');
+          button.querySelector('.status').textContent = 'Select to explore';
+        });
+        document.getElementById('case-title').textContent = cases[key].title;
+        document.getElementById('case-description').textContent = cases[key].description;
+        document.getElementById('jaunty-marker').hidden = key !== 'jaunty';
+        title.textContent = 'Select a question';
+        document.getElementById('detail-intro').textContent = 'Each question helps you test a different part of an AI-supported decision.';
+        document.getElementById('detail-grid').hidden = true;
+        progress.textContent = 'Questions explored: 0 of 4.';
+      }
+      function setCheck(key) {
+        const item = cases[currentCase].checks[key];
+        explored.add(key);
+        checkButtons.forEach(function (button) {
+          const selected = button.dataset.check === key;
+          button.setAttribute('aria-pressed', String(selected));
+          button.querySelector('.status').textContent = selected ? 'Showing example' : explored.has(button.dataset.check) ? 'Explored · select again' : 'Select to explore';
+        });
+        title.textContent = labels[key];
+        document.getElementById('detail-intro').textContent = item.intro;
+        document.getElementById('look-for').textContent = item.look;
+        document.getElementById('before-acting').textContent = item.act;
+        document.getElementById('detail-grid').hidden = false;
+        progress.textContent = 'Questions explored: ' + explored.size + ' of 4.' + (explored.size === 4 ? ' You have completed this case; try the other case.' : '');
+        title.focus();
+      }
+      caseButtons.forEach(function (button) {
+        button.addEventListener('click', function () { setCase(button.dataset.case); });
+      });
+      checkButtons.forEach(function (button) {
+        button.addEventListener('click', function () { setCheck(button.dataset.check); });
+      });
+    }());
+  </script>
+</body>
+</html>
