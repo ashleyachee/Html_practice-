@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antietam Battlefield Investigator</title>
+<style>
+  :root{
+    --ink:#1d2520;
+    --muted:#5e675f;
+    --paper:#f2ead7;
+    --paper-2:#e8dcc3;
+    --panel:#fffdf7;
+    --line:#cdbf9f;
+    --accent:#7b3f2a;
+    --accent-2:#38546b;
+    --union:#426c8f;
+    --confed:#8a5f4a;
+    --field:#b9b37d;
+    --woods:#66795c;
+    --water:#6e98ac;
+    --road:#c6ae86;
+    --danger:#9d4b3e;
+    --success:#4b7157;
+    --shadow:0 10px 24px rgba(39,31,19,.12);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:#ece6d8;
+    line-height:1.45;
+  }
+
+  .app{
+    max-width:1180px;
+    margin:0 auto;
+    padding:18px;
+  }
+
+  .hero{
+    background:linear-gradient(135deg,#f7f0df,#e8dcc3);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+
+  .eyebrow{
+    font-size:.78rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:700;
+  }
+
+  h1{
+    margin:.25rem 0 .35rem;
+    font-family:Georgia, "Times New Roman", serif;
+    font-size:clamp(1.8rem,4vw,3rem);
+  }
+
+  .hero p{
+    max-width:850px;
+    margin:.5rem 0 0;
+    color:var(--muted);
+  }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:14px;
+  }
+
+  button, input[type="range"]{
+    font:inherit;
+  }
+
+  button{
+    min-height:44px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 14px;
+    background:#fffaf0;
+    color:var(--ink);
+    cursor:pointer;
+  }
+
+  button:hover{background:#f8edd9}
+  button:focus-visible,
+  input:focus-visible{
+    outline:3px solid #1f6b8f;
+    outline-offset:2px;
+  }
+
+  button.active{
+    background:var(--ink);
+    color:white;
+    border-color:var(--ink);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:minmax(0,2fr) minmax(280px,1fr);
+    gap:16px;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+  }
+
+  .map-card{
+    overflow:hidden;
+  }
+
+  .map-head{
+    padding:14px 14px 8px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 16px;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+
+  .map-head h2,.side h2,.side h3{
+    font-family:Georgia, "Times New Roman", serif;
+    margin:0;
+  }
+
+  .map-wrap{
+    position:relative;
+    background:#d7d0b8;
+    min-height:560px;
+  }
+
+  svg{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+
+  .hotspot{
+    cursor:pointer;
+    transition:transform .2s ease, opacity .2s ease;
+    transform-box:fill-box;
+    transform-origin:center;
+  }
+
+  .hotspot:hover{
+    transform:scale(1.04);
+  }
+
+  .hotspot .pulse{
+    fill:rgba(255,255,255,.18);
+    stroke:#fffdf7;
+    stroke-width:2;
+    stroke-dasharray:5 5;
+  }
+
+  .hotspot text{
+    font-size:13px;
+    font-weight:700;
+    fill:#1a1d19;
+    paint-order:stroke;
+    stroke:#f7f0df;
+    stroke-width:4px;
+    stroke-linejoin:round;
+  }
+
+  .unit text{
+    font-size:15px;
+    fill:#fff;
+    font-weight:700;
+  }
+
+  .unit circle{
+    stroke:#fff;
+    stroke-width:2.2;
+  }
+
+  .union circle{fill:var(--union)}
+  .confed circle{fill:var(--confed)}
+
+  .overlay-hidden{display:none}
+
+  .arrow{
+    fill:none;
+    stroke-width:4;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    opacity:.9;
+  }
+
+  .union-arrow{stroke:var(--union)}
+  .confed-arrow{stroke:var(--confed)}
+
+  .phase-label{
+    position:absolute;
+    left:12px;
+    bottom:12px;
+    padding:8px 10px;
+    border-radius:9px;
+    background:rgba(255,253,247,.92);
+    border:1px solid var(--line);
+    font-size:.9rem;
+    max-width:70%;
+  }
+
+  .side{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .panel-pad{
+    padding:16px;
+  }
+
+  .site-title{
+    font-family:Georgia, "Times New Roman", serif;
+    font-size:1.35rem;
+    margin:.1rem 0 .35rem;
+  }
+
+  .site-kicker{
+    color:var(--accent);
+    font-size:.76rem;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    font-weight:700;
+  }
+
+  .clue{
+    margin-top:12px;
+    padding:12px;
+    border:1px solid var(--line);
+    background:#fbf5e7;
+    border-radius:12px;
+  }
+
+  .clue strong{display:block;margin-bottom:4px}
+
+  .choice-row{
+    display:grid;
+    gap:8px;
+    margin-top:10px;
+  }
+
+  .choice-row button{
+    text-align:left;
+  }
+
+  .choice-row button.correct{
+    border-color:var(--success);
+    background:#edf5ee;
+  }
+
+  .choice-row button.incorrect{
+    border-color:var(--danger);
+    background:#f8ece8;
+  }
+
+  .feedback{
+    margin-top:10px;
+    padding:10px 12px;
+    border-left:4px solid var(--accent-2);
+    background:#eef4f7;
+    border-radius:8px;
+  }
+
+  .notebook{
+    max-height:330px;
+    overflow:auto;
+  }
+
+  .evidence-item{
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .evidence-item:last-child{border-bottom:0}
+
+  .tag{
+    display:inline-block;
+    padding:2px 7px;
+    border-radius:999px;
+    font-size:.72rem;
+    background:#ece5d5;
+    margin-right:6px;
+  }
+
+  .timeline{
+    padding:16px;
+    margin-top:16px;
+  }
+
+  .timeline-grid{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:center;
+  }
+
+  input[type="range"]{
+    width:100%;
+    accent-color:var(--accent);
+  }
+
+  .time-pill{
+    min-width:94px;
+    text-align:center;
+    padding:8px 10px;
+    background:#f4ecdb;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-weight:700;
+  }
+
+  .reconstruct{
+    margin-top:16px;
+    padding:16px;
+  }
+
+  .reconstruct-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-top:12px;
+  }
+
+  .phase{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    background:#fcf8ee;
+  }
+
+  .phase h3{
+    font-size:1rem;
+    margin:0 0 8px;
+    font-family:Georgia, "Times New Roman", serif;
+  }
+
+  select{
+    width:100%;
+    min-height:44px;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:white;
+    font:inherit;
+  }
+
+  .result{
+    margin-top:12px;
+    padding:12px;
+    border-radius:10px;
+    background:#f2efe6;
+    border:1px solid var(--line);
+  }
+
+  .sr-only{
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr}
+    .map-wrap{min-height:0}
+    .reconstruct-grid{grid-template-columns:1fr 1fr}
+  }
+
+  @media (max-width:520px){
+    .app{padding:10px}
+    .hero{padding:14px}
+    .reconstruct-grid{grid-template-columns:1fr}
+    .phase-label{max-width:92%;font-size:.82rem}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <section class="hero" aria-labelledby="title">
+    <div class="eyebrow">Historical Investigation • September 17, 1862</div>
+    <h1 id="title">Antietam Battlefield Investigator</h1>
+    <p>
+      Explore a stylized reconstruction of the Antietam battlefield. Investigate terrain, troop positions,
+      crossings, and movement patterns. Collect evidence, use the timeline to examine the battle in phases,
+      then reconstruct the sequence of events.
+    </p>
+    <div class="toolbar" aria-label="Map layers">
+      <button type="button" class="layer-btn active" data-layer="base">Terrain</button>
+      <button type="button" class="layer-btn" data-layer="troops">Troop Positions</button>
+      <button type="button" class="layer-btn" data-layer="movement">Movement</button>
+      <button type="button" class="layer-btn" data-layer="elevation">Elevation</button>
+      <button type="button" id="resetBtn">Reset Investigation</button>
+    </div>
+  </section>
+
+  <section class="layout">
+    <article class="card map-card">
+      <div class="map-head">
+        <h2>Battlefield Map</h2>
+        <span id="mapStatus" aria-live="polite">Select a location to investigate.</span>
+      </div>
+
+      <div class="map-wrap">
+        <svg id="battleMap" viewBox="0 0 900 620" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">Stylized interactive map of the Antietam battlefield</title>
+          <desc id="mapDesc">
+            The map shows the Cornfield in the north, the Sunken Road in the center, Antietam Creek and the Lower Bridge to the southeast, and Sharpsburg to the west. This is a schematic teaching reconstruction, not a survey map.
+          </desc>
+
+          <defs>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".18"/>
+            </filter>
+            <marker id="arrowUnion" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#426c8f"/>
+            </marker>
+            <marker id="arrowConfed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#8a5f4a"/>
+            </marker>
+            <pattern id="cornPattern" width="16" height="16" patternUnits="userSpaceOnUse">
+              <rect width="16" height="16" fill="#c4bc7d"/>
+              <path d="M4 16 Q5 9 4 3 M12 16 Q11 9 12 3" stroke="#786f42" stroke-width="1.4" fill="none"/>
+            </pattern>
+            <pattern id="woodsPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+              <rect width="24" height="24" fill="#66795c"/>
+              <circle cx="7" cy="7" r="4" fill="#516549"/>
+              <circle cx="18" cy="13" r="5" fill="#566a4c"/>
+            </pattern>
+            <linearGradient id="elevGrad" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#e9dfc5"/>
+              <stop offset=".55" stop-color="#b9aa7b"/>
+              <stop offset="1" stop-color="#756a4e"/>
+            </linearGradient>
+          </defs>
+
+          <!-- BASE -->
+          <g id="layer-base">
+            <rect x="0" y="0" width="900" height="620" fill="#d8cfad"/>
+            <path d="M0 100 C180 40 250 150 430 90 C600 35 700 90 900 40 L900 0 L0 0 Z" fill="#c7bf94"/>
+            <path d="M0 520 C190 470 250 560 410 520 C580 470 700 555 900 500 L900 620 L0 620 Z" fill="#c6ba8c"/>
+
+            <!-- woods -->
+            <path d="M80 80 C150 35 240 52 290 105 L275 175 C210 150 150 170 92 142 Z" fill="url(#woodsPattern)" opacity=".95"/>
+            <path d="M650 100 C735 55 835 75 880 135 L860 210 C790 180 730 195 660 170 Z" fill="url(#woodsPattern)" opacity=".95"/>
+            <path d="M610 390 C690 355 780 365 865 430 L840 525 C740 480 680 490 605 465 Z" fill="url(#woodsPattern)" opacity=".95"/>
+
+            <!-- cornfield -->
+            <path d="M220 115 L440 105 L470 230 L245 240 Z" fill="url(#cornPattern)" stroke="#8c8457" stroke-width="2"/>
+            <text x="330" y="182" text-anchor="middle" font-size="22" font-family="Georgia,serif" fill="#5f5834">The Cornfield</text>
+
+            <!-- roads -->
+            <path d="M100 320 C250 290 350 280 520 300 C650 318 730 280 865 260" fill="none" stroke="#c6ae86" stroke-width="18" stroke-linecap="round"/>
+            <path d="M165 550 C280 480 390 430 520 390 C650 352 760 330 875 320" fill="none" stroke="#c6ae86" stroke-width="15" stroke-linecap="round"/>
+            <path d="M120 60 C200 145 280 220 420 310 C540 390 670 450 835 500" fill="none" stroke="#c6ae86" stroke-width="12" stroke-linecap="round"/>
+
+            <!-- sunken road -->
+            <path d="M375 300 C460 315 545 318 625 296" fill="none" stroke="#6c5841" stroke-width="15" stroke-linecap="round"/>
+            <path d="M375 297 C460 312 545 315 625 293" fill="none" stroke="#b39c78" stroke-width="8" stroke-linecap="round"/>
+            <text x="505" y="345" text-anchor="middle" font-size="18" font-family="Georgia,serif" fill="#4a4338">Sunken Road</text>
+
+            <!-- creek -->
+            <path d="M720 -10 C690 85 750 150 720 240 C690 325 735 410 710 630" fill="none" stroke="#6e98ac" stroke-width="36" stroke-linecap="round"/>
+            <path d="M720 -10 C690 85 750 150 720 240 C690 325 735 410 710 630" fill="none" stroke="#90b1c1" stroke-width="20" stroke-linecap="round"/>
+            <text x="760" y="280" transform="rotate(76 760 280)" font-size="18" font-family="Georgia,serif" fill="#38546b">Antietam Creek</text>
+
+            <!-- bridge -->
+            <g filter="url(#softShadow)">
+              <rect x="676" y="438" width="78" height="18" rx="3" fill="#8a6e4f" transform="rotate(-8 715 447)"/>
+              <line x1="684" y1="442" x2="747" y2="433" stroke="#e3d2b3" stroke-width="3"/>
+              <line x1="687" y1="450" x2="750" y2="441" stroke="#e3d2b3" stroke-width="3"/>
+            </g>
+            <text x="785" y="450" font-size="17" font-family="Georgia,serif" fill="#4a4338">Lower Bridge</text>
+
+            <!-- Sharpsburg -->
+            <g transform="translate(145 380)">
+              <rect x="0" y="0" width="150" height="105" rx="8" fill="#d8c39a" stroke="#8b744d" stroke-width="2"/>
+              <g fill="#735742">
+                <rect x="20" y="25" width="25" height="18"/>
+                <polygon points="18,25 33,12 48,25"/>
+                <rect x="65" y="15" width="30" height="22"/>
+                <polygon points="63,15 80,2 97,15"/>
+                <rect x="105" y="35" width="26" height="20"/>
+                <polygon points="103,35 118,23 133,35"/>
+              </g>
+              <text x="75" y="88" text-anchor="middle" font-size="18" font-family="Georgia,serif">Sharpsburg</text>
+            </g>
+          </g>
+
+          <!-- ELEVATION -->
+          <g id="layer-elevation" class="overlay-hidden" opacity=".72">
+            <path d="M570 360 C650 300 805 310 900 245 L900 620 L560 620 Z" fill="url(#elevGrad)"/>
+            <path d="M140 200 C260 165 385 195 490 145" fill="none" stroke="#786d56" stroke-width="2"/>
+            <path d="M130 220 C255 185 390 215 505 160" fill="none" stroke="#786d56" stroke-width="2"/>
+            <path d="M600 380 C680 340 790 350 875 300" fill="none" stroke="#655b47" stroke-width="3"/>
+            <path d="M610 402 C690 360 800 372 884 320" fill="none" stroke="#655b47" stroke-width="3"/>
+            <text x="742" y="360" font-size="15" font-weight="700" fill="#3e372b">Higher ground</text>
+          </g>
+
+          <!-- TROOPS -->
+          <g id="layer-troops" class="overlay-hidden">
+            <g class="unit union" transform="translate(245 64)">
+              <circle r="22"/><text text-anchor="middle" dy="4">U</text>
+            </g>
+            <g class="unit union" transform="translate(350 245)">
+              <circle r="22"/><text text-anchor="middle" dy="4">U</text>
+            </g>
+            <g class="unit union" transform="translate(615 520)">
+              <circle r="22"/><text text-anchor="middle" dy="4">U</text>
+            </g>
+            <g class="unit confed" transform="translate(450 160)">
+              <circle r="22"/><text text-anchor="middle" dy="4">C</text>
+            </g>
+            <g class="unit confed" transform="translate(610 280)">
+              <circle r="22"/><text text-anchor="middle" dy="4">C</text>
+            </g>
+            <g class="unit confed" transform="translate(820 380)">
+              <circle r="22"/><text text-anchor="middle" dy="4">C</text>
+            </g>
+          </g>
+
+          <!-- MOVEMENT -->
+          <g id="layer-movement" class="overlay-hidden">
+            <path class="arrow union-arrow" marker-end="url(#arrowUnion)" d="M270 70 C300 100 330 120 350 150"/>
+            <path class="arrow confed-arrow" marker-end="url(#arrowConfed)" d="M430 145 C400 165 370 185 345 205"/>
+            <path class="arrow union-arrow" marker-end="url(#arrowUnion)" d="M385 255 C440 275 500 285 560 290"/>
+            <path class="arrow union-arrow" marker-end="url(#arrowUnion)" d="M630 500 C660 480 680 460 700 445"/>
+            <path class="arrow confed-arrow" marker-end="url(#arrowConfed)" d="M850 560 C800 530 760 510 720 500"/>
+          </g>
+
+          <!-- HOTSPOTS -->
+          <g id="hotspot-cornfield" class="hotspot" tabindex="0" role="button" aria-label="Investigate the Cornfield">
+            <ellipse class="pulse" cx="350" cy="175" rx="125" ry="82"/>
+            <text x="350" y="92" text-anchor="middle">Investigate Cornfield</text>
+          </g>
+
+          <g id="hotspot-sunken" class="hotspot" tabindex="0" role="button" aria-label="Investigate the Sunken Road">
+            <ellipse class="pulse" cx="505" cy="304" rx="145" ry="55"/>
+            <text x="505" y="255" text-anchor="middle">Investigate Sunken Road</text>
+          </g>
+
+          <g id="hotspot-bridge" class="hotspot" tabindex="0" role="button" aria-label="Investigate the Lower Bridge">
+            <ellipse class="pulse" cx="716" cy="446" rx="92" ry="60"/>
+            <text x="790" y="540" text-anchor="middle">Investigate Lower Bridge</text>
+          </g>
+
+          <g id="hotspot-hill" class="hotspot" tabindex="0" role="button" aria-label="Investigate the high ground near the Lower Bridge">
+            <ellipse class="pulse" cx="790" cy="380" rx="90" ry="70"/>
+            <text x="815" y="320" text-anchor="middle">Investigate High Ground</text>
+          </g>
+        </svg>
+        <div class="phase-label" id="phaseLabel">Morning: fighting opens in the northern sector around the Cornfield.</div>
+      </div>
+    </article>
+
+    <aside class="side">
+      <section class="card panel-pad" aria-live="polite">
+        <div class="site-kicker">Investigation Site</div>
+        <div id="siteContent">
+          <h2 class="site-title">Select a location</h2>
+          <p>Click or tap one of the outlined battlefield locations. Each site contains an observation and an evidence question.</p>
+        </div>
+      </section>
+
+      <section class="card panel-pad notebook">
+        <h2>Field Notebook</h2>
+        <p id="evidenceCount">Evidence collected: 0 / 4</p>
+        <div id="evidenceList">
+          <p class="muted">No evidence collected yet.</p>
+        </div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="card timeline">
+    <h2>Battle Timeline</h2>
+    <p>Move through the day to see how the battlefield emphasis shifts.</p>
+    <div class="timeline-grid">
+      <input id="timeSlider" type="range" min="0" max="4" step="1" value="0" aria-label="Battle timeline">
+      <div class="time-pill" id="timePill">6:00 AM</div>
+    </div>
+  </section>
+
+  <section class="card reconstruct">
+    <h2>Reconstruct the Battle</h2>
+    <p>After collecting evidence, use what you found to identify the major focus of each phase.</p>
+    <div class="reconstruct-grid">
+      <div class="phase">
+        <h3>Phase 1 — Morning</h3>
+        <select id="phase1">
+          <option value="">Choose location</option>
+          <option value="cornfield">Cornfield</option>
+          <option value="sunken">Sunken Road</option>
+          <option value="bridge">Lower Bridge</option>
+          <option value="sharpsburg">Sharpsburg</option>
+        </select>
+      </div>
+      <div class="phase">
+        <h3>Phase 2 — Midday</h3>
+        <select id="phase2">
+          <option value="">Choose location</option>
+          <option value="cornfield">Cornfield</option>
+          <option value="sunken">Sunken Road</option>
+          <option value="bridge">Lower Bridge</option>
+          <option value="sharpsburg">Sharpsburg</option>
+        </select>
+      </div>
+      <div class="phase">
+        <h3>Phase 3 — Afternoon</h3>
+        <select id="phase3">
+          <option value="">Choose location</option>
+          <option value="cornfield">Cornfield</option>
+          <option value="sunken">Sunken Road</option>
+          <option value="bridge">Lower Bridge</option>
+          <option value="sharpsburg">Sharpsburg</option>
+        </select>
+      </div>
+      <div class="phase">
+        <h3>Phase 4 — Late Afternoon</h3>
+        <select id="phase4">
+          <option value="">Choose event</option>
+          <option value="advance">Union advance toward Sharpsburg</option>
+          <option value="hill">Confederate defenders remain at bridge</option>
+          <option value="arrival">A.P. Hill's division arrives</option>
+          <option value="corn">Cornfield fighting begins</option>
+        </select>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button type="button" id="checkReconstruction">Check Reconstruction</button>
+      <button type="button" id="replayBtn">Replay Battle</button>
+    </div>
+    <div class="result" id="reconstructionResult" aria-live="polite">
+      Complete the four phases, then check your reconstruction.
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  const sites = {
+    cornfield:{
+      title:"The Cornfield",
+      kicker:"Northern Sector",
+      observation:"A large open field sits between wooded areas and opposing lines. Repeated advances would expose troops while nearby woods could conceal movement.",
+      question:"Which battlefield factor is most important here?",
+      choices:[
+        ["Open ground increased exposure during repeated advances", true],
+        ["The field made artillery impossible to use", false],
+        ["The terrain prevented troops from changing direction", false]
+      ],
+      evidence:"Open agricultural ground and nearby woods shaped visibility, exposure, and repeated attacks in the northern sector."
+    },
+    sunken:{
+      title:"The Sunken Road",
+      kicker:"Central Sector",
+      observation:"The road lies below the surrounding fields, creating a natural depression that can shield troops from direct fire—until attackers gain a position along or above it.",
+      question:"Why could this position be useful to defenders?",
+      choices:[
+        ["Its lower elevation could provide cover", true],
+        ["It was the fastest route across Antietam Creek", false],
+        ["It allowed cavalry to charge downhill", false]
+      ],
+      evidence:"The road's depressed profile gave defenders natural cover, but the position became vulnerable once attackers gained an advantageous angle."
+    },
+    bridge:{
+      title:"The Lower Bridge",
+      kicker:"Southern Sector",
+      observation:"The bridge creates a narrow crossing point over Antietam Creek. A large force attempting to cross here can become compressed and easier to resist.",
+      question:"What tactical problem does the bridge create?",
+      choices:[
+        ["A bottleneck that limits how many troops can cross at once", true],
+        ["A hidden route that lets entire brigades cross unseen", false],
+        ["A wide open area that prevents defenders from concentrating fire", false]
+      ],
+      evidence:"The bridge constrained movement and created a bottleneck during Union attempts to cross Antietam Creek."
+    },
+    hill:{
+      title:"High Ground Above the Creek",
+      kicker:"Southern Sector",
+      observation:"Wooded slopes and higher ground overlook approaches to the Lower Bridge. Defenders can observe and fire toward forces moving through the crossing zone.",
+      question:"What advantage does this terrain create?",
+      choices:[
+        ["Defenders can observe and contest the crossing from above", true],
+        ["Attackers can move uphill faster than defenders can react", false],
+        ["The elevation makes small-arms fire ineffective", false]
+      ],
+      evidence:"Higher ground overlooking the creek strengthened Confederate defensive positions near the Lower Bridge."
+    }
+  };
+
+  const collected = new Set();
+  const siteContent = document.getElementById("siteContent");
+  const evidenceList = document.getElementById("evidenceList");
+  const evidenceCount = document.getElementById("evidenceCount");
+  const mapStatus = document.getElementById("mapStatus");
+
+  function renderSite(key){
+    const s = sites[key];
+    mapStatus.textContent = "Investigating " + s.title + ".";
+    let html = '<div class="site-kicker">'+s.kicker+'</div>';
+    html += '<h2 class="site-title">'+s.title+'</h2>';
+    html += '<p>'+s.observation+'</p>';
+    html += '<div class="clue"><strong>'+s.question+'</strong><div class="choice-row">';
+    s.choices.forEach((c,i)=>{
+      html += '<button type="button" data-site="'+key+'" data-choice="'+i+'">'+c[0]+'</button>';
+    });
+    html += '</div><div id="feedback-'+key+'" class="feedback" hidden></div></div>';
+    siteContent.innerHTML = html;
+
+    siteContent.querySelectorAll("button[data-choice]").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const choiceIndex = Number(btn.dataset.choice);
+        const correct = sites[key].choices[choiceIndex][1];
+        siteContent.querySelectorAll("button[data-choice]").forEach(b=>{
+          b.classList.remove("correct","incorrect");
+        });
+        btn.classList.add(correct ? "correct" : "incorrect");
+        const fb = document.getElementById("feedback-"+key);
+        fb.hidden = false;
+        fb.textContent = correct
+          ? "Evidence logged. This interpretation is supported by the terrain shown here."
+          : "Look again at the terrain and movement constraints in this location.";
+        if(correct){
+          collected.add(key);
+          renderNotebook();
+        }
+      });
+    });
+  }
+
+  function renderNotebook(){
+    evidenceCount.textContent = "Evidence collected: " + collected.size + " / 4";
+    if(!collected.size){
+      evidenceList.innerHTML = "<p>No evidence collected yet.</p>";
+      return;
+    }
+    evidenceList.innerHTML = "";
+    collected.forEach(key=>{
+      const s = sites[key];
+      const item = document.createElement("div");
+      item.className = "evidence-item";
+      item.innerHTML = '<span class="tag">'+s.kicker+'</span><strong>'+s.title+'</strong><div>'+s.evidence+'</div>';
+      evidenceList.appendChild(item);
+    });
+  }
+
+  document.querySelectorAll(".hotspot").forEach(el=>{
+    const key = el.id.replace("hotspot-","");
+    el.addEventListener("click",()=>renderSite(key));
+    el.addEventListener("keydown",e=>{
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        renderSite(key);
+      }
+    });
+  });
+
+  document.querySelectorAll(".layer-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      document.querySelectorAll(".layer-btn").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      ["troops","movement","elevation"].forEach(layer=>{
+        document.getElementById("layer-"+layer).classList.add("overlay-hidden");
+      });
+      if(btn.dataset.layer!=="base"){
+        document.getElementById("layer-"+btn.dataset.layer).classList.remove("overlay-hidden");
+      }
+      mapStatus.textContent = btn.textContent + " layer active.";
+    });
+  });
+
+  const timeline = [
+    {time:"6:00 AM",label:"Morning: fighting opens in the northern sector around the Cornfield.",show:"movement"},
+    {time:"9:00 AM",label:"Morning intensifies: repeated attacks and counterattacks continue in the north.",show:"troops"},
+    {time:"12:00 PM",label:"Midday: fighting shifts toward the Sunken Road in the center.",show:"troops"},
+    {time:"1:00 PM",label:"Early afternoon: Union forces secure the Lower Bridge and begin crossing.",show:"elevation"},
+    {time:"4:00 PM",label:"Late afternoon: Union forces advance toward Sharpsburg before Confederate reinforcements counterattack.",show:"movement"}
+  ];
+
+  const slider = document.getElementById("timeSlider");
+  const timePill = document.getElementById("timePill");
+  const phaseLabel = document.getElementById("phaseLabel");
+
+  function applyTime(i){
+    const t = timeline[i];
+    timePill.textContent = t.time;
+    phaseLabel.textContent = t.label;
+    ["troops","movement","elevation"].forEach(layer=>{
+      document.getElementById("layer-"+layer).classList.add("overlay-hidden");
+    });
+    if(t.show) document.getElementById("layer-"+t.show).classList.remove("overlay-hidden");
+  }
+
+  slider.addEventListener("input",()=>applyTime(Number(slider.value)));
+
+  document.getElementById("checkReconstruction").addEventListener("click",()=>{
+    const answers = [
+      document.getElementById("phase1").value,
+      document.getElementById("phase2").value,
+      document.getElementById("phase3").value,
+      document.getElementById("phase4").value
+    ];
+    const correct = ["cornfield","sunken","bridge","arrival"];
+    let score = 0;
+    answers.forEach((a,i)=>{ if(a===correct[i]) score++; });
+    const result = document.getElementById("reconstructionResult");
+    if(answers.some(a=>!a)){
+      result.textContent = "Complete all four phases before checking your reconstruction.";
+      return;
+    }
+    result.innerHTML = "<strong>"+score+" of 4 phases correctly reconstructed.</strong> " +
+      (score===4
+        ? "Your sequence matches the major progression represented in this simulation."
+        : "Use the timeline and your field notebook, then revise any phase that does not fit the evidence.");
+  });
+
+  let replayTimer = null;
+  document.getElementById("replayBtn").addEventListener("click",()=>{
+    if(replayTimer) clearInterval(replayTimer);
+    let i = 0;
+    slider.value = 0;
+    applyTime(0);
+    replayTimer = setInterval(()=>{
+      i++;
+      if(i > 4){
+        clearInterval(replayTimer);
+        replayTimer = null;
+        return;
+      }
+      slider.value = i;
+      applyTime(i);
+    }, 1500);
+  });
+
+  document.getElementById("resetBtn").addEventListener("click",()=>{
+    collected.clear();
+    renderNotebook();
+    siteContent.innerHTML = '<h2 class="site-title">Select a location</h2><p>Click or tap one of the outlined battlefield locations. Each site contains an observation and an evidence question.</p>';
+    document.querySelectorAll("select").forEach(s=>s.value="");
+    slider.value = 0;
+    applyTime(0);
+    document.getElementById("reconstructionResult").textContent = "Complete the four phases, then check your reconstruction.";
+    mapStatus.textContent = "Select a location to investigate.";
+    if(replayTimer){
+      clearInterval(replayTimer);
+      replayTimer = null;
+    }
+  });
+
+  renderNotebook();
+  applyTime(0);
+})();
+</script>
+</body>
+</html>
