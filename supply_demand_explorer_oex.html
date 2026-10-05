@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supply and Demand Explorer</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --line: #d8dee8;
+      --panel: #f8fafc;
+      --demand: #6b4eff;
+      --supply: #0f766e;
+      --eq: #b45309;
+      --focus: #1d4ed8;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.45;
+    }
+
+    .activity {
+      max-width: 960px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .header {
+      padding: 20px 22px 12px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      line-height: 1.2;
+    }
+
+    .intro {
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .8fr);
+      gap: 18px;
+      padding: 10px 22px 22px;
+      align-items: start;
+    }
+
+    .graph-card,
+    .controls-card,
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+    }
+
+    .graph-card {
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .graph-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    svg {
+      width: 100%;
+      min-width: 420px;
+      height: auto;
+      display: block;
+    }
+
+    .controls-card {
+      padding: 16px;
+    }
+
+    .control-group + .control-group {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .control-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .shift-label {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .slider-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      min-height: 44px;
+      min-width: 44px;
+      border: 1px solid #aeb7c5;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #f1f5f9;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      min-height: 44px;
+      accent-color: #334155;
+      cursor: pointer;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .78rem;
+      margin-top: 2px;
+      padding: 0 52px;
+    }
+
+    .reset-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .reset {
+      min-width: 0;
+      padding: 0 14px;
+      font-size: .95rem;
+    }
+
+    .result-card {
+      margin: 0 22px 22px;
+      padding: 16px 18px;
+      background: var(--panel);
+    }
+
+    .result-heading {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .metrics {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .metric {
+      font-size: .95rem;
+    }
+
+    .metric strong {
+      display: inline-block;
+      font-size: 1.1rem;
+      margin-left: 4px;
+    }
+
+    .explanation {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 2px 2px 8px;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 22px;
+      height: 4px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .demand-swatch { background: var(--demand); }
+    .supply-swatch { background: var(--supply); }
+    .eq-swatch { background: var(--eq); }
+
+    .axis {
+      stroke: #374151;
+      stroke-width: 2;
+    }
+
+    .grid {
+      stroke: #e5e7eb;
+      stroke-width: 1;
+    }
+
+    .tick {
+      fill: #6b7280;
+      font-size: 12px;
+    }
+
+    .axis-label {
+      fill: #374151;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .curve-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .eq-label {
+      font-size: 13px;
+      font-weight: 700;
+      fill: var(--eq);
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 8px; }
+      .layout { grid-template-columns: 1fr; padding: 10px 14px 14px; }
+      .header { padding: 16px 14px 8px; }
+      .result-card { margin: 0 14px 14px; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      #demandLine,
+      #supplyLine,
+      #equilibriumPoint,
+      #eqVertical,
+      #eqHorizontal {
+        transition: all .16s ease;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="activity" aria-labelledby="activityTitle">
+    <header class="header">
+      <h1 id="activityTitle">Supply and Demand Explorer</h1>
+      <p class="intro">
+        Move the demand and supply sliders to see how shifts in each curve affect equilibrium price and quantity.
+      </p>
+    </header>
+
+    <section class="layout">
+      <div class="graph-card">
+        <div class="legend" aria-hidden="true">
+          <span class="legend-item"><span class="swatch demand-swatch"></span>Demand</span>
+          <span class="legend-item"><span class="swatch supply-swatch"></span>Supply</span>
+          <span class="legend-item"><span class="swatch eq-swatch"></span>Equilibrium</span>
+        </div>
+
+        <div class="graph-wrap">
+          <svg id="marketGraph" viewBox="0 0 620 430" role="img" aria-labelledby="graphTitle graphDesc">
+            <title id="graphTitle">Interactive supply and demand graph</title>
+            <desc id="graphDesc">
+              A downward-sloping demand curve and upward-sloping supply curve. Their intersection marks market equilibrium.
+            </desc>
+
+            <g id="gridLines"></g>
+
+            <line class="axis" x1="70" y1="360" x2="575" y2="360"></line>
+            <line class="axis" x1="70" y1="360" x2="70" y2="35"></line>
+
+            <text class="axis-label" x="550" y="395">Quantity</text>
+            <text class="axis-label" x="24" y="48" transform="rotate(-90 24 48)">Price</text>
+
+            <g id="tickLabels"></g>
+
+            <line id="demandLine" stroke="var(--demand)" stroke-width="5" stroke-linecap="round"></line>
+            <line id="supplyLine" stroke="var(--supply)" stroke-width="5" stroke-linecap="round"></line>
+
+            <line id="eqVertical" stroke="var(--eq)" stroke-width="2" stroke-dasharray="6 6"></line>
+            <line id="eqHorizontal" stroke="var(--eq)" stroke-width="2" stroke-dasharray="6 6"></line>
+            <circle id="equilibriumPoint" r="7" fill="var(--eq)" stroke="#fff" stroke-width="3"></circle>
+
+            <text id="demandLabel" class="curve-label" fill="var(--demand)">Demand</text>
+            <text id="supplyLabel" class="curve-label" fill="var(--supply)">Supply</text>
+            <text id="eqLabel" class="eq-label">Equilibrium</text>
+          </svg>
+        </div>
+      </div>
+
+      <aside class="controls-card" aria-label="Graph controls">
+        <div class="control-group">
+          <div class="control-title">
+            <label for="demandSlider">Demand</label>
+            <span id="demandStatus" class="shift-label">No shift</span>
+          </div>
+          <div class="slider-row">
+            <button id="demandDown" type="button" aria-label="Shift demand left">−</button>
+            <input id="demandSlider" type="range" min="-30" max="30" step="5" value="0" aria-describedby="demandHelp">
+            <button id="demandUp" type="button" aria-label="Shift demand right">+</button>
+          </div>
+          <div class="scale-labels" id="demandHelp">
+            <span>Decrease</span><span>Increase</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-title">
+            <label for="supplySlider">Supply</label>
+            <span id="supplyStatus" class="shift-label">No shift</span>
+          </div>
+          <div class="slider-row">
+            <button id="supplyDown" type="button" aria-label="Shift supply left">−</button>
+            <input id="supplySlider" type="range" min="-30" max="30" step="5" value="0" aria-describedby="supplyHelp">
+            <button id="supplyUp" type="button" aria-label="Shift supply right">+</button>
+          </div>
+          <div class="scale-labels" id="supplyHelp">
+            <span>Decrease</span><span>Increase</span>
+          </div>
+        </div>
+
+        <div class="reset-row">
+          <button id="resetButton" class="reset" type="button">Reset graph</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="result-card" aria-live="polite" aria-atomic="true">
+      <h2 class="result-heading">Market result</h2>
+      <div class="metrics">
+        <span class="metric">Equilibrium price: <strong id="priceValue">50</strong></span>
+        <span class="metric">Equilibrium quantity: <strong id="quantityValue">57</strong></span>
+      </div>
+      <p id="explanation" class="explanation">
+        At the starting point, supply and demand are in equilibrium.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const demandSlider = document.getElementById('demandSlider');
+      const supplySlider = document.getElementById('supplySlider');
+      const demandStatus = document.getElementById('demandStatus');
+      const supplyStatus = document.getElementById('supplyStatus');
+
+      const demandLine = document.getElementById('demandLine');
+      const supplyLine = document.getElementById('supplyLine');
+      const equilibriumPoint = document.getElementById('equilibriumPoint');
+      const eqVertical = document.getElementById('eqVertical');
+      const eqHorizontal = document.getElementById('eqHorizontal');
+      const demandLabel = document.getElementById('demandLabel');
+      const supplyLabel = document.getElementById('supplyLabel');
+      const eqLabel = document.getElementById('eqLabel');
+
+      const priceValue = document.getElementById('priceValue');
+      const quantityValue = document.getElementById('quantityValue');
+      const explanation = document.getElementById('explanation');
+
+      const plot = { left: 70, right: 575, top: 35, bottom: 360 };
+      const xMax = 110;
+      const yMax = 100;
+
+      const x = q => plot.left + (q / xMax) * (plot.right - plot.left);
+      const y = p => plot.bottom - (p / yMax) * (plot.bottom - plot.top);
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function demandPrice(q, shift) {
+        return 90 + (0.7 * shift) - (0.7 * q);
+      }
+
+      function supplyPrice(q, shift) {
+        return 10 - (0.7 * shift) + (0.7 * q);
+      }
+
+      function lineEndpoints(fn, shift) {
+        const points = [];
+        for (let q = 0; q <= xMax; q += 1) {
+          const p = fn(q, shift);
+          if (p >= 0 && p <= yMax) points.push({ q, p });
+        }
+        return [points[0], points[points.length - 1]];
+      }
+
+      function describeShift(value, curve) {
+        if (value === 0) return 'No shift';
+        const direction = value > 0 ? 'right' : 'left';
+        const word = value > 0 ? 'Increase' : 'Decrease';
+        return word + ' · shifts ' + direction;
+      }
+
+      function createGrid() {
+        const grid = document.getElementById('gridLines');
+        const ticks = document.getElementById('tickLabels');
+
+        for (let value = 20; value <= 100; value += 20) {
+          const gx = x(value);
+          const gy = y(value);
+
+          const v = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          v.setAttribute('class', 'grid');
+          v.setAttribute('x1', gx);
+          v.setAttribute('y1', plot.top);
+          v.setAttribute('x2', gx);
+          v.setAttribute('y2', plot.bottom);
+          grid.appendChild(v);
+
+          const h = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          h.setAttribute('class', 'grid');
+          h.setAttribute('x1', plot.left);
+          h.setAttribute('y1', gy);
+          h.setAttribute('x2', plot.right);
+          h.setAttribute('y2', gy);
+          grid.appendChild(h);
+
+          const tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          tx.setAttribute('class', 'tick');
+          tx.setAttribute('x', gx);
+          tx.setAttribute('y', 378);
+          tx.setAttribute('text-anchor', 'middle');
+          tx.textContent = value;
+          ticks.appendChild(tx);
+
+          const ty = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          ty.setAttribute('class', 'tick');
+          ty.setAttribute('x', 55);
+          ty.setAttribute('y', gy + 4);
+          ty.setAttribute('text-anchor', 'end');
+          ty.textContent = value;
+          ticks.appendChild(ty);
+        }
+      }
+
+      function sentence(demandShift, supplyShift, price, quantity) {
+        if (demandShift === 0 && supplyShift === 0) {
+          return 'At the starting point, supply and demand are in equilibrium.';
+        }
+
+        const parts = [];
+
+        if (demandShift > 0) parts.push('Higher demand puts upward pressure on price and quantity');
+        if (demandShift < 0) parts.push('Lower demand puts downward pressure on price and quantity');
+        if (supplyShift > 0) parts.push('Higher supply tends to lower price and raise quantity');
+        if (supplyShift < 0) parts.push('Lower supply tends to raise price and lower quantity');
+
+        let ending = '. The new equilibrium is about price ' + Math.round(price) +
+          ' and quantity ' + Math.round(quantity) + '.';
+
+        return parts.join('. ') + ending;
+      }
+
+      function update() {
+        const d = Number(demandSlider.value);
+        const s = Number(supplySlider.value);
+
+        const demandPts = lineEndpoints(demandPrice, d);
+        const supplyPts = lineEndpoints(supplyPrice, s);
+
+        demandLine.setAttribute('x1', x(demandPts[0].q));
+        demandLine.setAttribute('y1', y(demandPts[0].p));
+        demandLine.setAttribute('x2', x(demandPts[1].q));
+        demandLine.setAttribute('y2', y(demandPts[1].p));
+
+        supplyLine.setAttribute('x1', x(supplyPts[0].q));
+        supplyLine.setAttribute('y1', y(supplyPts[0].p));
+        supplyLine.setAttribute('x2', x(supplyPts[1].q));
+        supplyLine.setAttribute('y2', y(supplyPts[1].p));
+
+        const qEq = clamp((80 + 0.7 * d + 0.7 * s) / 1.4, 0, xMax);
+        const pEq = clamp(50 + 0.35 * d - 0.35 * s, 0, yMax);
+
+        const eqX = x(qEq);
+        const eqY = y(pEq);
+
+        equilibriumPoint.setAttribute('cx', eqX);
+        equilibriumPoint.setAttribute('cy', eqY);
+
+        eqVertical.setAttribute('x1', eqX);
+        eqVertical.setAttribute('y1', eqY);
+        eqVertical.setAttribute('x2', eqX);
+        eqVertical.setAttribute('y2', plot.bottom);
+
+        eqHorizontal.setAttribute('x1', plot.left);
+        eqHorizontal.setAttribute('y1', eqY);
+        eqHorizontal.setAttribute('x2', eqX);
+        eqHorizontal.setAttribute('y2', eqY);
+
+        demandLabel.setAttribute('x', x(demandPts[1].q) - 70);
+        demandLabel.setAttribute('y', Math.max(plot.top + 18, y(demandPts[1].p) - 10));
+
+        supplyLabel.setAttribute('x', x(supplyPts[1].q) - 55);
+        supplyLabel.setAttribute('y', Math.max(plot.top + 18, y(supplyPts[1].p) - 10));
+
+        eqLabel.setAttribute('x', Math.min(eqX + 10, 500));
+        eqLabel.setAttribute('y', Math.max(eqY - 12, 24));
+
+        demandStatus.textContent = describeShift(d, 'demand');
+        supplyStatus.textContent = describeShift(s, 'supply');
+
+        priceValue.textContent = Math.round(pEq);
+        quantityValue.textContent = Math.round(qEq);
+        explanation.textContent = sentence(d, s, pEq, qEq);
+
+        document.getElementById('graphDesc').textContent =
+          'Demand is shifted ' + d + ' units and supply is shifted ' + s +
+          ' units. The equilibrium price is approximately ' + Math.round(pEq) +
+          ' and equilibrium quantity is approximately ' + Math.round(qEq) + '.';
+      }
+
+      function nudge(slider, amount) {
+        const min = Number(slider.min);
+        const max = Number(slider.max);
+        slider.value = clamp(Number(slider.value) + amount, min, max);
+        update();
+        slider.focus();
+      }
+
+      demandSlider.addEventListener('input', update);
+      supplySlider.addEventListener('input', update);
+
+      document.getElementById('demandDown').addEventListener('click', () => nudge(demandSlider, -5));
+      document.getElementById('demandUp').addEventListener('click', () => nudge(demandSlider, 5));
+      document.getElementById('supplyDown').addEventListener('click', () => nudge(supplySlider, -5));
+      document.getElementById('supplyUp').addEventListener('click', () => nudge(supplySlider, 5));
+
+      document.getElementById('resetButton').addEventListener('click', function () {
+        demandSlider.value = 0;
+        supplySlider.value = 0;
+        update();
+        demandSlider.focus();
+      });
+
+      createGrid();
+      update();
+    })();
+  </script>
+</body>
+</html>
