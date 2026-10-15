@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build the SIPOC: Order Fulfillment</title>
+<style>
+/* ==========================================================================
+   Build the SIPOC: Order Fulfillment (E159 U3.1)
+   All rules are scoped under .sipoc-root so nothing leaks into OEX.
+   ========================================================================== */
+
+.sipoc-root, .sipoc-root *, .sipoc-root *::before, .sipoc-root *::after { box-sizing: border-box; }
+
+.sipoc-root {
+  /* Brand tokens live on the component root, never on :root */
+  --color-midnight:     #002855;
+  --color-blue-mid:     #0070f0;
+  --color-sky:          #46b1ef;
+  --color-white:        #ffffff;
+  --color-black:        #000000;
+
+  --color-grey:         #a7a7a7;
+  --color-grey-10:      #f5f5f5;
+  --color-grey-20:      #e8e8e8;
+  --color-grey-80:      #5a5a5a;
+
+  --color-green:        #2e9e5b;
+  --color-purple:       #7968ba;
+  --color-yellow:       #f2b705;
+  --color-yellow-10:    #fef9e6;
+  --color-teal:         #2c7c7a;
+  --color-orange:       #d06a2e;
+
+  --color-midnight-10:  #e6ebf1;
+  --color-midnight-20:  #ccd6e3;
+  --color-midnight-80:  #334d74;
+  --color-purple-10:    #f0eefa;
+  --color-purple-80:    #5c4da8;
+  --color-teal-10:      #e6f3f3;
+  --color-teal-80:      #235f5d;
+  --color-orange-10:    #fdf2ec;
+  --color-orange-80:    #a8521f;
+
+  --font-primary: 'Verdana Pro', Arial, Verdana, Geneva, sans-serif;
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.8125rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg:   1rem;
+  --font-size-xl:   1.125rem;
+  --font-size-2xl:  1.375rem;
+  --font-weight-regular: 400;
+  --font-weight-bold:    700;
+  --line-height-tight:   1.3;
+  --line-height-base:    1.5;
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+
+  /* Root layout and base typography (never on body) */
+  container: sipoc / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-5);
+  background: transparent;
+  color: var(--color-black);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+.sipoc-root .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---------- Component header (tinted default variant, standalone block) ---------- */
+.sipoc-root .sipoc-header {
+  background: var(--color-midnight-10);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+}
+.sipoc-root .sipoc-eyebrow {
+  margin: 0 0 var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--color-midnight);
+}
+.sipoc-root .sipoc-header h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-midnight);
+}
+.sipoc-root .sipoc-subtitle {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+}
+
+/* ---------- Section headings ---------- */
+.sipoc-root h3 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
+}
+.sipoc-root h4 {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
+}
+
+/* ---------- Callout box ---------- */
+.sipoc-root .callout-box {
+  background: var(--color-yellow-10);
+  border: 1px solid var(--color-yellow);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+.sipoc-root .callout-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-yellow);
+  color: var(--color-black);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+}
+.sipoc-root .callout-box p { margin: 0 0 var(--space-3); }
+.sipoc-root .callout-box p:last-child { margin-bottom: 0; }
+
+/* ---------- Process boundary cards (2 parallel cards: teal + purple) ---------- */
+.sipoc-root .card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.sipoc-root .card {
+  background: var(--color-white);
+  border: 1px solid var(--color-grey-20);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+.sipoc-root .card-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2);
+}
+.sipoc-root .card--teal   .card-label { color: var(--color-teal-80); }
+.sipoc-root .card--purple .card-label { color: var(--color-purple-80); }
+.sipoc-root .card p { margin: 0; color: var(--color-black); }
+
+/* ---------- Items to Sort pool ---------- */
+.sipoc-root .pool {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-height: 56px;
+  padding: var(--space-3);
+  background: var(--color-grey-10);
+  border: 1px solid var(--color-grey-20);
+  border-radius: var(--radius-md);
+}
+.sipoc-root .pool.drag-over { outline: 2px solid var(--color-midnight); outline-offset: 2px; }
+.sipoc-root .pool-empty { margin: 0; font-size: var(--font-size-sm); color: var(--color-black); }
+
+/* ---------- Chips (draggable / selectable items) ---------- */
+.sipoc-root .chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100%;
+  background: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-grey-80);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+.sipoc-root .chip:hover { background: var(--color-grey-10); }
+.sipoc-root .chip:focus-visible { outline: 2px solid var(--color-midnight); outline-offset: 2px; }
+.sipoc-root .chip.dragging { opacity: 0.5; }
+.sipoc-root .chip-text { overflow-wrap: anywhere; }
+.sipoc-root .chip-icon { display: inline-block; vertical-align: -3px; margin-right: var(--space-1); color: var(--color-midnight); }
+
+/* Selected: thicker border + background + check icon (never color alone) */
+.sipoc-root .chip[aria-pressed="true"] {
+  background: var(--color-midnight-10);
+  border: 2px solid var(--color-midnight);
+  padding: calc(var(--space-2) - 1px) calc(var(--space-3) - 1px);
+}
+
+/* Provided (fixed) items */
+.sipoc-root .chip.is-fixed {
+  background: var(--color-midnight-10);
+  border: 1px solid var(--color-grey-20);
+  cursor: default;
+}
+.sipoc-root .chip.is-fixed:hover { background: var(--color-midnight-10); }
+.sipoc-root .fixed-tag { display: block; font-size: var(--font-size-xs); color: var(--color-black); }
+
+/* Check results: border + background + icon + visible text */
+.sipoc-root .chip.is-correct   { background: var(--color-teal-10);   border: 1px solid var(--color-teal-80); }
+.sipoc-root .chip.is-incorrect { background: var(--color-orange-10); border: 1px solid var(--color-orange-80); }
+.sipoc-root .chip-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+}
+.sipoc-root .is-correct   .chip-status svg { color: var(--color-teal-80); }
+.sipoc-root .is-incorrect .chip-status svg { color: var(--color-orange-80); }
+
+/* Process step number badge */
+.sipoc-root .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-teal-80);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  margin-right: var(--space-1);
+  vertical-align: middle;
+}
+
+/* ---------- SIPOC board: single five-column table ---------- */
+/* Scroll container: keeps all five columns side by side and scrolls sideways in narrow content boxes */
+.sipoc-root .table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--color-grey-20);
+  border-radius: var(--radius-md);
+}
+.sipoc-root .table-scroll:focus-visible { outline: 2px solid var(--color-midnight); outline-offset: 2px; }
+.sipoc-root .scroll-hint { margin: 0 0 var(--space-2); font-size: var(--font-size-sm); color: var(--color-black); }
+
+.sipoc-root table.sipoc-table {
+  width: 100%;
+  min-width: 672px; /* five columns never compress below this; the container scrolls instead */
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: var(--color-white);
+}
+.sipoc-root .sipoc-table th,
+.sipoc-root .sipoc-table td {
+  border: 1px solid var(--color-grey-20);
+  padding: var(--space-3);
+  vertical-align: top;
+  text-align: left;
+  min-width: 0;
+}
+.sipoc-root .sipoc-table thead th {
+  background: var(--color-teal-80);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+.sipoc-root .th-hint { display: block; margin-top: var(--space-1); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); line-height: var(--line-height-base); }
+.sipoc-root .sipoc-table tbody tr:nth-child(even) td { background: var(--color-teal-10); }
+.sipoc-root .sipoc-table tbody td { height: 1px; } /* lets .slot-inner fill the row height */
+
+/* Slot cell contents */
+.sipoc-root .slot-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  min-height: 72px;
+}
+.sipoc-root .slot-inner > .chip { flex: 1; width: 100%; font-size: var(--font-size-xs); padding: var(--space-1); }
+.sipoc-root .slot-inner > .chip[aria-pressed="true"] { padding: calc(var(--space-1) - 1px); }
+.sipoc-root .slot.drag-over .chip,
+.sipoc-root .slot.drag-over .slot-btn { background: var(--color-midnight-20); }
+
+/* Empty slot control (native button) */
+.sipoc-root .slot-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: var(--space-1);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-base);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  /* OEX button defense: pin the resting state */
+  background: var(--color-white) !important;
+  color: var(--color-black) !important;
+  font-weight: var(--font-weight-regular) !important;
+  text-transform: none !important;
+  border: 1px dashed var(--color-grey-80) !important;
+  box-shadow: none !important;
+}
+.sipoc-root .slot-btn:hover { background: var(--color-midnight-10) !important; }
+.sipoc-root .slot-btn:focus-visible { outline: 2px solid var(--color-midnight) !important; outline-offset: 2px; }
+/* When an item is selected, empty slots switch to a solid border and "Place here" text */
+.sipoc-root .slot-btn.is-targetable {
+  border: 1px solid var(--color-midnight) !important;
+  background: var(--color-midnight-10) !important;
+  font-weight: var(--font-weight-bold) !important;
+}
+
+/* ---------- Buttons (OEX button defense on every button) ---------- */
+.sipoc-root .controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.sipoc-root .btn {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-5);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.sipoc-root .btn-primary {
+  background: var(--color-midnight) !important;
+  color: var(--color-white) !important;
+  font-weight: var(--font-weight-regular) !important;
+  text-transform: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.sipoc-root .btn-primary:hover { background: var(--color-midnight-80) !important; }
+.sipoc-root .btn-primary:focus-visible { outline: 2px solid var(--color-midnight) !important; outline-offset: 2px; }
+.sipoc-root .btn-ghost {
+  background: transparent !important;
+  color: var(--color-black) !important;
+  font-weight: var(--font-weight-regular) !important;
+  text-transform: none !important;
+  border: 1px solid var(--color-midnight) !important;
+  box-shadow: none !important;
+}
+.sipoc-root .btn-ghost:hover { background: var(--color-midnight-10) !important; }
+.sipoc-root .btn-ghost:focus-visible { outline: 2px solid var(--color-midnight) !important; outline-offset: 2px; }
+.sipoc-root .btn-ghost:disabled {
+  color: var(--color-grey-80) !important;
+  border-color: var(--color-grey) !important;
+  background: transparent !important;
+  cursor: not-allowed;
+}
+.sipoc-root .progress { margin: 0; font-size: var(--font-size-sm); color: var(--color-black); }
+
+/* ---------- Feedback ---------- */
+.sipoc-root .feedback-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border: 1px solid var(--color-grey-20);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+.sipoc-root .feedback-box.is-success { background: var(--color-teal-10); }
+.sipoc-root .feedback-box.is-partial { background: var(--color-orange-10); }
+.sipoc-root .feedback-box h3 { margin: 0; display: flex; align-items: center; gap: var(--space-2); }
+.sipoc-root .feedback-box h3:focus-visible { outline: 2px solid var(--color-midnight); outline-offset: 2px; }
+.sipoc-root .feedback-box.is-success h3 svg { color: var(--color-teal-80); flex: none; }
+.sipoc-root .feedback-box.is-partial h3 svg { color: var(--color-orange-80); flex: none; }
+.sipoc-root .feedback-box p { margin: 0; }
+.sipoc-root .feedback-box ul { margin: 0; padding-left: var(--space-5); }
+.sipoc-root .feedback-box li::marker { color: var(--color-black); }
+
+.sipoc-root .footer-note {
+  margin: 0;
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-black);
+}
+
+/* ---------- Narrow content boxes ---------- */
+@container sipoc (max-width: 479px) {
+  .sipoc-root .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<section class="sipoc-root" aria-label="Build the SIPOC: Order Fulfillment">
+
+  <header class="sipoc-header">
+    <p class="sipoc-eyebrow">U3.1 · Drag-and-drop activity</p>
+    <h2>Build the SIPOC: Order Fulfillment</h2>
+    <p class="sipoc-subtitle">Sort each item into the correct SIPOC category for the Meridian Outfitters Emergency Response Kit order fulfillment process. Use the provided Process steps and fixed examples to identify the high-level process and its boundaries.</p>
+  </header>
+
+  <div class="callout-box">
+    <span class="callout-label">
+      <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Before You Begin
+    </span>
+    <p><strong>Select an item, then select its matching numbered slot</strong> (or drag it directly to a slot). The five Process steps and selected examples are already in place and marked <strong>Provided</strong>. Sort the remaining items into individual slots that match the SIPOC rows, reading each row across the five columns. If a slot is occupied, the displaced item returns to Items to Sort.</p>
+    <p>Keyboard and screen reader users: press Enter or Space on an item to select it, then press Enter or Space on a slot to place it. Press Escape to clear your selection.</p>
+  </div>
+
+  <div>
+    <h3 id="sipoc-boundary-heading">Process boundary</h3>
+    <div class="card-grid">
+      <div class="card card--teal">
+        <span class="card-label">Start</span>
+        <p>Order for Emergency Response Kit received</p>
+      </div>
+      <div class="card card--purple">
+        <span class="card-label">End</span>
+        <p>Emergency Response Kit delivered to customer</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 id="sipoc-pool-heading">Items to sort</h3>
+    <div class="pool" id="sipoc-pool" role="group" aria-labelledby="sipoc-pool-heading"></div>
+  </div>
+
+  <div>
+    <h3 id="sipoc-board-heading">SIPOC board</h3>
+    <p class="scroll-hint" id="sipoc-scroll-hint" hidden>Scroll sideways to see all five columns. Use the arrow keys when the table has focus.</p>
+    <div class="table-scroll" id="sipoc-scroll" role="region" aria-label="SIPOC table, scrollable" tabindex="0">
+      <table class="sipoc-table">
+        <caption class="sr-only">SIPOC table for the Meridian Outfitters order fulfillment process. Each row is one process step. Columns are Suppliers (who provides what the process needs), Inputs (what each step receives), Process (provided steps, start to end), Outputs (what each step produces), and Customers (who receives the outputs).</caption>
+        <thead>
+          <tr>
+            <th scope="col">Suppliers<span class="th-hint" aria-hidden="true">Who provides what the process needs?</span></th>
+            <th scope="col">Inputs<span class="th-hint" aria-hidden="true">What does each step receive?</span></th>
+            <th scope="col">Process<span class="th-hint" aria-hidden="true">Provided steps — start to end</span></th>
+            <th scope="col">Outputs<span class="th-hint" aria-hidden="true">What does each step produce?</span></th>
+            <th scope="col">Customers<span class="th-hint" aria-hidden="true">Who receives the outputs?</span></th>
+          </tr>
+        </thead>
+        <tbody id="sipoc-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button type="button" class="btn btn-primary" id="sipoc-check">Check My Work</button>
+    <button type="button" class="btn btn-ghost" id="sipoc-reset">Reset</button>
+    <button type="button" class="btn btn-ghost" id="sipoc-return" disabled>Return selected item to Items to sort</button>
+    <p class="progress" id="sipoc-progress"></p>
+  </div>
+
+  <!-- Visually hidden status region: short current-action messages only.
+       Initialized with a non-breaking space so the first update is announced. -->
+  <div id="sipoc-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true">&nbsp;</div>
+
+  <!-- Feedback region: announced politely; focus moves to its heading when it appears -->
+  <div id="sipoc-feedback" aria-live="polite"></div>
+
+  <p class="footer-note">E159 — U3.1 · Understanding and Developing a SIPOC</p>
+</section>
+
+<script>
+(function () {
+  var root = document.querySelector('.sipoc-root');
+  if (!root) return;
+
+  // Item pool built directly from the approved Meridian Outfitters SIPOC worked example.
+  // Supplier/Customer entries share labels by design (each internal team is the customer of the
+  // step before it and the supplier of the step after it). Grading therefore compares labels at
+  // each category/row, so identical-looking chips are interchangeable.
+  var ITEMS = [
+    { id: "s1", label: "AdventureWorks Guided Expeditions", zone: "a" },
+    { id: "s2", label: "Warehouse Team", zone: "a" },
+    { id: "s3", label: "Packing Team", zone: "a" },
+    { id: "s4", label: "Shipping Team", zone: "a" },
+    { id: "s5", label: "Carrier", zone: "a" },
+
+    { id: "i1", label: "Order Information", zone: "b" },
+    { id: "i2", label: "Accepted Order & Inventory Availability for Kit", zone: "b" },
+    { id: "i3", label: "Picked Kit & Packing Materials", zone: "b" },
+    { id: "i4", label: "Packed Kit & Shipping Information", zone: "b" },
+    { id: "i5", label: "Pickup Request & Shipment Information", zone: "b" },
+
+    { id: "p1", label: "Check Inventory", zone: "c", order: 1 },
+    { id: "p2", label: "Pick Order", zone: "c", order: 2 },
+    { id: "p3", label: "Pack Order", zone: "c", order: 3 },
+    { id: "p4", label: "Arrange Order Shipment", zone: "c", order: 4 },
+    { id: "p5", label: "Deliver Order", zone: "c", order: 5 },
+
+    { id: "o1", label: "Inventory Availability for Kit", zone: "d" },
+    { id: "o2", label: "Picked Kit", zone: "d" },
+    { id: "o3", label: "Packed Kit", zone: "d" },
+    { id: "o4", label: "Pickup Request", zone: "d" },
+    { id: "o5", label: "Delivered Kit", zone: "d" },
+
+    { id: "c1", label: "Warehouse Team", zone: "e" },
+    { id: "c2", label: "Packing Team", zone: "e" },
+    { id: "c3", label: "Shipping Team", zone: "e" },
+    { id: "c4", label: "Carrier", zone: "e" },
+    { id: "c5", label: "AdventureWorks Guided Expeditions", zone: "e" }
+  ];
+  var CATS = ["a", "b", "c", "d", "e"];
+  var ZONE_NAMES = { a: "Suppliers", b: "Inputs", c: "Process", d: "Outputs", e: "Customers" };
+  var FIXED_IDS = new Set(["s1", "o1", "i3", "c1", "c3", "p1", "p2", "p3", "p4", "p5"]);
+  var SORTABLE_ITEMS = ITEMS.filter(function (i) { return !FIXED_IDS.has(i.id); });
+
+  // Canonical reference: the row (1-5) each item belongs to within its category.
+  var POSITIONS = {
+    s1: 1, s2: 2, s3: 3, s4: 4, s5: 5,
+    i1: 1, i2: 2, i3: 3, i4: 4, i5: 5,
+    p1: 1, p2: 2, p3: 3, p4: 4, p5: 5,
+    o1: 1, o2: 2, o3: 3, o4: 4, o5: 5,
+    c1: 1, c2: 2, c3: 3, c4: 4, c5: 5
+  };
+  var STEPS = {};
+  ITEMS.forEach(function (i) { if (i.zone === "c") STEPS[i.order] = i.label; });
+
+  var ICONS = {
+    check: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+    alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'
+  };
+  function icon(name, size) {
+    return '<svg aria-hidden="true" focusable="false" width="' + size + '" height="' + size +
+      '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      ICONS[name] + '</svg>';
+  }
+
+  var state = {};          // id -> { zone, row } or null (in pool)
+  var selectedId = null;
+  var results = null;      // id -> true/false after "Check My Work"; cleared on any change
+  var focusKey = null;     // chip id to refocus after a re-render
+
+  function initializePlacements() {
+    ITEMS.forEach(function (item) {
+      state[item.id] = FIXED_IDS.has(item.id) ? { zone: item.zone, row: POSITIONS[item.id] } : null;
+    });
+  }
+  initializePlacements();
+
+  function itemById(id) { return ITEMS.find(function (item) { return item.id === id; }); }
+  function placedAt(zone, row) {
+    return ITEMS.find(function (item) { return state[item.id] && state[item.id].zone === zone && state[item.id].row === row; });
+  }
+  function canonicalAt(zone, row) {
+    return ITEMS.find(function (item) { return item.zone === zone && POSITIONS[item.id] === row; });
+  }
+  function placedCount() { return SORTABLE_ITEMS.filter(function (item) { return state[item.id]; }).length; }
+
+  // Shuffle the pool once on load
+  var order = (function () {
+    var ids = SORTABLE_ITEMS.map(function (item) { return item.id; });
+    for (var i = ids.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = ids[i]; ids[i] = ids[j]; ids[j] = tmp;
+    }
+    return ids;
+  })();
+
+  // Screen reader status: clear first, then write, so repeated messages are re-announced
+  function say(msg) {
+    var s = root.querySelector('#sipoc-status');
+    s.textContent = '';
+    setTimeout(function () { s.textContent = msg; }, 50);
+  }
+
+  function clearFeedback() {
+    results = null;
+    root.querySelector('#sipoc-feedback').innerHTML = '';
+  }
+
+  function el(tag, cls) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    return node;
+  }
+
+  // ---------- Chips ----------
+  function makeChip(id, opts) {
+    opts = opts || {};
+    var item = itemById(id);
+    var fixed = FIXED_IDS.has(id);
+    var chip = el('div', 'chip');
+    chip.dataset.id = id;
+
+    var text = el('span', 'chip-text');
+    if (!fixed && selectedId === id) {
+      var sel = el('span', 'chip-icon');
+      sel.innerHTML = icon('check', 16);
+      text.appendChild(sel);
+    }
+    if (opts.numbered) {
+      var badge = el('span', 'step-num');
+      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = POSITIONS[id];
+      text.appendChild(badge);
+    }
+    text.appendChild(document.createTextNode(item.label));
+    chip.appendChild(text);
+
+    if (fixed) {
+      chip.classList.add('is-fixed');
+      var tag = el('span', 'fixed-tag');
+      tag.textContent = 'Provided';
+      chip.appendChild(tag);
+      return chip;
+    }
+
+    chip.setAttribute('role', 'button');
+    chip.tabIndex = 0;
+    chip.draggable = true;
+    chip.setAttribute('aria-pressed', selectedId === id ? 'true' : 'false');
+
+    if (opts.context) {
+      var ctx = el('span', 'sr-only');
+      ctx.textContent = ', placed in ' + opts.context;
+      chip.appendChild(ctx);
+    }
+    if (results && state[id] && id in results) {
+      var good = results[id];
+      chip.classList.add(good ? 'is-correct' : 'is-incorrect');
+      var status = el('span', 'chip-status');
+      status.innerHTML = icon(good ? 'check' : 'alert', 16) + '<span>' + (good ? 'Correct' : 'Incorrect') + '</span>';
+      chip.appendChild(status);
+    }
+
+    chip.addEventListener('click', function (e) { e.stopPropagation(); activateChip(id); });
+    chip.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activateChip(id); }
+    });
+    chip.addEventListener('dragstart', function (e) {
+      e.dataTransfer.setData('text/plain', id);
+      e.dataTransfer.effectAllowed = 'move';
+      chip.classList.add('dragging');
+    });
+    chip.addEventListener('dragend', function () { chip.classList.remove('dragging'); });
+    return chip;
+  }
+
+  // Activating a chip: select / deselect it, or, if another item is already selected and this
+  // chip sits in a slot, place the selected item into this chip's slot.
+  function activateChip(id) {
+    var loc = state[id];
+    var label = itemById(id).label;
+    if (selectedId && selectedId !== id && loc) {
+      placeItem(selectedId, loc.zone, loc.row);
+      return;
+    }
+    focusKey = id;
+    if (selectedId === id) {
+      selectedId = null;
+      say('Deselected: ' + label + '.');
+    } else {
+      selectedId = id;
+      say('Selected: ' + label + '. Choose a numbered slot to place it.');
+    }
+    render();
+  }
+
+  // ---------- Placement ----------
+  function placeItem(id, zone, row) {
+    var item = itemById(id);
+    if (!item || FIXED_IDS.has(id)) return;
+
+    if (zone === 'pool') {
+      if (!state[id]) { selectedId = null; focusKey = id; say('Deselected: ' + item.label + '.'); render(); return; }
+      state[id] = null;
+      selectedId = null;
+      focusKey = id;
+      clearFeedback();
+      say(item.label + ' returned to Items to sort. ' + placedCount() + ' of ' + SORTABLE_ITEMS.length + ' items placed.');
+      render();
+      return;
+    }
+
+    if (CATS.indexOf(zone) === -1 || zone === 'c' || row < 1 || row > 5) return;
+    var occupied = placedAt(zone, row);
+    if (occupied && FIXED_IDS.has(occupied.id)) {
+      say('That slot holds a provided item and cannot be changed.');
+      return;
+    }
+    var displaced = null;
+    if (occupied && occupied.id !== id) { displaced = occupied; state[occupied.id] = null; }
+    state[id] = { zone: zone, row: row };
+    selectedId = null;
+    focusKey = id;
+    clearFeedback();
+
+    var msg = 'Placed ' + item.label + ' in ' + ZONE_NAMES[zone] + ', row ' + row + '. ';
+    if (displaced) msg += displaced.label + ' returned to Items to sort. ';
+    msg += placedCount() + ' of ' + SORTABLE_ITEMS.length + ' items placed.';
+    say(msg);
+    render();
+  }
+
+  // Show the scroll hint only when the table is wider than its container
+  function updateScrollHint() {
+    var wrap = root.querySelector('#sipoc-scroll');
+    var hint = root.querySelector('#sipoc-scroll-hint');
+    if (wrap && hint) hint.hidden = !(wrap.scrollWidth > wrap.clientWidth + 1);
+  }
+  window.addEventListener('resize', updateScrollHint);
+
+  // ---------- Render ----------
+  function render() {
+    var pool = root.querySelector('#sipoc-pool');
+    pool.innerHTML = '';
+    var pooled = order.filter(function (id) { return !state[id]; });
+    if (!pooled.length) {
+      var empty = el('p', 'pool-empty');
+      empty.textContent = 'All items have been placed.';
+      pool.appendChild(empty);
+    }
+    pooled.forEach(function (id) { pool.appendChild(makeChip(id)); });
+
+    var tbody = root.querySelector('#sipoc-tbody');
+    tbody.innerHTML = '';
+    for (var row = 1; row <= 5; row++) {
+      (function (row) {
+        var tr = el('tr');
+        tr.setAttribute('aria-label', 'Row ' + row + ': ' + STEPS[row]);
+
+        CATS.forEach(function (cat) {
+          var slot = el('td', 'slot');
+          slot.dataset.zone = cat;
+          slot.dataset.row = row;
+          var inner = el('div', 'slot-inner');
+
+          var context = ZONE_NAMES[cat] + ', row ' + row + ' (' + STEPS[row] + ')';
+          var current = placedAt(cat, row);
+          var fixedSlot = !!(current && FIXED_IDS.has(current.id));
+
+          if (current) {
+            inner.appendChild(makeChip(current.id, { numbered: cat === 'c', context: context }));
+          } else {
+            var btn = el('button', 'slot-btn');
+            btn.type = 'button';
+            var visible = selectedId ? 'Place here' : 'Drop item here';
+            var hidden = selectedId
+              ? 'Place ' + itemById(selectedId).label + ' in ' + context
+              : 'Empty slot, ' + context + '. Select an item first.';
+            if (selectedId) btn.classList.add('is-targetable');
+            btn.innerHTML = '<span aria-hidden="true">' + visible + '</span><span class="sr-only">' + visible + '. ' + hidden + '</span>';
+            btn.addEventListener('click', function () {
+              if (selectedId) placeItem(selectedId, cat, row);
+              else say('Select an item first, then choose a slot.');
+            });
+            inner.appendChild(btn);
+          }
+
+          if (!fixedSlot) {
+            slot.addEventListener('dragover', function (e) { e.preventDefault(); slot.classList.add('drag-over'); });
+            slot.addEventListener('dragleave', function () { slot.classList.remove('drag-over'); });
+            slot.addEventListener('drop', function (e) {
+              e.preventDefault(); e.stopPropagation();
+              slot.classList.remove('drag-over');
+              var id = e.dataTransfer.getData('text/plain');
+              if (id) placeItem(id, cat, row);
+            });
+          }
+          slot.appendChild(inner);
+          tr.appendChild(slot);
+        });
+        tbody.appendChild(tr);
+      })(row);
+    }
+
+    updateScrollHint();
+    root.querySelector('#sipoc-progress').textContent =
+      placedCount() + ' of ' + SORTABLE_ITEMS.length + ' items placed · ' + FIXED_IDS.size + ' provided';
+    root.querySelector('#sipoc-return').disabled = !(selectedId && state[selectedId]);
+
+    // Restore keyboard focus after the re-render
+    if (focusKey) {
+      var target = root.querySelector('.chip[data-id="' + focusKey + '"]');
+      if (target) target.focus({ preventScroll: true });
+      focusKey = null;
+    }
+  }
+
+  // ---------- Pool drop / click, Return button, Escape ----------
+  var poolEl = root.querySelector('#sipoc-pool');
+  poolEl.addEventListener('click', function (e) {
+    if (!e.target.closest('.chip') && selectedId) placeItem(selectedId, 'pool');
+  });
+  poolEl.addEventListener('dragover', function (e) { e.preventDefault(); poolEl.classList.add('drag-over'); });
+  poolEl.addEventListener('dragleave', function () { poolEl.classList.remove('drag-over'); });
+  poolEl.addEventListener('drop', function (e) {
+    e.preventDefault();
+    poolEl.classList.remove('drag-over');
+    var id = e.dataTransfer.getData('text/plain');
+    if (id) placeItem(id, 'pool');
+  });
+
+  root.querySelector('#sipoc-return').addEventListener('click', function () {
+    if (selectedId && state[selectedId]) placeItem(selectedId, 'pool');
+  });
+
+  root.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && selectedId) {
+      var label = itemById(selectedId).label;
+      focusKey = selectedId;
+      selectedId = null;
+      say('Deselected: ' + label + '.');
+      render();
+    }
+  });
+
+  // ---------- Reset ----------
+  root.querySelector('#sipoc-reset').addEventListener('click', function () {
+    initializePlacements();
+    selectedId = null;
+    clearFeedback();
+    say('Activity reset. 0 of ' + SORTABLE_ITEMS.length + ' items placed.');
+    render();
+  });
+
+  // ---------- Check My Work ----------
+  function showFeedback(type, heading, bodyHtml, withNote) {
+    var fb = root.querySelector('#sipoc-feedback');
+    var html = '<div class="feedback-box ' + (type === 'success' ? 'is-success' : 'is-partial') + '">' +
+      '<h3 id="sipoc-feedback-heading" tabindex="-1">' +
+      icon(type === 'success' ? 'check' : 'alert', 20) + '<span>' + heading + '</span></h3>' + bodyHtml;
+    if (withNote) {
+      html += '<div class="callout-box"><span class="callout-label">' + icon('info', 16) + ' Note</span>' +
+        '<p><strong>Process boundary:</strong> the provided Process steps run from Check Inventory through Deliver Order. ' +
+        'The SIPOC columns show the supplier, input, output, and customer associated with each step.</p></div>';
+    }
+    html += '</div>';
+    fb.innerHTML = html;
+    var h = fb.querySelector('#sipoc-feedback-heading');
+    if (h) h.focus();
+  }
+
+  root.querySelector('#sipoc-check').addEventListener('click', function () {
+    var placed = placedCount();
+    var total = SORTABLE_ITEMS.length;
+
+    if (placed < total) {
+      results = null;
+      render();
+      showFeedback('partial', 'Keep going.',
+        '<p>' + placed + ' of ' + total + ' items placed. Match each item to the correct category and row.</p>', false);
+      return;
+    }
+
+    var res = {};
+    var correct = 0;
+    var wrong = [];
+    SORTABLE_ITEMS.forEach(function (item) {
+      var loc = state[item.id];
+      var canon = canonicalAt(loc.zone, loc.row);
+      var good = !!canon && canon.label === item.label;
+      res[item.id] = good;
+      if (good) correct++;
+      else wrong.push(item.label + ' (currently in ' + ZONE_NAMES[loc.zone] + ', row ' + loc.row + ')');
+    });
+    results = res;
+    render();
+
+    if (correct === total) {
+      showFeedback('success', 'All ' + correct + ' items matched correctly!',
+        '<p>Each SIPOC row aligns with the corresponding process step.</p>', true);
+    } else {
+      var list = '<p>Items marked Incorrect need a different category or row. Select or drag them to try again.</p><ul>' +
+        wrong.map(function (w) { return '<li>' + w + '</li>'; }).join('') + '</ul>';
+      showFeedback('partial', correct + ' of ' + total + ' items in the correct slots.', list, true);
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
