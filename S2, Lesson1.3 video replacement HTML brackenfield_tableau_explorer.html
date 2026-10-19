@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build a Tableau Visual from a Business Question</title>
+<style>
+.bx{--navy:#123f68;--blue:#287db8;--pale:#eef6fd;--line:#c7dfef;--ink:#243746;font:15px/1.5 Arial,Helvetica,sans-serif;max-width:1000px;margin:auto;color:var(--ink);background:#fff}
+.bx *{box-sizing:border-box}.bx button,.bx select{font:inherit}.bx button{cursor:pointer}.bx h2,.bx h3,.bx p{margin:0}.bx h2{font-size:clamp(20px,3vw,26px)!important;color:#fff!important;line-height:1.25!important}.bx h3{font-size:17px!important;color:var(--navy)!important;line-height:1.3!important}.bx-head{background:var(--navy);color:#fff;padding:18px 20px;border-radius:12px 12px 0 0}.bx-kicker{color:#cfe8fa;font-size:12px;font-weight:bold;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px!important}.bx-shell{border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:18px}.bx-question{background:var(--pale);border-left:4px solid var(--blue);padding:14px;border-radius:0 8px 8px 0;margin-bottom:15px}.bx-small{font-size:13px;color:#46647b}.bx-progress{display:flex;gap:6px;margin:13px 0 16px}.bx-dot{height:6px;border-radius:9px;background:#d5e7f4;flex:1}.bx-dot.done{background:#287db8}.bx-step{display:none}.bx-step.active{display:block}.bx-stepintro{margin:8px 0 14px!important}.bx-options{display:grid;gap:9px;margin:13px 0}.bx-option{display:block;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:11px 13px;text-align:left;color:var(--ink)}.bx-option:hover{background:#eef6fd;border-color:var(--blue)}.bx-option[aria-pressed="true"]{background:#e4f1fc;border:2px solid var(--blue);padding:10.5px 12.5px}.bx-option:focus-visible,.bx-btn:focus-visible,.bx-tab:focus-visible{outline:3px solid #f0a43d;outline-offset:2px}.bx-option strong{color:var(--navy)}.bx-row{display:flex;gap:12px;flex-wrap:wrap}.bx-card{flex:1 1 220px;border:1px solid var(--line);border-radius:8px;padding:13px;background:#f8fbfe}.bx-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#456982}.bx-field{background:#e3f0fa;display:inline-block;color:#123f68;border-radius:5px;padding:3px 7px;margin:3px;font-size:13px}.bx-btn{background:var(--navy);border:2px solid var(--navy);color:#fff;border-radius:7px;font-weight:700;padding:9px 16px}.bx-btn.secondary{color:var(--navy);background:#fff}.bx-btn:disabled{opacity:.48;cursor:not-allowed}.bx-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:17px}.bx-feedback{background:#fff7e7;border:1px solid #dfb65e;border-radius:8px;padding:12px;margin:13px 0;display:none}.bx-feedback.good{background:#edf8f2;border-color:#8ac9a6}.bx-feedback.show{display:block}.bx-dashboard{display:grid;grid-template-columns:175px minmax(0,1fr);border:1px solid #bed5e6;border-radius:9px;overflow:hidden;margin:14px 0;background:#fff}.bx-side{background:#eef4f8;border-right:1px solid #bed5e6;padding:12px}.bx-side p{margin:0 0 7px}.bx-work{min-width:0;padding:13px}.bx-shelf{border:1px dashed #a9c3d7;padding:8px;margin-bottom:9px;border-radius:5px;font-size:13px;min-height:41px}.bx-chart{margin-top:10px;padding:10px;border-top:1px solid #e1eaf1}.bx-barline{display:grid;grid-template-columns:minmax(100px,175px) minmax(0,1fr) 45px;gap:9px;align-items:center;margin:11px 0;font-size:13px}.bx-bartrack{height:20px;background:#eaf2f8;border-radius:4px;overflow:hidden}.bx-bar{height:100%;background:#287db8;border-radius:4px}.bx-chart.muted .bx-bar{background:#7fa7c3}.bx-score{font-weight:700;color:#123f68}.bx-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}.bx-compare>div{border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0}.bx-note{font-size:12px;color:#567083;margin-top:9px!important}.bx-warning{background:#fff7e7;border-left:4px solid #d68b28;padding:12px;margin:13px 0}.bx-complete{background:#e7f3fb;border:1px solid var(--line);padding:15px;border-radius:8px;margin-top:14px}.bx-list{padding-left:20px;margin:8px 0 0}.bx-list li{margin:6px 0}.bx-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.bx-pills span{background:#e6f2fa;border:1px solid #b9d6e9;border-radius:20px;padding:6px 10px;color:#123f68;font-weight:700;font-size:13px}.bx-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:650px){.bx-shell{padding:12px}.bx-dashboard{grid-template-columns:1fr}.bx-side{border-right:0;border-bottom:1px solid #bed5e6}.bx-compare{grid-template-columns:1fr}.bx-barline{grid-template-columns:minmax(86px,125px) minmax(0,1fr) 37px;gap:6px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){.bx *{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<section class="bx" id="brackenfield-explorer" aria-label="Interactive business intelligence chart builder">
+<header class="bx-head"><p class="bx-kicker">Brackenfield Manufacturing Co. | BI Decision Lab</p><h2>Build a Visual from a Business Question</h2></header>
+<div class="bx-shell">
+<div class="bx-question"><strong>Leadership's question</strong><p>Which suppliers have the highest <strong>late-delivery rate</strong> <strong>this quarter (April–June)</strong>?</p></div>
+<p class="bx-small">Make the same decisions an analyst would make before signing off on a Tableau chart. This is an interactive teaching mock-up, not a live Tableau workbook.</p>
+<div class="bx-progress" aria-label="Five stages of activity"><span class="bx-dot done"></span><span class="bx-dot"></span><span class="bx-dot"></span><span class="bx-dot"></span><span class="bx-dot"></span></div>
+<div class="bx-step active" data-step="0">
+<h3>1. Identify the objective</h3><p class="bx-stepintro">What does leadership need the visual to show?</p>
+<div class="bx-options" role="group" aria-label="Choose chart objective">
+<button type="button" class="bx-option" data-value="trend" aria-pressed="false">A trend in delivery performance over time</button>
+<button type="button" class="bx-option" data-value="compare" aria-pressed="false">A comparison of late-delivery rates across suppliers</button>
+<button type="button" class="bx-option" data-value="count" aria-pressed="false">A count of all late orders across the network</button>
+</div>
+</div>
+<div class="bx-step" data-step="1">
+<h3>2. Choose fields and a visual</h3><p class="bx-stepintro">Choose the field combination that answers a supplier comparison question without unnecessary detail.</p>
+<div class="bx-dashboard"><aside class="bx-side"><p class="bx-label">Available fields</p><span class="bx-field">Supplier</span><span class="bx-field">On-Time %</span><span class="bx-field">Order Date</span><span class="bx-field">Product Category</span><p class="bx-note">Select the best arrangement below. Fields listed here are reference only.</p></aside><div class="bx-work"><p class="bx-label">Worksheet preview</p><div class="bx-shelf">Rows: <strong id="bx-rowfield">—</strong></div><div class="bx-shelf">Columns: <strong id="bx-colfield">—</strong></div><div class="bx-shelf">Chart: <strong id="bx-charttype">—</strong></div><div class="bx-chart"><p class="bx-small">Your selected structure will appear in these shelves.</p></div></div></div>
+<div class="bx-options" role="group" aria-label="Select field combination">
+<button type="button" class="bx-option" data-value="fieldsA" aria-pressed="false"><strong>Supplier + On-Time %</strong> · horizontal bar chart</button>
+<button type="button" class="bx-option" data-value="fieldsB" aria-pressed="false"><strong>Order Date + On-Time %</strong> · line chart</button>
+<button type="button" class="bx-option" data-value="fieldsC" aria-pressed="false"><strong>Supplier + Product Category + On-Time %</strong> · grouped bars</button>
+</div>
+<p class="bx-note">On-Time % is the provided rate measure. Late-delivery rate = 100% − On-Time %. Compare rates, not raw late-order counts.</p>
+</div>
+<div class="bx-step" data-step="2">
+<h3>3. Scope the time period</h3><p class="bx-stepintro">A chart can be technically valid and still answer the wrong question. Which Order Date filter should you apply?</p>
+<div class="bx-options" role="group" aria-label="Choose date filter">
+<button type="button" class="bx-option" data-value="all" aria-pressed="false">January–June (all six months)</button>
+<button type="button" class="bx-option" data-value="quarter" aria-pressed="false">April–June (current quarter)</button>
+<button type="button" class="bx-option" data-value="month" aria-pressed="false">June only (latest month)</button>
+</div>
+<div class="bx-card"><p class="bx-label">Filter shelf</p><span id="bx-filterlabel">Order Date: not selected</span></div>
+</div>
+<div class="bx-step" data-step="3">
+<h3>4. Set the level of detail</h3><p class="bx-stepintro">How much detail will help leadership identify which supplier needs attention?</p>
+<div class="bx-options" role="group" aria-label="Choose level of detail">
+<button type="button" class="bx-option" data-value="detailed" aria-pressed="false"><strong>Supplier × Product Category</strong> — multiple bars per supplier</button>
+<button type="button" class="bx-option" data-value="overall" aria-pressed="false"><strong>Network-wide total</strong> — a single overall bar</button>
+<button type="button" class="bx-option" data-value="supplier" aria-pressed="false"><strong>By supplier</strong> — one rate per supplier</button>
+</div>
+<div class="bx-card" id="bx-detailpreview" aria-live="polite"><p class="bx-label">Level-of-detail preview</p><p>Select an option to see what the chart would communicate.</p></div>
+</div>
+<div class="bx-step" data-step="4">
+<h3>5. Check the finished chart</h3><p class="bx-stepintro">Both worksheets could look complete. Which one answers leadership's original question?</p>
+<div class="bx-compare">
+<div><p class="bx-label">Worksheet A · Jan–Jun</p><p class="bx-small">Six-month view</p><div class="bx-chart" style="background:#f3f7fa;border-radius:6px;padding:16px 10px"><p><strong>Supplier comparison chart</strong></p><p class="bx-small">Filter: January–June</p><p class="bx-note">All-months results were not provided. This worksheet represents the wrong filter, not verified six-month measurements.</p></div></div>
+<div><p class="bx-label">Worksheet B · Apr–Jun</p><p class="bx-small">Current-quarter view · late-delivery rate</p><div class="bx-chart"><div class="bx-barline"><span>Cross Bay</span><div class="bx-bartrack"><div class="bx-bar" style="width:92%"></div></div><span class="bx-score">46%</span></div><div class="bx-barline"><span>Palmetto</span><div class="bx-bartrack"><div class="bx-bar" style="width:40%"></div></div><span class="bx-score">20%</span></div><div class="bx-barline"><span>Ironclad</span><div class="bx-bartrack"><div class="bx-bar" style="width:30%"></div></div><span class="bx-score">15%</span></div><div class="bx-barline"><span>Meridian</span><div class="bx-bartrack"><div class="bx-bar" style="width:14%"></div></div><span class="bx-score">7%</span></div></div><p class="bx-note">Case-study example figures supplied in the storyboard; source reconciliation pending.</p></div>
+</div>
+<div class="bx-options" role="group" aria-label="Choose the chart that answers the question"><button type="button" class="bx-option" data-value="A" aria-pressed="false">Worksheet A: Six months of supplier history</button><button type="button" class="bx-option" data-value="B" aria-pressed="false">Worksheet B: April–June supplier rates</button><button type="button" class="bx-option" data-value="either" aria-pressed="false">Either worksheet works because both use supplier bars</button></div>
+<div class="bx-warning"><strong>Analyst's check:</strong> A chart is not complete just because it renders correctly. Check its fields, filter, detail, and measure against the original business question.</div>
+</div>
+<div id="bx-feedback" class="bx-feedback" role="status" aria-live="polite" tabindex="-1"></div>
+<div class="bx-actions"><button type="button" class="bx-btn secondary" id="bx-back" hidden>Back</button><button type="button" class="bx-btn" id="bx-submit" disabled>Check my decision</button><button type="button" class="bx-btn" id="bx-next" hidden>Continue →</button></div>
+<div id="bx-end" class="bx-complete" hidden tabindex="-1"><h3>Decision lab complete</h3><p>You built the decision logic for a supplier comparison chart and checked whether the finished view answered the question.</p><div class="bx-pills" aria-label="Four-step analyst workflow"><span>Fields</span><span>→ Filter</span><span>→ Detail</span><span>→ Check</span></div><p class="bx-note">In Tableau, you would build this as supplier-level bars with a calculated late-delivery rate derived from On-Time %, filtered to April–June and sorted highest to lowest. Validate the measure's source before reporting the results.</p><div class="bx-actions"><button type="button" class="bx-btn secondary" id="bx-reset">Start again</button></div></div>
+</div>
+</section>
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('brackenfield-explorer');if(!root)return;
+var stages=[].slice.call(root.querySelectorAll('.bx-step'));
+var choices=[null,null,null,null,null];var stage=0;
+var feedback=root.querySelector('#bx-feedback'),submit=root.querySelector('#bx-submit'),next=root.querySelector('#bx-next'),back=root.querySelector('#bx-back'),end=root.querySelector('#bx-end');
+var correct=['compare','fieldsA','quarter','supplier','B'];
+var hints=[
+{'trend':'A trend line would show how results change over time. Here, leadership is comparing suppliers within one quarter.','count':'Raw counts can mislead when suppliers handle different numbers of orders. Leadership asked for a rate.','compare':'Correct. The question compares suppliers by late-delivery rate.'},
+{'fieldsB':'Order Date is useful as a filter here, but a date-based line chart changes the question into a trend.','fieldsC':'Product Category introduces detail the question did not request. Keep it out of this supplier comparison.','fieldsA':'Correct. Supplier identifies the groups, and On-Time % can be converted to late-delivery rate. A bar chart supports comparison.'},
+{'all':'That filter includes January–March, so it answers a six-month question instead of this-quarter performance.','month':'June alone is narrower than April–June. The time frame has to match the question.','quarter':'Correct. April–June matches the time period leadership specified.'},
+{'detailed':'That adds category-level breakdowns, answering a more detailed question that leadership did not ask.','overall':'One network-wide rate hides which supplier is contributing to late deliveries.','supplier':'Correct. One bar per supplier makes the comparison clear without unnecessary breakdowns.'},
+{'A':'Worksheet A may be a valid chart, but its six-month filter does not match the current-quarter question.','either':'Chart type alone is not enough. A different time filter means a different business question.','B':'Correct. Worksheet B is scoped to April–June and compares late-delivery rates by supplier.'}
+];
+function refresh(){stages.forEach(function(s,i){s.classList.toggle('active',i===stage);});root.querySelectorAll('.bx-dot').forEach(function(d,i){d.classList.toggle('done',i<=stage);});back.hidden=stage===0;submit.hidden=false;next.hidden=true;feedback.className='bx-feedback';feedback.textContent='';submit.disabled=!choices[stage];stages[stage].querySelectorAll('.bx-option').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.value===choices[stage]));});}
+stages.forEach(function(s,i){s.querySelectorAll('.bx-option').forEach(function(b){b.addEventListener('click',function(){choices[i]=b.dataset.value;s.querySelectorAll('.bx-option').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});feedback.className='bx-feedback';feedback.textContent='';submit.disabled=false;next.hidden=true;submit.hidden=false;if(i===1){var map={fieldsA:['Supplier','Late-delivery rate (100% − On-Time %)','Bar'],fieldsB:['Order Date','On-Time %','Line'],fieldsC:['Supplier + Product Category','On-Time %','Grouped bar']};var f=map[b.dataset.value];root.querySelector('#bx-rowfield').textContent=f[0];root.querySelector('#bx-colfield').textContent=f[1];root.querySelector('#bx-charttype').textContent=f[2];}if(i===2){root.querySelector('#bx-filterlabel').textContent='Order Date: '+({all:'Jan–Jun',quarter:'Apr–Jun',month:'Jun'}[b.dataset.value]);}if(i===3){root.querySelector('#bx-detailpreview').innerHTML='<p class="bx-label">Level-of-detail preview</p><p>'+({detailed:'Many category-by-supplier bars. The chart becomes harder to scan and answers a new question.',overall:'One network-wide bar. Supplier differences disappear.',supplier:'Four supplier-level bars. Each supplier has one comparable late-delivery rate.'}[b.dataset.value])+'</p>';}});});});
+submit.addEventListener('click',function(){var v=choices[stage];if(!v)return;var good=v===correct[stage];feedback.textContent=(good?'✓ ':'Consider this: ')+hints[stage][v];feedback.className='bx-feedback show'+(good?' good':'');if(good){submit.hidden=true;next.hidden=false;next.textContent=stage===4?'Finish activity':'Continue →';}feedback.focus();});
+next.addEventListener('click',function(){if(stage<4){stage++;refresh();}else{stages.forEach(function(s){s.classList.remove('active');});root.querySelector('.bx-progress').hidden=true;root.querySelector('#bx-feedback').hidden=true;root.querySelector('.bx-actions').hidden=true;end.hidden=false;end.focus();}});
+back.addEventListener('click',function(){if(stage>0){stage--;refresh();}});
+root.querySelector('#bx-reset').addEventListener('click',function(){stage=0;choices=[null,null,null,null,null];end.hidden=true;root.querySelector('.bx-progress').hidden=false;root.querySelector('#bx-feedback').hidden=false;root.querySelector('.bx-actions').hidden=false;root.querySelector('#bx-rowfield').textContent='—';root.querySelector('#bx-colfield').textContent='—';root.querySelector('#bx-charttype').textContent='—';root.querySelector('#bx-filterlabel').textContent='Order Date: not selected';root.querySelector('#bx-detailpreview').innerHTML='<p class="bx-label">Level-of-detail preview</p><p>Select an option to see what the chart would communicate.</p>';refresh();root.querySelector('.bx-question').scrollIntoView({block:'nearest'});});
+refresh();
+})();
+</script>
+</body>
+</html>
