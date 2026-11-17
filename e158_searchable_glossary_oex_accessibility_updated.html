@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E158 Glossary of Terms</title>
+<style>
+
+#e158-glossary{font:14px/1.55 Arial,Helvetica,sans-serif!important;color:#24394c!important;max-width:900px;margin:0 auto;box-sizing:border-box}
+#e158-glossary *,#e158-glossary *:before,#e158-glossary *:after{box-sizing:border-box}
+#e158-glossary .eg-shell{border:1px solid #c7dfef;border-radius:12px;overflow:hidden;background:#fff}
+#e158-glossary .eg-head{padding:18px 20px;background:#123f68;color:#fff}
+#e158-glossary .eg-kicker{display:block;font-size:11px!important;font-weight:700;letter-spacing:.6px;color:#d5eaff!important;text-transform:uppercase}
+#e158-glossary .eg-title{display:block;font-size:22px!important;font-weight:700!important;line-height:1.25;color:#fff!important;margin:4px 0 5px!important}
+#e158-glossary .eg-headnote{font-size:13px!important;color:#e1effb!important;margin:0!important}
+#e158-glossary .eg-body{padding:16px}
+#e158-glossary .eg-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 10px}
+#e158-glossary .eg-search{flex:1;min-width:190px;width:100%;max-width:100%;padding:11px 13px!important;border:1px solid #9bbfd9!important;border-radius:7px!important;background:#fff!important;color:#20384c!important;font:14px Arial,Helvetica,sans-serif!important}
+#e158-glossary .eg-count{font-size:12px!important;color:#526b80!important}
+#e158-glossary .eg-nav{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0 16px}
+#e158-glossary .eg-letter{display:inline-block;text-decoration:none!important;min-width:31px;text-align:center;padding:5px 7px;border-radius:5px;border:1px solid #c7dfef;background:#eef6fd;color:#123f68!important;font-size:12px!important;font-weight:700}
+#e158-glossary .eg-letter:hover{background:#dcecf9}
+#e158-glossary .eg-letter.eg-muted{opacity:.35;pointer-events:none;cursor:default;text-decoration:none!important}
+#e158-glossary .eg-section{margin:0 0 16px}
+#e158-glossary .eg-section-title{font-size:15px!important;color:#123f68!important;font-weight:700!important;padding:5px 0 7px!important;border-bottom:2px solid #dcecf9;margin:0 0 7px!important}
+#e158-glossary .eg-entry{margin:5px 0;border:1px solid #d0e0ed;border-radius:7px;overflow:hidden;background:#fff}
+#e158-glossary .eg-entry summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:10px 12px;background:#f7fbff;color:#123f68;font-weight:700;font-size:14px;line-height:1.4}
+#e158-glossary .eg-entry summary::-webkit-details-marker{display:none}
+#e158-glossary .eg-entry summary::after{content:'+';font-size:18px;font-weight:400;line-height:1;color:#287db8}
+#e158-glossary .eg-entry[open] summary{background:#dcecf9}
+#e158-glossary .eg-entry[open] summary::after{content:'−'}
+#e158-glossary .eg-definition{padding:11px 13px!important;margin:0!important;font-size:15px!important;line-height:1.6!important;color:#263445!important}
+#e158-glossary .eg-empty{display:none;background:#eef6fd;padding:15px;border-radius:8px;color:#123f68}
+#e158-glossary .eg-footer{font-size:12px!important;color:#526b80!important;margin:7px 0 0!important}
+#e158-glossary button{font:700 12px Arial,Helvetica,sans-serif!important;padding:9px 11px!important;border-radius:6px!important;border:1px solid #287db8!important;background:#fff!important;color:#123f68!important;cursor:pointer;box-shadow:none!important;text-transform:none!important;letter-spacing:normal!important}
+#e158-glossary button:hover{background:#eef6fd!important}
+#e158-glossary summary:focus-visible,#e158-glossary button:focus-visible,#e158-glossary input:focus-visible,#e158-glossary a:focus-visible{outline:3px solid #2563eb!important;outline-offset:2px}
+@media(max-width:520px){#e158-glossary .eg-head{padding:14px}#e158-glossary .eg-title{font-size:19px!important}#e158-glossary .eg-body{padding:11px}#e158-glossary .eg-tools{align-items:stretch}#e158-glossary .eg-search{flex-basis:100%}}
+@media(forced-colors:active){#e158-glossary .eg-entry,#e158-glossary .eg-shell{border:1px solid CanvasText}}
+
+</style></head><body>
+<section id="e158-glossary" aria-label="E158 business intelligence glossary"><div class="eg-shell">
+<div class="eg-head"><span class="eg-kicker">E158 · Fundamentals of Business Intelligence</span><span class="eg-title" role="heading" aria-level="2">Glossary of Terms</span><p class="eg-headnote">Search for a term or select a letter. Open any term to read its definition.</p></div>
+<div class="eg-body">
+<div class="eg-tools"><input class="eg-search" type="search" aria-label="Search glossary terms and definitions" placeholder="Search terms and definitions…"><button type="button" id="eg-clear">Clear</button><button type="button" id="eg-expand">Expand all</button><button type="button" id="eg-collapse">Collapse all</button></div>
+<div class="eg-count" id="eg-count" role="status" aria-live="polite" aria-atomic="true">Showing all 122 terms</div>
+<nav class="eg-nav" aria-label="Jump to letter">
+<a class="eg-letter" data-letter="A" href="#eg-letter-A">A</a>
+<a class="eg-letter" data-letter="B" href="#eg-letter-B">B</a>
+<a class="eg-letter" data-letter="C" href="#eg-letter-C">C</a>
+<a class="eg-letter" data-letter="D" href="#eg-letter-D">D</a>
+<a class="eg-letter" data-letter="E" href="#eg-letter-E">E</a>
+<a class="eg-letter" data-letter="F" href="#eg-letter-F">F</a>
+<a class="eg-letter" data-letter="G" href="#eg-letter-G">G</a>
+<a class="eg-letter" data-letter="H" href="#eg-letter-H">H</a>
+<a class="eg-letter" data-letter="I" href="#eg-letter-I">I</a>
+<a class="eg-letter" data-letter="J" href="#eg-letter-J">J</a>
+<a class="eg-letter" data-letter="K" href="#eg-letter-K">K</a>
+<a class="eg-letter" data-letter="L" href="#eg-letter-L">L</a>
+<a class="eg-letter" data-letter="M" href="#eg-letter-M">M</a>
+<a class="eg-letter" data-letter="N" href="#eg-letter-N">N</a>
+<a class="eg-letter" data-letter="O" href="#eg-letter-O">O</a>
+<a class="eg-letter" data-letter="P" href="#eg-letter-P">P</a>
+<a class="eg-letter" data-letter="Q" href="#eg-letter-Q">Q</a>
+<a class="eg-letter" data-letter="R" href="#eg-letter-R">R</a>
+<a class="eg-letter" data-letter="S" href="#eg-letter-S">S</a>
+<a class="eg-letter" data-letter="T" href="#eg-letter-T">T</a>
+<a class="eg-letter" data-letter="U" href="#eg-letter-U">U</a>
+<a class="eg-letter" data-letter="V" href="#eg-letter-V">V</a>
+<a class="eg-letter" data-letter="W" href="#eg-letter-W">W</a>
+</nav><div class="eg-empty" id="eg-empty">No matching terms. Try a different search.</div>
+<section class="eg-section" id="eg-letter-A" data-letter="A" aria-label="Terms beginning with A"><div class="eg-section-title" role="heading" aria-level="3">A</div>
+<details class="eg-entry" data-search="actionable a presentation or finding that ends on a specific next step the audience can take, rather than ending on the finding alone"><summary>actionable</summary><p class="eg-definition">a presentation or finding that ends on a specific next step the audience can take, rather than ending on the finding alone</p></details>
+<details class="eg-entry" data-search="aggregation the way individual records are combined into a single value (e.g., sum, average, count) before being charted"><summary>aggregation</summary><p class="eg-definition">the way individual records are combined into a single value (e.g., sum, average, count) before being charted</p></details>
+<details class="eg-entry" data-search="aggregation choice the decision of which arithmetic (sum, average, count) combines individual records into the value a chart displays"><summary>aggregation choice</summary><p class="eg-definition">the decision of which arithmetic (sum, average, count) combines individual records into the value a chart displays</p></details>
+<details class="eg-entry" data-search="analytics the practice of examining data to find patterns and support a decision"><summary>analytics</summary><p class="eg-definition">the practice of examining data to find patterns and support a decision</p></details>
+<details class="eg-entry" data-search="association a claim that names a pattern between two measures without asserting that one causes the other"><summary>association</summary><p class="eg-definition">a claim that names a pattern between two measures without asserting that one causes the other</p></details>
+<details class="eg-entry" data-search="assumption a decision made during data preparation or analysis that affects the result, such as how a late delivery is defined or whether a canceled order is counted"><summary>assumption</summary><p class="eg-definition">a decision made during data preparation or analysis that affects the result, such as how a late delivery is defined or whether a canceled order is counted</p></details>
+<details class="eg-entry" data-search="audience fit whether a message’s detail level, language, visual emphasis, and action all match what a specific audience needs"><summary>audience fit</summary><p class="eg-definition">whether a message’s detail level, language, visual emphasis, and action all match what a specific audience needs</p></details>
+<details class="eg-entry" data-search="audience need the specific thing a particular stakeholder must know before they can act, which differs depending on their role"><summary>audience need</summary><p class="eg-definition">the specific thing a particular stakeholder must know before they can act, which differs depending on their role</p></details>
+</section>
+<section class="eg-section" id="eg-letter-B" data-letter="B" aria-label="Terms beginning with B"><div class="eg-section-title" role="heading" aria-level="3">B</div>
+<details class="eg-entry" data-search="bar chart a chart that shows one separate bar per discrete category, sized to that category&#x27;s value, for comparing categories at a single point in time rather than a trend over time"><summary>bar chart</summary><p class="eg-definition">a chart that shows one separate bar per discrete category, sized to that category&#x27;s value, for comparing categories at a single point in time rather than a trend over time</p></details>
+<details class="eg-entry" data-search="bin size the width of the value ranges a histogram groups a measure into; a choice that changes the chart&#x27;s apparent shape without changing the underlying data"><summary>bin size</summary><p class="eg-definition">the width of the value ranges a histogram groups a measure into; a choice that changes the chart&#x27;s apparent shape without changing the underlying data</p></details>
+<details class="eg-entry" data-search="box plot a chart that summarizes a measure&#x27;s spread (median, quartiles, range) for one or more groups at once"><summary>box plot</summary><p class="eg-definition">a chart that summarizes a measure&#x27;s spread (median, quartiles, range) for one or more groups at once</p></details>
+<details class="eg-entry" data-search="business intelligence (bi) a decision-support process that uses data to help someone act, distinct from reporting or dashboarding on their own"><summary>business intelligence (BI)</summary><p class="eg-definition">a decision-support process that uses data to help someone act, distinct from reporting or dashboarding on their own</p></details>
+<details class="eg-entry" data-search="business question the specific question a decision maker needs answered before they can act"><summary>business question</summary><p class="eg-definition">the specific question a decision maker needs answered before they can act</p></details>
+</section>
+<section class="eg-section" id="eg-letter-C" data-letter="C" aria-label="Terms beginning with C"><div class="eg-section-title" role="heading" aria-level="3">C</div>
+<details class="eg-entry" data-search="calculated field a new column built by computing a value from other fields in the same table, such as a days late column computed as actual delivery date minus promised date"><summary>calculated field</summary><p class="eg-definition">a new column built by computing a value from other fields in the same table, such as a Days Late column computed as Actual Delivery Date minus Promised Date</p></details>
+<details class="eg-entry" data-search="chart-question alignment whether a finished chart&#x27;s type, fields, and aggregation match the business question it was built to answer"><summary>chart-question alignment</summary><p class="eg-definition">whether a finished chart&#x27;s type, fields, and aggregation match the business question it was built to answer</p></details>
+<details class="eg-entry" data-search="claim the conclusion being defended, stated plainly, as the first of four parts in a complete defense"><summary>claim</summary><p class="eg-definition">the conclusion being defended, stated plainly, as the first of four parts in a complete defense</p></details>
+<details class="eg-entry" data-search="coherence whether a finished dashboard&#x27;s purpose, worksheet selection, layout, and title work together to answer its intended question without outside explanation"><summary>coherence</summary><p class="eg-definition">whether a finished dashboard&#x27;s purpose, worksheet selection, layout, and title work together to answer its intended question without outside explanation</p></details>
+<details class="eg-entry" data-search="comparison a question asking how one category or group&#x27;s measure stacks up against another&#x27;s"><summary>comparison</summary><p class="eg-definition">a question asking how one category or group&#x27;s measure stacks up against another&#x27;s</p></details>
+<details class="eg-entry" data-search="composition a question asking how a total breaks into its component parts"><summary>composition</summary><p class="eg-definition">a question asking how a total breaks into its component parts</p></details>
+<details class="eg-entry" data-search="confounding factor a third variable connected to both measures in a correlation, capable of producing the pattern without either measure directly affecting the other"><summary>confounding factor</summary><p class="eg-definition">a third variable connected to both measures in a correlation, capable of producing the pattern without either measure directly affecting the other</p></details>
+<details class="eg-entry" data-search="consistency using the same label and the same color meaning for a measure across every worksheet on a dashboard"><summary>consistency</summary><p class="eg-definition">using the same label and the same color meaning for a measure across every worksheet on a dashboard</p></details>
+<details class="eg-entry" data-search="context the situation that prompted a dashboard or finding to be built in the first place"><summary>context</summary><p class="eg-definition">the situation that prompted a dashboard or finding to be built in the first place</p></details>
+<details class="eg-entry" data-search="continuous a smooth numeric or date range, shown in green in tableau, such as qty ordered or order date treated as a timeline"><summary>continuous</summary><p class="eg-definition">a smooth numeric or date range, shown in green in Tableau, such as Qty Ordered or Order Date treated as a timeline</p></details>
+<details class="eg-entry" data-search="correlation a relationship between two measures described by direction, form, and strength, without claiming that one causes the other"><summary>correlation</summary><p class="eg-definition">a relationship between two measures described by direction, form, and strength, without claiming that one causes the other</p></details>
+<details class="eg-entry" data-search="cost the routine price paid to fulfill an order, unit cost of goods plus standard freight, before anything is rushed"><summary>cost</summary><p class="eg-definition">the routine price paid to fulfill an order, unit cost of goods plus standard freight, before anything is rushed</p></details>
+<details class="eg-entry" data-search="current state the situation as it exists right now, including the problem a dmaic project is meant to address"><summary>current state</summary><p class="eg-definition">the situation as it exists right now, including the problem a DMAIC project is meant to address</p></details>
+</section>
+<section class="eg-section" id="eg-letter-D" data-letter="D" aria-label="Terms beginning with D"><div class="eg-section-title" role="heading" aria-level="3">D</div>
+<details class="eg-entry" data-search="dashboard a combined view of multiple worksheets, arranged so they may answer one or more business questions that are part of the overall problem statement, and help with monitoring, measuring, and analyzing relevant data in key areas"><summary>dashboard</summary><p class="eg-definition">a combined view of multiple worksheets, arranged so they may answer one or more business questions that are part of the overall problem statement, and help with monitoring, measuring, and analyzing relevant data in key areas</p></details>
+<details class="eg-entry" data-search="data cleaning the general process bi professionals use to prepare any dataset to use, regardless of the tool"><summary>data cleaning</summary><p class="eg-definition">the general process BI professionals use to prepare any dataset to use, regardless of the tool</p></details>
+<details class="eg-entry" data-search="data pane the panel in tableau&#x27;s workspace where every field from a connected sheet appears, already sorted into dimensions and measures"><summary>data pane</summary><p class="eg-definition">the panel in Tableau&#x27;s workspace where every field from a connected sheet appears, already sorted into dimensions and measures</p></details>
+<details class="eg-entry" data-search="data profiling the practice of examining a dataset to uncover what is normal, what is missing, and what is going wrong in it"><summary>data profiling</summary><p class="eg-definition">the practice of examining a dataset to uncover what is normal, what is missing, and what is going wrong in it</p></details>
+<details class="eg-entry" data-search="data quality whether a dataset is accurate, complete, and consistent enough to support the decision you&#x27;re about to make with it"><summary>data quality</summary><p class="eg-definition">whether a dataset is accurate, complete, and consistent enough to support the decision you&#x27;re about to make with it</p></details>
+<details class="eg-entry" data-search="data story a one-time, guided explanation built to walk a specific audience through a specific conclusion, as distinct from a dashboard built for repeated reference"><summary>data story</summary><p class="eg-definition">a one-time, guided explanation built to walk a specific audience through a specific conclusion, as distinct from a dashboard built for repeated reference</p></details>
+<details class="eg-entry" data-search="date granularity the level of detail a date field is grouped by (day, week, month, quarter, year), which changes a chart&#x27;s shape without changing the underlying data"><summary>date granularity</summary><p class="eg-definition">the level of detail a date field is grouped by (day, week, month, quarter, year), which changes a chart&#x27;s shape without changing the underlying data</p></details>
+<details class="eg-entry" data-search="decision-support an approach to using data and analysis that is aimed at guiding an upcoming decision, not just describing what already happened"><summary>decision-support</summary><p class="eg-definition">an approach to using data and analysis that is aimed at guiding an upcoming decision, not just describing what already happened</p></details>
+<details class="eg-entry" data-search="defects an output that fails to meet a requirement, such as a shipment that arrives short or damaged"><summary>defects</summary><p class="eg-definition">an output that fails to meet a requirement, such as a shipment that arrives short or damaged</p></details>
+<details class="eg-entry" data-search="defensible bi data story a presentation that is evidence-tied, adapted to its audience, presented with its tradeoffs named, ready to explain its methods in plain language, and ready to answer a live question without overclaiming"><summary>defensible BI data story</summary><p class="eg-definition">a presentation that is evidence-tied, adapted to its audience, presented with its tradeoffs named, ready to explain its methods in plain language, and ready to answer a live question without overclaiming</p></details>
+<details class="eg-entry" data-search="delivery days a calculated field equal to delivery date minus order date"><summary>Delivery Days</summary><p class="eg-definition">a calculated field equal to Delivery Date minus Order Date</p></details>
+<details class="eg-entry" data-search="delivery variance the gap between the date a supplier promised a shipment and the date it arrived"><summary>delivery variance</summary><p class="eg-definition">the gap between the date a supplier promised a shipment and the date it arrived</p></details>
+<details class="eg-entry" data-search="demand the volume to be fulfilled each month, and the baseline against which every other kpi category is read"><summary>demand</summary><p class="eg-definition">the volume to be fulfilled each month, and the baseline against which every other KPI category is read</p></details>
+<details class="eg-entry" data-search="description a claim that states only what is directly visible in a chart, with no interpretation added"><summary>description</summary><p class="eg-definition">a claim that states only what is directly visible in a chart, with no interpretation added</p></details>
+<details class="eg-entry" data-search="design rationale a short explanation connecting a dashboard&#x27;s specific design choices back to the purpose it was built to serve"><summary>design rationale</summary><p class="eg-definition">a short explanation connecting a dashboard&#x27;s specific design choices back to the purpose it was built to serve</p></details>
+<details class="eg-entry" data-search="discrete a distinct, separate value, shown in blue in tableau, such as category or supplier"><summary>discrete</summary><p class="eg-definition">a distinct, separate value, shown in blue in Tableau, such as Category or Supplier</p></details>
+<details class="eg-entry" data-search="distribution a question asking how spread out a single measure is across many records"><summary>distribution</summary><p class="eg-definition">a question asking how spread out a single measure is across many records</p></details>
+<details class="eg-entry" data-search="distribution center a facility a company uses to receive, store, and ship inventory to retailers or customers"><summary>distribution center</summary><p class="eg-definition">a facility a company uses to receive, store, and ship inventory to retailers or customers</p></details>
+<details class="eg-entry" data-search="dmaic a five-phase process, define, measure, analyze, improve, control, used to guide an improvement effort from problem to solution"><summary>DMAIC</summary><p class="eg-definition">a five-phase process, define, measure, analyze, improve, control, used to guide an improvement effort from problem to solution</p></details>
+<details class="eg-entry" data-search="documentation a stated definition of a dashboard&#x27;s key terms, date range, and thresholds, so viewers don&#x27;t have to assume them"><summary>documentation</summary><p class="eg-definition">a stated definition of a dashboard&#x27;s key terms, date range, and thresholds, so viewers don&#x27;t have to assume them</p></details>
+<details class="eg-entry" data-search="drill-down an interactive feature that moves a viewer from a summary view to more detail within the same dashboard"><summary>drill-down</summary><p class="eg-definition">an interactive feature that moves a viewer from a summary view to more detail within the same dashboard</p></details>
+<details class="eg-entry" data-search="duplicate records the same event entered twice"><summary>duplicate records</summary><p class="eg-definition">the same event entered twice</p></details>
+</section>
+<section class="eg-section" id="eg-letter-E" data-letter="E" aria-label="Terms beginning with E"><div class="eg-section-title" role="heading" aria-level="3">E</div>
+<details class="eg-entry" data-search="expedited freight fees extra charges paid to rush a shipment when a supplier or carrier is running behind"><summary>expedited freight fees</summary><p class="eg-definition">extra charges paid to rush a shipment when a supplier or carrier is running behind</p></details>
+<details class="eg-entry" data-search="explanatory visualization a chart built to communicate a specific, already identified finding to an audience"><summary>explanatory visualization</summary><p class="eg-definition">a chart built to communicate a specific, already identified finding to an audience</p></details>
+<details class="eg-entry" data-search="exploratory visualization a chart built to look for a pattern in data before deciding what, if anything, to conclude from it"><summary>exploratory visualization</summary><p class="eg-definition">a chart built to look for a pattern in data before deciding what, if anything, to conclude from it</p></details>
+</section>
+<section class="eg-section" id="eg-letter-F" data-letter="F" aria-label="Terms beginning with F"><div class="eg-section-title" role="heading" aria-level="3">F</div>
+<details class="eg-entry" data-search="filter a mechanism that narrows a chart or view to only the data relevant to the specific question being asked"><summary>filter</summary><p class="eg-definition">a mechanism that narrows a chart or view to only the data relevant to the specific question being asked</p></details>
+<details class="eg-entry" data-search="filtering leaving out rows that don&#x27;t belong in a particular analysis, such as a canceled order or a test entry"><summary>filtering</summary><p class="eg-definition">leaving out rows that don&#x27;t belong in a particular analysis, such as a canceled order or a test entry</p></details>
+<details class="eg-entry" data-search="forecast a claim about data that does not exist yet; distinct from a trend description, which only characterizes data that has already been observed"><summary>forecast</summary><p class="eg-definition">a claim about data that does not exist yet; distinct from a trend description, which only characterizes data that has already been observed</p></details>
+<details class="eg-entry" data-search="format check confirming that a column is stored as the right data type, such as making sure a date column is stored as a date and not text"><summary>format check</summary><p class="eg-definition">confirming that a column is stored as the right data type, such as making sure a date column is stored as a date and not text</p></details>
+</section>
+<section class="eg-section" id="eg-letter-G" data-letter="G" aria-label="Terms beginning with G"><div class="eg-section-title" role="heading" aria-level="3">G</div>
+<details class="eg-entry" data-search="governance control over who can access, see, or change a shared view of data"><summary>governance</summary><p class="eg-definition">control over who can access, see, or change a shared view of data</p></details>
+</section>
+<section class="eg-section" id="eg-letter-H" data-letter="H" aria-label="Terms beginning with H"><div class="eg-section-title" role="heading" aria-level="3">H</div>
+<details class="eg-entry" data-search="hallucination a case where an ai model produces a plausible-sounding but false or unverifiable answer"><summary>hallucination</summary><p class="eg-definition">a case where an AI model produces a plausible-sounding but false or unverifiable answer</p></details>
+<details class="eg-entry" data-search="heat map a chart that uses color across two dimensions to flag exceptions or status at a glance"><summary>heat map</summary><p class="eg-definition">a chart that uses color across two dimensions to flag exceptions or status at a glance</p></details>
+<details class="eg-entry" data-search="hierarchy the order in which a dashboard layout&#x27;s size and position direct a viewer&#x27;s attention across a dashboard&#x27;s worksheets"><summary>hierarchy</summary><p class="eg-definition">the order in which a dashboard layout&#x27;s size and position direct a viewer&#x27;s attention across a dashboard&#x27;s worksheets</p></details>
+<details class="eg-entry" data-search="highlight table a grid of values with color indicating status"><summary>highlight table</summary><p class="eg-definition">a grid of values with color indicating status</p></details>
+<details class="eg-entry" data-search="histogram a chart that groups a single measure into ranges (bins) to show how its values are spread out"><summary>histogram</summary><p class="eg-definition">a chart that groups a single measure into ranges (bins) to show how its values are spread out</p></details>
+<details class="eg-entry" data-search="horizontal container a tableau layout element that groups worksheets side by side"><summary>horizontal container</summary><p class="eg-definition">a Tableau layout element that groups worksheets side by side</p></details>
+<details class="eg-entry" data-search="hovering resting your mouse pointer directly over a chart mark, without clicking, to bring up a tooltip&#x27;s value"><summary>hovering</summary><p class="eg-definition">resting your mouse pointer directly over a chart mark, without clicking, to bring up a tooltip&#x27;s value</p></details>
+</section>
+<section class="eg-section" id="eg-letter-I" data-letter="I" aria-label="Terms beginning with I"><div class="eg-section-title" role="heading" aria-level="3">I</div>
+<details class="eg-entry" data-search="implication what a finding means for operations if it continues unaddressed"><summary>implication</summary><p class="eg-definition">what a finding means for operations if it continues unaddressed</p></details>
+<details class="eg-entry" data-search="improved state the situation a dmaic project is aiming for once the goal statement is achieved"><summary>improved state</summary><p class="eg-definition">the situation a DMAIC project is aiming for once the goal statement is achieved</p></details>
+<details class="eg-entry" data-search="inconsistent categories the same thing spelled, capitalized, or typed differently across rows"><summary>inconsistent categories</summary><p class="eg-definition">the same thing spelled, capitalized, or typed differently across rows</p></details>
+<details class="eg-entry" data-search="index a way of rescaling two or more series to a common starting value, such as 100, so they can be compared on the same axis regardless of their original units"><summary>index</summary><p class="eg-definition">a way of rescaling two or more series to a common starting value, such as 100, so they can be compared on the same axis regardless of their original units</p></details>
+<details class="eg-entry" data-search="insight a conclusion drawn from a chart or pattern in data, distinct from the data or chart itself"><summary>insight</summary><p class="eg-definition">a conclusion drawn from a chart or pattern in data, distinct from the data or chart itself</p></details>
+<details class="eg-entry" data-search="insight statement a concise, evidence-based sentence that names a specific value, pattern, or exception from a dataset"><summary>insight statement</summary><p class="eg-definition">a concise, evidence-based sentence that names a specific value, pattern, or exception from a dataset</p></details>
+<details class="eg-entry" data-search="intellectual property data or work a person or organization owns, including how it can be used or shared**"><summary>intellectual property</summary><p class="eg-definition">data or work a person or organization owns, including how it can be used or shared**</p></details>
+<details class="eg-entry" data-search="interactive dashboard a dashboard where the viewer can adjust filters, parameters, or variables to change what is displayed"><summary>interactive dashboard</summary><p class="eg-definition">a dashboard where the viewer can adjust filters, parameters, or variables to change what is displayed</p></details>
+<details class="eg-entry" data-search="invalid dates a date that can&#x27;t exist, like month 13"><summary>invalid dates</summary><p class="eg-definition">a date that can&#x27;t exist, like month 13</p></details>
+<details class="eg-entry" data-search="inventory the quantity of materials, work in process, finished goods, and supplies physically on hand at a single point in time, unlike demand, which is measured over a period of time"><summary>inventory</summary><p class="eg-definition">the quantity of materials, work in process, finished goods, and supplies physically on hand at a single point in time, unlike demand, which is measured over a period of time</p></details>
+</section>
+<section class="eg-section" id="eg-letter-J" data-letter="J" aria-label="Terms beginning with J"><div class="eg-section-title" role="heading" aria-level="3">J</div>
+<details class="eg-entry" data-search="join combining two tables into one by matching a shared field between them, such as matching supplier names between a company’s orders data and its supplier reference table"><summary>join</summary><p class="eg-definition">combining two tables into one by matching a shared field between them, such as matching Supplier names between a company’s Orders data and its Supplier reference table</p></details>
+</section>
+<section class="eg-section" id="eg-letter-K" data-letter="K" aria-label="Terms beginning with K"><div class="eg-section-title" role="heading" aria-level="3">K</div>
+<details class="eg-entry" data-search="kpi a measurable value used to track how well a process or goal is performing"><summary>KPI</summary><p class="eg-definition">a measurable value used to track how well a process or goal is performing</p></details>
+<details class="eg-entry" data-search="kpi-style view a chart, often a color-coded table, built to show whether a set of measures is meeting a threshold rather than to show shape or trend"><summary>KPI-style view</summary><p class="eg-definition">a chart, often a color-coded table, built to show whether a set of measures is meeting a threshold rather than to show shape or trend</p></details>
+</section>
+<section class="eg-section" id="eg-letter-L" data-letter="L" aria-label="Terms beginning with L"><div class="eg-section-title" role="heading" aria-level="3">L</div>
+<details class="eg-entry" data-search="lean six sigma a process-improvement framework used to classify costs like waste and to structure improvement efforts through phases such as dmaic"><summary>Lean Six Sigma</summary><p class="eg-definition">a process-improvement framework used to classify costs like waste and to structure improvement efforts through phases such as DMAIC</p></details>
+<details class="eg-entry" data-search="line chart a chart that connects each point in a continuous sequence, such as month over month, into a single trend, rather than treating each value as its own separate bar"><summary>line chart</summary><p class="eg-definition">a chart that connects each point in a continuous sequence, such as month over month, into a single trend, rather than treating each value as its own separate bar</p></details>
+</section>
+<section class="eg-section" id="eg-letter-M" data-letter="M" aria-label="Terms beginning with M"><div class="eg-section-title" role="heading" aria-level="3">M</div>
+<details class="eg-entry" data-search="matching key the field used to join two tables together, which must match exactly between them for the join to work correctly"><summary>matching key</summary><p class="eg-definition">the field used to join two tables together, which must match exactly between them for the join to work correctly</p></details>
+<details class="eg-entry" data-search="method a brief, plain-language account of how the evidence behind a claim was produced"><summary>method</summary><p class="eg-definition">a brief, plain-language account of how the evidence behind a claim was produced</p></details>
+<details class="eg-entry" data-search="missing values a field left blank"><summary>missing values</summary><p class="eg-definition">a field left blank</p></details>
+</section>
+<section class="eg-section" id="eg-letter-N" data-letter="N" aria-label="Terms beginning with N"><div class="eg-section-title" role="heading" aria-level="3">N</div>
+<details class="eg-entry" data-search="narration script the full spoken text a presenter writes in advance for a recorded or virtual presentation, planned for pacing since the audience cannot give real-time feedback"><summary>narration script</summary><p class="eg-definition">the full spoken text a presenter writes in advance for a recorded or virtual presentation, planned for pacing since the audience cannot give real-time feedback</p></details>
+<details class="eg-entry" data-search="next step a proposal to investigate further, short of committing to a final decision"><summary>next step</summary><p class="eg-definition">a proposal to investigate further, short of committing to a final decision</p></details>
+<details class="eg-entry" data-search="next-step question a specific, answerable question that turns a visual finding into a direction for further investigation"><summary>next-step question</summary><p class="eg-definition">a specific, answerable question that turns a visual finding into a direction for further investigation</p></details>
+</section>
+<section class="eg-section" id="eg-letter-O" data-letter="O" aria-label="Terms beginning with O"><div class="eg-section-title" role="heading" aria-level="3">O</div>
+<details class="eg-entry" data-search="objective-first framework choosing what you need to learn before choosing which chart will show it"><summary>objective-first framework</summary><p class="eg-definition">choosing what you need to learn before choosing which chart will show it</p></details>
+<details class="eg-entry" data-search="otif (on time in full) a supply chain kpi measuring whether a delivery arrived both by the promised date and with the full quantity ordered, combining timing and completeness into one measure"><summary>OTIF (On Time In Full)</summary><p class="eg-definition">a supply chain KPI measuring whether a delivery arrived both by the promised date and with the full quantity ordered, combining timing and completeness into one measure</p></details>
+<details class="eg-entry" data-search="outliers a number so far outside the expected range that it requires an explanation."><summary>outliers</summary><p class="eg-definition">a number so far outside the expected range that it requires an explanation.</p></details>
+<details class="eg-entry" data-search="overreach a claim that assigns a cause, motive, or certainty a chart cannot support on its own"><summary>overreach</summary><p class="eg-definition">a claim that assigns a cause, motive, or certainty a chart cannot support on its own</p></details>
+</section>
+<section class="eg-section" id="eg-letter-P" data-letter="P" aria-label="Terms beginning with P"><div class="eg-section-title" role="heading" aria-level="3">P</div>
+<details class="eg-entry" data-search="parameter an interactive control that lets a viewer swap which measure or dimension a chart displays"><summary>parameter</summary><p class="eg-definition">an interactive control that lets a viewer swap which measure or dimension a chart displays</p></details>
+<details class="eg-entry" data-search="problem statement a plain description of what is going wrong, before it is sharpened into a specific, answerable business question"><summary>problem statement</summary><p class="eg-definition">a plain description of what is going wrong, before it is sharpened into a specific, answerable business question</p></details>
+</section>
+<section class="eg-section" id="eg-letter-Q" data-letter="Q" aria-label="Terms beginning with Q"><div class="eg-section-title" role="heading" aria-level="3">Q</div>
+<details class="eg-entry" data-search="quality the defect or return rate on shipments received, regardless of whether they arrived on time"><summary>quality</summary><p class="eg-definition">the defect or return rate on shipments received, regardless of whether they arrived on time</p></details>
+</section>
+<section class="eg-section" id="eg-letter-R" data-letter="R" aria-label="Terms beginning with R"><div class="eg-section-title" role="heading" aria-level="3">R</div>
+<details class="eg-entry" data-search="recommendation a specific next step proposed in response to a finding&#x27;s implication"><summary>recommendation</summary><p class="eg-definition">a specific next step proposed in response to a finding&#x27;s implication</p></details>
+<details class="eg-entry" data-search="reference table a separate table joined to another dataset to look up additional information, such as a supplier reference table that carries each supplier&#x27;s on-time percentage"><summary>reference table</summary><p class="eg-definition">a separate table joined to another dataset to look up additional information, such as a Supplier reference table that carries each supplier&#x27;s on-time percentage</p></details>
+<details class="eg-entry" data-search="relationship a question asking whether two measures move together"><summary>relationship</summary><p class="eg-definition">a question asking whether two measures move together</p></details>
+<details class="eg-entry" data-search="renaming changing a column&#x27;s label so it&#x27;s used consistently everywhere it&#x27;s needed, such as changing &quot;amt&quot; to &quot;qty ordered&quot;"><summary>renaming</summary><p class="eg-definition">changing a column&#x27;s label so it&#x27;s used consistently everywhere it&#x27;s needed, such as changing &quot;Amt&quot; to &quot;Qty Ordered&quot;</p></details>
+<details class="eg-entry" data-search="reporting presenting data or results after the fact, without necessarily connecting them to a specific decision"><summary>reporting</summary><p class="eg-definition">presenting data or results after the fact, without necessarily connecting them to a specific decision</p></details>
+<details class="eg-entry" data-search="root cause the actual underlying reason a pattern or problem exists, as distinct from the pattern itself"><summary>root cause</summary><p class="eg-definition">the actual underlying reason a pattern or problem exists, as distinct from the pattern itself</p></details>
+</section>
+<section class="eg-section" id="eg-letter-S" data-letter="S" aria-label="Terms beginning with S"><div class="eg-section-title" role="heading" aria-level="3">S</div>
+<details class="eg-entry" data-search="scatter plot a chart that plots two measures against each other to show whether they move together"><summary>scatter plot</summary><p class="eg-definition">a chart that plots two measures against each other to show whether they move together</p></details>
+<details class="eg-entry" data-search="service level the percentage of shipments a supplier delivers on or before the promised date, tracked supplier by supplier"><summary>service level</summary><p class="eg-definition">the percentage of shipments a supplier delivers on or before the promised date, tracked supplier by supplier</p></details>
+<details class="eg-entry" data-search="shelves the areas across the top and side of a worksheet, such as columns, rows, and marks, where you build encodings by dragging fields onto them"><summary>shelves</summary><p class="eg-definition">the areas across the top and side of a worksheet, such as Columns, Rows, and Marks, where you build encodings by dragging fields onto them</p></details>
+<details class="eg-entry" data-search="show me a panel of chart-type suggestions based on what is currently on the shelves (same location)"><summary>Show Me</summary><p class="eg-definition">a panel of chart-type suggestions based on what is currently on the shelves (same location)</p></details>
+<details class="eg-entry" data-search="smart a goal is smart when it is specific, measurable, attainable, relevant, and time-bound, so a team knows exactly what success looks like and by when"><summary>SMART</summary><p class="eg-definition">a goal is SMART when it is specific, measurable, attainable, relevant, and time-bound, so a team knows exactly what success looks like and by when</p></details>
+<details class="eg-entry" data-search="sorting reordering rows so a pattern is visible at a glance"><summary>sorting</summary><p class="eg-definition">reordering rows so a pattern is visible at a glance</p></details>
+<details class="eg-entry" data-search="static dashboard a dashboard showing a fixed view to every viewer, whose underlying data may update, but whose displayed parameters the viewer cannot change"><summary>static dashboard</summary><p class="eg-definition">a dashboard showing a fixed view to every viewer, whose underlying data may update, but whose displayed parameters the viewer cannot change</p></details>
+<details class="eg-entry" data-search="statistical process control (spc) chart a control chart that plots control limits alongside a trend, used in the control phase to tell ordinary variation from a real slide back toward the original problem"><summary>Statistical Process Control (SPC) chart</summary><p class="eg-definition">a control chart that plots control limits alongside a trend, used in the Control phase to tell ordinary variation from a real slide back toward the original problem</p></details>
+<details class="eg-entry" data-search="status visual a chart built to show whether something currently meets a threshold, rather than to show a trend or a ranked comparison"><summary>status visual</summary><p class="eg-definition">a chart built to show whether something currently meets a threshold, rather than to show a trend or a ranked comparison</p></details>
+<details class="eg-entry" data-search="stockout a situation where a product is out of stock and an order for it cannot be fulfilled"><summary>stockout</summary><p class="eg-definition">a situation where a product is out of stock and an order for it cannot be fulfilled</p></details>
+</section>
+<section class="eg-section" id="eg-letter-T" data-letter="T" aria-label="Terms beginning with T"><div class="eg-section-title" role="heading" aria-level="3">T</div>
+<details class="eg-entry" data-search="tableau a business intelligence and data visualization platform used to build charts, dashboards, and shared analytical views from prepared data"><summary>Tableau</summary><p class="eg-definition">a business intelligence and data visualization platform used to build charts, dashboards, and shared analytical views from prepared data</p></details>
+<details class="eg-entry" data-search="tableau prep a visual, no-code tableau tool for cleaning, shaping, and automatically refreshing data at a scale beyond what is practical to do by hand in excel"><summary>Tableau Prep</summary><p class="eg-definition">a visual, no-code Tableau tool for cleaning, shaping, and automatically refreshing data at a scale beyond what is practical to do by hand in Excel</p></details>
+<details class="eg-entry" data-search="tooltip a small box that shows a viewer the exact values behind a chart without cluttering it with every number at once"><summary>tooltip</summary><p class="eg-definition">a small box that shows a viewer the exact values behind a chart without cluttering it with every number at once</p></details>
+<details class="eg-entry" data-search="tradeoff a risk, cost, or constraint that follows from taking a recommended action, stated alongside the recommendation’s benefit rather than left unstated"><summary>tradeoff</summary><p class="eg-definition">a risk, cost, or constraint that follows from taking a recommended action, stated alongside the recommendation’s benefit rather than left unstated</p></details>
+<details class="eg-entry" data-search="trend a question asking how a measure is changing over time"><summary>trend</summary><p class="eg-definition">a question asking how a measure is changing over time</p></details>
+</section>
+<section class="eg-section" id="eg-letter-U" data-letter="U" aria-label="Terms beginning with U"><div class="eg-section-title" role="heading" aria-level="3">U</div>
+<details class="eg-entry" data-search="unsupported conclusion a statement that claims more than the evidence behind it can confirm, whether by inventing a cause, assuming an intent, or reaching a conclusion that the data was never positioned to answer"><summary>unsupported conclusion</summary><p class="eg-definition">a statement that claims more than the evidence behind it can confirm, whether by inventing a cause, assuming an intent, or reaching a conclusion that the data was never positioned to answer</p></details>
+</section>
+<section class="eg-section" id="eg-letter-V" data-letter="V" aria-label="Terms beginning with V"><div class="eg-section-title" role="heading" aria-level="3">V</div>
+<details class="eg-entry" data-search="variation inconsistency in a process&#x27;s output, such as a supplier&#x27;s on-time rate swinging month to month"><summary>variation</summary><p class="eg-definition">inconsistency in a process&#x27;s output, such as a supplier&#x27;s on-time rate swinging month to month</p></details>
+<details class="eg-entry" data-search="vertical container a tableau layout element that stacks worksheets top to bottom"><summary>vertical container</summary><p class="eg-definition">a Tableau layout element that stacks worksheets top to bottom</p></details>
+<details class="eg-entry" data-search="visual emphasis which visual on a dashboard or in a presentation is shown first, or given the most prominent placement, based on what a specific audience most needs to see"><summary>visual emphasis</summary><p class="eg-definition">which visual on a dashboard or in a presentation is shown first, or given the most prominent placement, based on what a specific audience most needs to see</p></details>
+<details class="eg-entry" data-search="visual management a real-time dashboard a team checks routinely during the improve phase to confirm a change is moving performance toward the improved state"><summary>visual management</summary><p class="eg-definition">a real-time dashboard a team checks routinely during the Improve phase to confirm a change is moving performance toward the improved state</p></details>
+<details class="eg-entry" data-search="visualization a chart or other visual representation of data used to communicate a pattern or answer a business question"><summary>visualization</summary><p class="eg-definition">a chart or other visual representation of data used to communicate a pattern or answer a business question</p></details>
+</section>
+<section class="eg-section" id="eg-letter-W" data-letter="W" aria-label="Terms beginning with W"><div class="eg-section-title" role="heading" aria-level="3">W</div>
+<details class="eg-entry" data-search="waste in the lean six sigma sense, a cost incurred purely to compensate for a process that isn&#x27;t performing"><summary>waste</summary><p class="eg-definition">in the Lean Six Sigma sense, a cost incurred purely to compensate for a process that isn&#x27;t performing</p></details>
+<details class="eg-entry" data-search="wedge selection using keep only or exclude on a pie chart&#x27;s slice to filter the view down to, or remove, a single category without rebuilding the chart"><summary>wedge selection</summary><p class="eg-definition">using Keep Only or Exclude on a pie chart&#x27;s slice to filter the view down to, or remove, a single category without rebuilding the chart</p></details>
+<details class="eg-entry" data-search="workflow the sequence of stages, problem statement, business question, data, visualization, insight, decision, that carries a question through to a decision"><summary>workflow</summary><p class="eg-definition">the sequence of stages, problem statement, business question, data, visualization, insight, decision, that carries a question through to a decision</p></details>
+<details class="eg-entry" data-search="worksheet in tableau, one chart"><summary>worksheet</summary><p class="eg-definition">in Tableau, one chart</p></details>
+</section>
+<p class="eg-footer">Definitions are reproduced from the E158 course glossary. You can still browse and open terms if interactive search is unavailable.</p></div></div></section>
+<script>
+(function(){
+ var root=document.getElementById('e158-glossary'); if(!root)return;
+ var input=root.querySelector('.eg-search'), entries=[].slice.call(root.querySelectorAll('.eg-entry')),
+ sections=[].slice.call(root.querySelectorAll('.eg-section')),
+ links=[].slice.call(root.querySelectorAll('.eg-letter')),
+ count=root.querySelector('#eg-count'), empty=root.querySelector('#eg-empty');
+ var announceTimer=null;
+ function filter(){
+  var q=input.value.toLocaleLowerCase().trim(),visible=0;
+  entries.forEach(function(e){
+   var yes=!q||e.getAttribute('data-search').indexOf(q)>=0;
+   e.hidden=!yes;
+   e.style.display=yes?'':'none';
+   if(yes)visible++;
+  });
+  sections.forEach(function(section){
+   var any=[].some.call(section.querySelectorAll('.eg-entry'),function(e){return !e.hidden;});
+   section.hidden=!any;
+   section.style.display=any?'':'none';
+  });
+  links.forEach(function(a){
+   var sec=root.querySelector('#eg-letter-'+a.getAttribute('data-letter'));
+   var available=!!sec&&!sec.hidden;
+   a.classList.toggle('eg-muted',!available);
+   if(available){
+    a.removeAttribute('aria-disabled');
+    a.removeAttribute('tabindex');
+   }else{
+    a.setAttribute('aria-disabled','true');
+    a.setAttribute('tabindex','-1');
+   }
+  });
+  // Keep the visual empty message separate from the spoken result count.
+  empty.style.display=visible?'none':'block';
+  clearTimeout(announceTimer);
+  var message=q?(visible?visible+' matching '+(visible===1?'term':'terms'):'No matching terms. Try a different search.'):'Showing all '+entries.length+' terms';
+  // Announce once after a short pause rather than on every keystroke.
+  announceTimer=setTimeout(function(){count.textContent=message;},350);
+ }
+ input.addEventListener('input',filter);
+ links.forEach(function(link){
+  link.addEventListener('click',function(event){
+   if(link.getAttribute('aria-disabled')==='true')event.preventDefault();
+  });
+ });
+ root.querySelector('#eg-clear').addEventListener('click',function(){input.value='';filter();input.focus();});
+ root.querySelector('#eg-expand').addEventListener('click',function(){entries.forEach(function(e){if(!e.hidden)e.open=true;});});
+ root.querySelector('#eg-collapse').addEventListener('click',function(){entries.forEach(function(e){e.open=false;});});
+})();
+</script></body></html>
