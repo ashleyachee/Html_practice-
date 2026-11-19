@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Planning With a Paraeducator</title><style>
+/* Scoped OEX-safe light theme. No html/body/:root selectors or dark mode. */
+#para-guided { --gp-navy:#123f68;--gp-blue:#0869b0;--gp-text:#1e3347;--gp-soft:#eff6fc;--gp-border:#c8dbe9;--gp-muted:#435b70; font-family:Arial,Helvetica,sans-serif!important;max-width:860px;margin:0 auto;padding:10px;color:var(--gp-text)!important;background:#fff!important;font-size:15px!important;line-height:1.55!important;box-sizing:border-box;overflow-wrap:anywhere }
+#para-guided *,#para-guided *:before,#para-guided *:after {box-sizing:border-box}
+#para-guided [hidden]{display:none!important}
+#para-guided .gp-header{background:var(--gp-navy)!important;border-radius:10px;padding:18px 20px;color:#fff!important;margin-bottom:13px;border-bottom:4px solid #6bbfa2}
+#para-guided .gp-header .in{max-width:none!important;margin:0!important}
+#para-guided .eyebrow{color:#d9ecfc!important;font-size:12px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px!important}
+#para-guided h1{color:#fff!important;font-size:clamp(20px,3vw,25px)!important;line-height:1.3!important;font-weight:700!important;margin:0 0 7px!important}
+#para-guided .skill{color:#e6f2fb!important;font-size:14px!important;margin:0!important;line-height:1.5!important}
+#para-guided .wrap{padding:0!important;max-width:none!important;margin:0!important}
+#para-guided p,#para-guided li,#para-guided td,#para-guided th,#para-guided .t,#para-guided .fb,#para-guided label,#para-guided .quote{color:var(--gp-text)!important;font-size:15px!important;line-height:1.55!important}
+#para-guided p{margin:0 0 12px!important}
+#para-guided b,#para-guided strong{font-weight:700!important}
+#para-guided h2{color:var(--gp-navy)!important;font-size:19px!important;font-weight:700!important;line-height:1.35!important;margin:0 0 9px!important}
+#para-guided .scn{display:block;background:#f2f7fc!important;border:1px solid var(--gp-border)!important;border-radius:8px;margin:0 0 12px!important;padding:0!important}
+#para-guided .scn summary{display:list-item;list-style:revert;cursor:pointer;padding:12px 17px;color:var(--gp-navy)!important;font-size:16px!important;font-weight:700!important}
+#para-guided .scn>p,#para-guided .scn>.cycle{margin-left:17px!important;margin-right:17px!important}
+#para-guided .cycle{display:flex;flex-wrap:wrap;gap:6px;list-style:none!important;padding:0!important;margin-bottom:14px!important}
+#para-guided .cycle li{color:var(--gp-navy)!important;background:#fff!important;border:1px solid var(--gp-border);border-radius:20px;padding:3px 9px;font-size:12px!important;font-weight:700!important;margin:0!important}
+#para-guided .gp-nav{background:#fff!important;border:1px solid var(--gp-border);border-radius:9px;padding:12px 14px;margin:0 0 14px!important}
+#para-guided .gp-nav-top{display:flex;gap:8px 15px;flex-wrap:wrap;justify-content:space-between;color:var(--gp-navy)!important;font-size:13px!important;font-weight:700!important}
+#para-guided .gp-meter{height:7px;border-radius:10px;background:#e1edf6!important;overflow:hidden;margin:10px 0}
+#para-guided #gp-meter-fill{display:block;width:10%;height:100%;background:#0877be!important;transition:width .15s}
+#para-guided .gp-nav-buttons{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#para-guided button.gp-back,#para-guided button.gp-forward,#para-guided button.btn{appearance:none;display:inline-block!important;width:auto!important;min-height:40px!important;height:auto!important;margin:0!important;padding:9px 15px!important;border-radius:7px!important;font:700 14px Arial,Helvetica,sans-serif!important;line-height:1.4!important;cursor:pointer!important;white-space:normal!important;text-transform:none!important;letter-spacing:normal!important;box-shadow:none!important}
+#para-guided button.gp-back{color:var(--gp-navy)!important;border:2px solid var(--gp-navy)!important;background:#fff!important}
+#para-guided button.gp-forward,#para-guided button.btn{color:#fff!important;border:2px solid #0869b0!important;background:#0869b0!important}
+#para-guided button:disabled{opacity:.48;cursor:not-allowed!important}
+#para-guided button.gp-forward:hover:not(:disabled),#para-guided button.btn:hover{background:#084c80!important}
+#para-guided .gp-score-meter{height:0;overflow:hidden}
+#para-guided .step{display:block;background:#fff!important;border:1px solid var(--gp-border)!important;border-left:5px solid #0877be!important;border-radius:8px!important;padding:17px!important;margin:0 0 14px!important;color:var(--gp-text)!important}
+#para-guided .step[hidden]{display:none!important}
+#para-guided .meta{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:0 0 9px}
+#para-guided .n,#para-guided .c{display:inline-block;font-weight:700!important;border-radius:15px;padding:3px 10px;font-size:12px!important;letter-spacing:normal!important;text-transform:none!important}
+#para-guided .n{color:#fff!important;background:var(--gp-navy)!important}
+#para-guided .c{color:var(--gp-navy)!important;background:#e2eff9!important;text-transform:uppercase!important}
+#para-guided .opt{display:flex!important;align-items:flex-start;gap:10px;color:var(--gp-text)!important;background:#fff!important;border:1px solid #cadcea!important;border-radius:7px!important;padding:10px 12px!important;margin:8px 0!important;cursor:pointer;box-shadow:none!important;font-weight:400!important}
+#para-guided .opt input{flex:0 0 auto;margin:4px 0 0!important;accent-color:#0869b0;min-width:17px;min-height:17px}
+#para-guided .opt:hover{background:#f1f7fc!important;border-color:#0869b0!important}
+#para-guided .opt.ok,#para-guided .row.ok{background:#eaf7ef!important;border-color:#267747!important}
+#para-guided .opt.no,#para-guided .row.no{background:#fff1ef!important;border-color:#b83c34!important}
+#para-guided .fb{display:block!important;color:#40566a!important;font-size:13px!important;margin-top:6px!important;flex-basis:100%}
+#para-guided .res{color:var(--gp-navy)!important;font-size:14px!important;font-weight:700!important;margin:10px 0 0!important}
+#para-guided .row{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px 12px;background:#fff!important;border:1px solid var(--gp-border)!important;border-radius:7px!important;padding:10px 12px!important;margin:7px 0!important}
+#para-guided .row .t{flex:1 1 250px!important;min-width:0}
+#para-guided select{background:#fff!important;color:var(--gp-text)!important;border:1px solid #7b9eb8!important;border-radius:5px;padding:6px 9px;font:inherit!important}
+#para-guided .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px!important}
+#para-guided .tabs button{background:#fff!important;color:var(--gp-navy)!important;border:1px solid #8fb4cf!important;border-radius:6px!important;padding:8px 10px!important;font:700 13px Arial,Helvetica,sans-serif!important;margin:0!important;min-height:38px;cursor:pointer}
+#para-guided .tabs button[aria-selected="true"]{background:var(--gp-navy)!important;color:#fff!important;border-color:var(--gp-navy)!important}
+#para-guided .panel,#para-guided .chart{background:#fff!important;color:var(--gp-text)!important;border:1px solid var(--gp-border);border-radius:7px;padding:10px!important;overflow-x:auto;max-width:100%}
+#para-guided .panel[hidden]{display:none!important}
+#para-guided .panel ul{padding-left:20px!important;margin:0!important}
+#para-guided .panel .note{font-size:13px!important;color:var(--gp-muted)!important;margin:9px 0 0!important}
+#para-guided .gp-data-table{border-collapse:collapse;width:100%;min-width:440px;font-size:13px!important;color:var(--gp-text)!important}
+#para-guided .gp-data-table th,#para-guided .gp-data-table td{border:1px solid #c6d7e5!important;padding:8px!important;background:#fff!important;color:#1e3347!important;text-align:left!important;vertical-align:top!important;font-size:13px!important;font-weight:400!important}
+#para-guided .gp-data-table th{background:#e4eff8!important;color:#173e5f!important;font-weight:700!important}
+#para-guided .quote{background:#eef6fc!important;border-left:4px solid #0869b0!important;border-radius:0 6px 6px 0;padding:10px 13px!important;margin:11px 0!important}
+#para-guided textarea{display:block;width:100%!important;min-height:125px!important;resize:vertical;background:#fff!important;color:var(--gp-text)!important;border:2px solid #8fb4cf!important;border-radius:7px!important;padding:11px!important;font:15px Arial,Helvetica,sans-serif!important}
+#para-guided .chk{padding:0!important;list-style:none!important;margin:10px 0!important}
+#para-guided .chk li{margin:6px 0!important}
+#para-guided .model{background:#eaf7ef!important;color:var(--gp-text)!important;border-left:4px solid #267747;padding:13px!important;margin-top:12px;border-radius:0 7px 7px 0}
+#para-guided .sum{background:#eef6fc!important;color:var(--gp-text)!important;border:1px solid var(--gp-border)!important;border-radius:8px;padding:16px!important;margin:12px 0!important}
+#para-guided .sum h2{color:var(--gp-navy)!important}
+#para-guided .sum li{margin:6px 0!important}
+#para-guided .foot{font-size:12px!important;color:var(--gp-muted)!important;margin:12px 0!important}
+#para-guided button:focus-visible,#para-guided input:focus-visible,#para-guided select:focus-visible,#para-guided textarea:focus-visible,#para-guided summary:focus-visible{outline:3px solid #095aab!important;outline-offset:3px!important}
+@media(max-width:580px){#para-guided{padding:5px}#para-guided .gp-header{padding:15px}#para-guided .step{padding:13px!important}#para-guided h2{font-size:18px!important}#para-guided .gp-data-table{min-width:400px}}
+@media(prefers-reduced-motion:reduce){#para-guided #gp-meter-fill{transition:none}}
+@media(forced-colors:active){#para-guided .step,#para-guided .opt,#para-guided .row{border:2px solid CanvasText!important}}
+</style></head><body><main aria-label="Planning a small-group intervention with a paraeducator" id="para-guided"><div class="gp-header"><div class="in">
+<p class="eyebrow">Secondary literacy guided practice</p>
+<h1>Planning a Small-Group Intervention With a Paraeducator</h1>
+<p class="skill">Skill: Work with a paraeducator to build a data-based small-group intervention plan, including how often instruction happens, why the strategies fit, and how progress is monitored and shared.</p>
+</div></div><div class="wrap">
+<details class="scn" open=""><summary>The scenario</summary>
+
+<p>You are a first-year 8th grade ELA teacher at <b>Cedar Ridge Middle School</b>. <b>Ms. Okafor</b>, a paraeducator, supports your third-period class at the start of each period on Monday, Tuesday and Thursday. Fall data show that several students struggle to answer questions about what they read in science and social studies texts. Your job is to plan a small-group intervention with Ms. Okafor and explain your plan.</p>
+<p>Work through each step and get feedback as you go. Each step is tagged with its stage in the team's cycle:</p>
+<ul aria-label="Intervention cycle" class="cycle"><li>Assess</li><li>Plan</li><li>Communicate</li><li>Implement</li><li>Monitor</li><li>Adjust</li></ul>
+
+</details><nav aria-label="Activity step navigation" class="gp-nav"><div class="gp-nav-top"><span aria-atomic="true" aria-live="polite" id="gp-step-indicator">Step 1 of 10</span><span id="gp-step-title">Review the evidence</span></div><div aria-label="Steps reviewed" aria-valuemax="10" aria-valuemin="0" aria-valuenow="1" class="gp-meter" id="gp-meter" role="progressbar"><span id="gp-meter-fill"></span></div><div class="gp-nav-buttons"><button class="gp-back" id="gp-prev" type="button">Previous step</button><button class="gp-forward" id="gp-next" type="button">Next step</button></div><div aria-hidden="true" class="gp-score-meter"><i id="prog"></i></div></nav>
+<div class="step" data-gp-step="1" id="gp-step-1">
+<div class="meta"><span class="n">Step 1</span><span class="c">Assess</span></div>
+<h2>Review the evidence</h2>
+<p>Open each tab. Look for students who share the <b>same</b> barrier, not just low scores.</p>
+<div class="tabs" id="tabs" role="tablist"></div>
+<div id="panels"></div>
+</div>
+<div class="step q" data-correct="1,2,5,6" data-gp-step="2" data-type="multi" hidden="" id="q2">
+<div class="meta"><span class="n">Step 2</span><span class="c">Assess</span></div>
+<h2>Form the group</h2>
+<p>Select the students who share one instructional need and belong in the same small group.</p>
+<label class="opt" data-fb="Accurate, fluent reading with low vocabulary and missed vocabulary-linked questions: word knowledge is the barrier."><input type="checkbox" value="1"/>Ana</label>
+<label class="opt" data-fb="Same profile as Ana: strong decoding, low vocabulary, and most missed questions tied to academic words."><input type="checkbox" value="2"/>Devon</label>
+<label class="opt" data-fb="Keisha's accuracy is low and she stumbles on multisyllabic words. Her barrier is reading the words, which needs a different intervention."><input type="checkbox" value="3"/>Keisha</label>
+<label class="opt" data-fb="Liam is at benchmark across measures and does not need this intervention."><input type="checkbox" value="4"/>Liam</label>
+<label class="opt" data-fb="Strong decoding and low vocabulary: same need as Ana and Devon."><input type="checkbox" value="5"/>Priya</label>
+<label class="opt" data-fb="Strong decoding and low vocabulary. As a multilingual learner, Tomás will benefit from the visuals and examples the routine already includes."><input type="checkbox" value="6"/>Tomás</label>
+<label class="opt" data-fb="Wren's accuracy and fluency are low, but her vocabulary is at benchmark. Her comprehension is likely limited by word reading, so she needs a different group."><input type="checkbox" value="7"/>Wren</label>
+<button class="btn check">Check my answers</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="b" data-gp-step="3" data-type="single" hidden="" id="q3">
+<div class="meta"><span class="n">Step 3</span><span class="c">Plan</span></div>
+<h2>Choose the intervention and the rationale</h2>
+<p>Which Tier 2 intervention fits this group, for the right reason?</p>
+<label class="opt" data-fb="These students already read accurately and fluently, so fluency practice does not target their barrier."><input name="q3" type="radio" value="a"/>Repeated reading, because more fluent readers understand more.</label>
+<label class="opt" data-fb="Strong decoding means the barrier is word knowledge. Research supports explicit vocabulary instruction before reading, because students who know the key words can focus on the ideas in the text."><input name="q3" type="radio" value="b"/>Explicit pre-teaching of key academic words from upcoming texts, because decoding is strong and the missed questions point to word knowledge.</label>
+<label class="opt" data-fb="Copying definitions is passive and does not build the deep word knowledge needed to understand a text."><input name="q3" type="radio" value="c"/>Having students copy glossary definitions, because seeing words more often helps memory.</label>
+<label class="opt" data-fb="Phonics work would fit Keisha or Wren, not a group whose decoding is already strong."><input name="q3" type="radio" value="d"/>Multisyllabic word-reading practice, because older students often struggle with long words.</label>
+<button class="btn check">Check my answer</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="c" data-gp-step="4" data-type="single" hidden="" id="q4">
+<div class="meta"><span class="n">Step 4</span><span class="c">Plan</span></div>
+<h2>Set the schedule</h2>
+<p>The science and social studies texts are read in the core lesson on Tuesday and Thursday. Ms. Okafor is available at the start of the period Monday, Tuesday and Thursday. Which schedule fits best?</p>
+<label class="opt" data-fb="Pulling students from the whole core lesson removes them from the grade-level instruction the intervention is meant to support."><input name="q4" type="radio" value="a"/>Every day for the full period, in place of the core lesson.</label>
+<label class="opt" data-fb="Teaching the words after the unit is finished misses the point of pre-teaching."><input name="q4" type="radio" value="b"/>Once a week, after each unit ends, to review the words.</label>
+<label class="opt" data-fb="Short, frequent sessions just before the text is read let students use the words right away. A set end point builds in a data review."><input name="q4" type="radio" value="c"/>Two to three days a week for 15 minutes, just before the core lesson that uses the text, for about six weeks, then review the data.</label>
+<label class="opt" data-fb="Without a set schedule, instruction becomes inconsistent and progress is hard to judge."><input name="q4" type="radio" value="d"/>Whenever Ms. Okafor has a free moment.</label>
+<button class="btn check">Check my answer</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="b" data-gp-step="5" data-type="single" hidden="" id="q5">
+<div class="meta"><span class="n">Step 5</span><span class="c">Communicate</span></div>
+<h2>Hand off the plan</h2>
+<p>Which message gives Ms. Okafor what she needs to deliver the plan well?</p>
+<label class="opt" data-fb="This vague request leaves the paraeducator guessing and often leads to inconsistent instruction."><input name="q5" type="radio" value="a"/>“Could you go over the science vocabulary with Ana, Devon, Priya and Tomás?”</label>
+<label class="opt" data-fb="It covers who, what, why, how often, materials, the routine, modeling and feedback, and invites her input."><input name="q5" type="radio" value="b"/>“The data show these four students read accurately but miss questions tied to academic words, so we'll pre-teach key words before each text. We'll meet Tuesday and Thursday for 15 minutes before the core lesson for six weeks. Here are the word lists and materials for the first two weeks. I'll model the first lesson, then watch you teach and share feedback. Please tell me what you notice, since you'll see their responses up close.”</label>
+<label class="opt" data-fb="Handing over materials without the purpose, schedule or routine is still delegation, not planning together."><input name="q5" type="radio" value="c"/>“Here's the unit binder. Use whatever activities you think will work.”</label>
+<label class="opt" data-fb="This shares the schedule but not the data, the reason or the routine, and it gives her no way to share what she sees."><input name="q5" type="radio" value="d"/>“Take these four students Tuesdays and Thursdays. I'll check in at the end of the semester.”</label>
+<button class="btn check">Check my answer</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-gp-step="6" data-type="match" hidden="" id="q6">
+<div class="meta"><span class="n">Step 6</span><span class="c">Implement</span></div>
+<h2>Put the daily routine in order</h2>
+<p>You are walking Ms. Okafor through the 15-minute routine. Number the parts from 1 to 6.</p>
+<div class="row" data-answer="5" data-fb="5: Show where the words appear in the upcoming text so students are ready to meet them."><span class="t">Preview how the words appear in the upcoming text</span><select aria-label="Order for preview" id="o1"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<div class="row" data-answer="1" data-fb="1: Start by reviewing earlier words so learning builds over time."><span class="t">Review words taught earlier</span><select aria-label="Order for review" id="o2"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<div class="row" data-answer="6" data-fb="6: End with a quick check so you have data every session."><span class="t">Finish with a quick check</span><select aria-label="Order for quick check" id="o3"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<div class="row" data-answer="2" data-fb="2: Introduce each new word with a student-friendly definition and a visual or example."><span class="t">Introduce new words with a student-friendly definition and a visual or example</span><select aria-label="Order for introduce" id="o4"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<div class="row" data-answer="4" data-fb="4: Students use the words in speaking and in sentences."><span class="t">Have students use the words in speaking and in sentences</span><select aria-label="Order for use the words" id="o5"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<div class="row" data-answer="3" data-fb="3: Guided practice with examples and non-examples sharpens the meaning."><span class="t">Guide practice with examples and non-examples</span><select aria-label="Order for guided practice" id="o6"><option value="">#</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select><span class="fb"></span></div>
+<button class="btn check">Check my order</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="c" data-gp-step="7" data-type="single" hidden="" id="q7">
+<div class="meta"><span class="n">Step 7</span><span class="c">Implement</span></div>
+<h2>Coach error correction</h2>
+<p>During practice, Ms. Okafor asks, “Is a family moving across town for a new job an example of <i>migration</i>?” Devon answers, “No, migration is only for birds.” What should she say?</p>
+<div class="quote">Earlier example in the lesson: “Thousands of families moved west for farmland in the 1800s. That was a migration.”</div>
+<label class="opt" data-fb="Giving the answer does the thinking for Devon."><input name="q7" type="radio" value="a"/>“Actually, migration means people or animals moving from one place to another.”</label>
+<label class="opt" data-fb="Moving on without correcting leaves the misunderstanding in place."><input name="q7" type="radio" value="b"/>“Good try!” and move to the next student.</label>
+<label class="opt" data-fb="This prompts Devon to use what he already learned, so he does the thinking."><input name="q7" type="radio" value="c"/>“Think about the families moving west that we just discussed. Does this situation fit the word too?”</label>
+<label class="opt" data-fb="Sending him to the glossary interrupts the routine and does not connect to the examples you taught."><input name="q7" type="radio" value="d"/>“Look it up in the glossary and tell me what it says.”</label>
+<button class="btn check">Check my answer</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="1,2,3,5" data-gp-step="8" data-type="multi" hidden="" id="q8">
+<div class="meta"><span class="n">Step 8</span><span class="c">Monitor</span></div>
+<h2>Decide what to track</h2>
+<p>Select the information that shows whether the intervention is working.</p>
+<label class="opt" data-fb="Ms. Okafor records this after each session."><input type="checkbox" value="1"/>Accuracy on the short vocabulary check</label>
+<label class="opt" data-fb="Using a word correctly in a sentence shows deeper understanding than matching a definition."><input type="checkbox" value="2"/>Whether each student uses the words correctly in a sentence</label>
+<label class="opt" data-fb="Less prompting over time shows growing independence."><input type="checkbox" value="3"/>How much prompting each student needs</label>
+<label class="opt" data-fb="Attendance matters, but it does not show whether students are learning the words."><input type="checkbox" value="4"/>Whether students were present and on time only</label>
+<label class="opt" data-fb="You track this, and it shows whether the pre-teaching is improving comprehension of the text that follows."><input type="checkbox" value="5"/>Scores on comprehension questions about the text that follows</label>
+<label class="opt" data-fb="Liking an activity does not tell you whether students learned the words."><input type="checkbox" value="6"/>Whether students enjoyed the activities</label>
+<button class="btn check">Check my answers</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step q" data-correct="b" data-gp-step="9" data-type="single" hidden="" id="q9">
+<div class="meta"><span class="n">Step 9</span><span class="c">Adjust</span></div>
+<h2>Use the decision rule</h2>
+<p>At your weekly 10-minute data meeting, you review the vocabulary checks. Your goal is 80%. Your decision rule is to adjust instruction if a student is below the goal for three checks in a row.</p>
+<div class="chart"><table class="gp-data-table"><tr><th>Student</th><th>Check 1</th><th>Check 2</th><th>Check 3</th><th>Check 4</th></tr><tr><td>Ana</td><td>70%</td><td>80%</td><td>90%</td><td>90%</td></tr><tr><td>Devon</td><td>60%</td><td>80%</td><td>80%</td><td>90%</td></tr><tr><td>Priya</td><td>70%</td><td>90%</td><td>90%</td><td>100%</td></tr><tr><td>Tomás</td><td>50%</td><td>60%</td><td>60%</td><td>70%</td></tr></table></div>
+<p>What do you do?</p>
+<label class="opt" data-fb="Tomás is improving slowly, and removing him takes away the support he needs."><input name="q9" type="radio" value="a"/>Remove Tomás from the group, since the intervention is not working for him.</label>
+<label class="opt" data-fb="The rule is met, so you adjust. You make the call and explain the change to Ms. Okafor, because instructional decisions stay with you."><input name="q9" type="radio" value="b"/>Adjust for Tomás by teaching fewer words, adding more examples and visuals, and giving more practice using the words. Then explain the change to Ms. Okafor.</label>
+<label class="opt" data-fb="Ms. Okafor's observations matter, but you remain responsible for instructional decisions."><input name="q9" type="radio" value="c"/>Ask Ms. Okafor to decide what to change.</label>
+<label class="opt" data-fb="Waiting ignores a decision rule the team already agreed on."><input name="q9" type="radio" value="d"/>Keep everything the same until the six weeks are over.</label>
+<button class="btn check">Check my answer</button><div aria-live="polite" class="res"></div>
+</div>
+<div class="step" data-gp-step="10" hidden="" id="s10">
+<div class="meta"><span class="n">Step 10</span><span class="c">Full cycle</span></div>
+<h2>Explain your plan</h2>
+<p>In a short paragraph, explain how you would work with Ms. Okafor on this intervention. Include the data and rationale, the frequency, the routine and how you will support her, and how you will monitor and share progress.</p>
+<textarea id="plan" placeholder="The data show… Because… We will meet… I will model… Ms. Okafor will record… Each week we will… If a student… I will share progress with…"></textarea>
+<button class="btn" id="pcheck">Check my plan</button>
+<ul aria-live="polite" class="chk" id="pl"></ul>
+<div class="model" hidden="" id="pm"><b>Model response:</b>
+<p>The data show that Ana, Devon, Priya and Tomás read accurately and fluently but miss comprehension questions tied to academic vocabulary. Because their decoding is strong, the barrier is word knowledge, so I chose a Tier 2 intervention that pre-teaches key words from upcoming science and social studies texts with explicit instruction.</p>
+<p>The group will meet Tuesday and Thursday for 15 minutes, just before the core lesson that uses the text, for six weeks. Then we will review the data and decide whether to continue, adjust or exit each student. I will give Ms. Okafor the word lists and materials in advance, explain the data and the reason for pre-teaching, and walk her through the daily routine. I will model the first lesson, observe her teaching and give supportive feedback, including how to prompt students instead of giving answers.</p>
+<p>Ms. Okafor will record vocabulary-check accuracy, sentence use and prompting level, and I will track comprehension on the text that follows. We will meet for 10 minutes each week to review the data. If a student is below the goal for three checks in a row, I will adjust instruction. I will share progress with the grade-level team and with families.</p>
+<p>Your wording can differ, as long as it includes the same elements.</p></div>
+</div>
+<div class="sum" hidden="" id="sum">
+<h2>Your planning snapshot</h2>
+<ul id="sl"></ul>
+<p>Do not simply delegate an activity. Communicate the purpose, routine, expectations and feedback process so the whole team follows one cycle: assess, plan, communicate, implement, monitor and adjust.</p>
+</div>
+<p class="foot">The school, students, paraeducator and data in this scenario are fictional and for practice only.</p>
+</div></main><script>(function(){
+"use strict";
+
+var data=[
+["Reading data",'<table><tr><th>Student</th><th>Oral reading accuracy</th><th>Fluency</th><th>Comprehension</th><th>Vocabulary</th></tr><tr><td>Ana</td><td>98%</td><td>At benchmark</td><td>Below</td><td>Below</td></tr><tr><td>Devon</td><td>99%</td><td>At benchmark</td><td>Below</td><td>Below</td></tr><tr><td>Keisha</td><td>89%</td><td>Below</td><td>Below</td><td>Below</td></tr><tr><td>Liam</td><td>99%</td><td>At benchmark</td><td>At benchmark</td><td>At benchmark</td></tr><tr><td>Priya</td><td>97%</td><td>At benchmark</td><td>Below</td><td>Below</td></tr><tr><td>Tomás</td><td>98%</td><td>At benchmark</td><td>Below</td><td>Below</td></tr><tr><td>Wren</td><td>90%</td><td>Below</td><td>Below</td><td>At benchmark</td></tr></table><p class="note">Fall screener and diagnostic results for students flagged for review.</p>'],
+["Missed questions",'<ul><li>Ana, Devon, Priya and Tomás missed most of the comprehension questions that depended on an academic word, such as <i>adaptation</i>, <i>migration</i> and <i>territory</i>.</li><li>They answered most questions about sequence and main events correctly.</li><li>Keisha and Wren missed questions across all types and lost their place while reading long words aloud.</li></ul>'],
+["Student notes",'<ul><li><b>Tomás</b> is a multilingual learner. He explains ideas well when he has a visual or a concrete example.</li><li><b>Keisha</b> and <b>Wren</b> are being referred for a separate word-reading group.</li><li><b>Liam</b> scored at benchmark on every measure.</li></ul>'],
+["Upcoming texts",'<table><tr><th>Week</th><th>Core text (read Tue and Thu)</th><th>Key words</th></tr><tr><td>1–2</td><td>Science: “Life in a Changing Ecosystem”</td><td>adaptation, habitat, competition, population</td></tr><tr><td>3–4</td><td>Social studies: “Moving West”</td><td>migration, territory, settlement, conflict</td></tr><tr><td>5–6</td><td>Science: “Energy in Food Webs”</td><td>producer, consumer, transfer, decompose</td></tr></table>'],
+["Ms. Okafor",'<ul><li>Paraeducator with two years at Cedar Ridge.</li><li>Available at the start of third period on Monday, Tuesday and Thursday.</li><li>Asked: “When they don’t know a word, I usually just tell them. Is that okay?”</li><li>Prefers to get materials a few days ahead.</li></ul>']];
+var tabs=document.getElementById('tabs'),pan=document.getElementById('panels');
+data.forEach(function(d,i){var b=document.createElement('button');b.textContent=d[0];b.setAttribute('role','tab');b.setAttribute('aria-selected',i==0);b.setAttribute('id','gp-tab-'+i);b.setAttribute('aria-controls','gp-panel-'+i);b.setAttribute('tabindex',i===0?'0':'-1');b.onclick=function(){show(i)};tabs.appendChild(b);var p=document.createElement('div');p.className='panel';p.setAttribute('role','tabpanel');p.setAttribute('id','gp-panel-'+i);p.setAttribute('aria-labelledby','gp-tab-'+i);p.innerHTML=d[1];[].forEach.call(p.querySelectorAll('table'),function(t){t.classList.add('gp-data-table')});p.hidden=i!=0;pan.appendChild(p)});
+function show(k){[].forEach.call(tabs.children,function(b,i){b.setAttribute('aria-selected',i==k);b.setAttribute('tabindex',i==k?'0':'-1')});[].forEach.call(pan.children,function(p,i){p.hidden=i!=k})}
+var results={},TOTAL=9;
+function updateProg(){var n=Object.keys(results).length;document.getElementById('prog').style.width=(n/TOTAL*100)+'%';if(n==TOTAL)summary()}
+function fbEl(l){var f=l.querySelector('.fb');if(!f){f=document.createElement('span');f.className='fb';l.appendChild(f)}return f}
+[].forEach.call(document.querySelectorAll('.q'),function(q){
+q.querySelector('.check').onclick=function(){
+var type=q.dataset.type,r=q.querySelector('.res'),right=0,total=0;
+if(type=='match'){
+var rows=q.querySelectorAll('.row'),blank=false;
+[].forEach.call(rows,function(row){if(!row.querySelector('select').value)blank=true});
+if(blank){r.textContent='Choose a number for every part first.';return}
+[].forEach.call(rows,function(row){var ok=row.querySelector('select').value==row.dataset.answer;total++;if(ok)right++;row.classList.remove('ok','no');row.classList.add(ok?'ok':'no');row.querySelector('.fb').textContent=(ok?'Correct. ':'Not quite. ')+row.dataset.fb});
+r.textContent='You got '+right+' of '+total+' right.';
+}else{
+var correct=q.dataset.correct.split(','),single=type=='single',picked=false;
+[].forEach.call(q.querySelectorAll('label.opt input'),function(i){if(i.checked)picked=true});
+if(!picked){r.textContent='Make a selection first.';return}
+[].forEach.call(q.querySelectorAll('label.opt'),function(l){
+var i=l.querySelector('input'),should=correct.indexOf(i.value)>-1,ok=i.checked==should;
+l.classList.remove('ok','no');
+if(single){if(should)l.classList.add('ok');else if(i.checked)l.classList.add('no');if(should&&i.checked)right=1;total=1}
+else{total++;if(ok)right++;l.classList.add(ok?'ok':'no')}
+fbEl(l).textContent=(should?(single?'Best answer. ':'Yes. '):(single?'':'No. '))+l.dataset.fb});
+r.textContent=single?(right?'Correct.':'Not quite. Read the feedback and the best answer.'):('You got '+right+' of '+total+' right.');
+}
+results[q.id]=[right,total];updateProg()}});
+document.getElementById('pcheck').onclick=function(){
+var t=document.getElementById('plan').value;
+var c=[["Data and need named",/data|assessment|screener|decod|accura|vocabular|missed/i],["Rationale for the strategy",/because|since|so that|research|barrier|reason/i],["Frequency and length",/(\d|two|three)\s*(days|times)|minutes|weeks|tuesday|thursday/i],["Support for the paraeducator (materials, routine, modeling, feedback)",/model|routine|observe|feedback|materials|word list/i],["What will be recorded",/check|record|track|monitor|prompt/i],["Decision rule for adjusting",/(three|four|3|4)\s*(checks|in a row|times)|decision rule|adjust/i],["How progress is shared",/meet|weekly|famil|team|parent|share/i]];
+var n=0,h='';c.forEach(function(x){var ok=x[1].test(t);if(ok)n++;h+='<li>'+(ok?'✅ ':'⬜ ')+x[0]+'</li>'});
+document.getElementById('pl').innerHTML=t.trim()?h:'<li>Write your plan first.</li>';
+if(!t.trim())return;
+document.getElementById('pm').hidden=false;results.q10=[n,7];updateProg()};
+function summary(){
+var names={q2:'Forming the group from data',q3:'Choosing the intervention and rationale',q4:'Setting the schedule',q5:'Handing off the plan',q6:'Ordering the daily routine',q7:'Coaching error correction',q8:'Deciding what to track',q9:'Using the decision rule',q10:'Explaining your plan'};
+var h='';Object.keys(names).forEach(function(k){var v=results[k];h+='<li>'+names[k]+': '+v[0]+' of '+v[1]+'</li>'});
+document.getElementById('sl').innerHTML=h;document.getElementById('sum').hidden=false}
+
+
+tabs.addEventListener('keydown',function(e){var items=Array.prototype.slice.call(tabs.querySelectorAll('[role=tab]'));var k=items.indexOf(document.activeElement);if(k<0)return;var next=k;if(e.key==='ArrowRight')next=(k+1)%items.length;else if(e.key==='ArrowLeft')next=(k-1+items.length)%items.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=items.length-1;else return;e.preventDefault();show(next);items[next].focus();});
+
+
+/* Accessible single-step navigation (all original question content is unchanged). */
+var gpRoot=document.getElementById('para-guided');
+var gpSteps=Array.prototype.slice.call(gpRoot.querySelectorAll('.step'));
+var gpCurrent=0;
+function gpGo(index,focus){
+  if(index<0||index>=gpSteps.length)return;
+  gpCurrent=index;
+  gpSteps.forEach(function(el,i){el.hidden=i!==index;});
+  var title=gpSteps[index].querySelector('h2');
+  document.getElementById('gp-step-title').textContent=title?title.textContent:'';
+  document.getElementById('gp-step-indicator').textContent='Step '+(index+1)+' of '+gpSteps.length;
+  document.getElementById('gp-meter-fill').style.width=((index+1)/gpSteps.length*100)+'%';
+  document.getElementById('gp-meter').setAttribute('aria-valuenow',String(index+1));
+  document.getElementById('gp-prev').disabled=index===0;
+  document.getElementById('gp-next').disabled=index===gpSteps.length-1;
+  if(focus){ document.getElementById('gp-step-indicator').setAttribute('tabindex','-1');document.getElementById('gp-step-indicator').focus(); }
+}
+document.getElementById('gp-prev').addEventListener('click',function(){gpGo(gpCurrent-1,true)});
+document.getElementById('gp-next').addEventListener('click',function(){gpGo(gpCurrent+1,true)});
+gpGo(0,false);
+
+})();</script></body></html>
